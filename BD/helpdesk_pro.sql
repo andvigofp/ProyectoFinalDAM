@@ -114,10 +114,6 @@ CREATE TABLE adjunto(
         REFERENCES incidencia(id)
 );
 
--- ============================
--- TABLA HISTORIAL
--- ============================
-
 CREATE TABLE historial(
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     accion VARCHAR(255) NOT NULL,
@@ -187,3 +183,75 @@ INSERT INTO estado (nombre) VALUES
 ('En proceso'),
 ('Resuelta'),
 ('Cerrada');
+
+INSERT INTO usuario
+(nombre, apellidos, email, password_hash, telefono, activo, rol_id, departamento_id)
+VALUES
+('Andrés', 'Fernández Pereira', 'andres@helpdesk.com', '$2a$10$123456', '600111111', TRUE, 1, 1),
+('Laura', 'García López', 'laura@helpdesk.com', '$2a$10$123456', '600222222', TRUE, 2, 1),
+('Carlos', 'Martín Pérez', 'carlos@helpdesk.com', '$2a$10$123456', '600333333', TRUE, 3, 2),
+('Marta', 'Ruiz Sánchez', 'marta@helpdesk.com', '$2a$10$123456', '600444444', TRUE, 4, 3);
+
+
+INSERT INTO incidencia
+(titulo, descripcion, usuario_id, tecnico_id, categoria_id, prioridad_id, estado_id)
+VALUES
+('Ordenador no enciende',
+'El ordenador no responde al pulsar el botón de encendido.',
+3,2,1,3,1),
+
+('Error al iniciar sesión',
+'No es posible acceder a la aplicación.',
+4,2,2,2,2),
+
+('Sin conexión a Internet',
+'No hay acceso a la red de la empresa.',
+3,2,3,4,2),
+
+('Correo bloqueado',
+'Outlook muestra error al enviar mensajes.',
+4,2,4,2,3);
+
+
+INSERT INTO comentario
+(mensaje, usuario_id, incidencia_id)
+VALUES
+('Se está revisando el equipo.',2,1),
+('Se ha solicitado más información.',2,2),
+('El problema parece ser del router.',2,3),
+('Incidencia solucionada correctamente.',2,4);
+
+
+INSERT INTO adjunto
+(nombre_archivo,url_archivo,tipo_archivo,tamano,incidencia_id)
+VALUES
+('foto_pc.jpg','/adjuntos/foto_pc.jpg','image/jpeg',256000,1),
+('error_login.png','/adjuntos/error_login.png','image/png',180000,2),
+('router.jpg','/adjuntos/router.jpg','image/jpeg',310000,3),
+('correo.pdf','/adjuntos/correo.pdf','application/pdf',540000,4);
+
+INSERT INTO historial
+(accion,usuario_id,incidencia_id)
+VALUES
+('Incidencia creada.',3,1),
+('Incidencia asignada al técnico.',2,2),
+('Prioridad cambiada a Urgente.',2,3),
+('Incidencia cerrada.',2,4);
+
+INSERT INTO etiqueta
+(nombre,descripcion)
+VALUES
+('Urgente','Requiere atención inmediata'),
+('Hardware','Problema físico del equipo'),
+('Software','Problema de aplicaciones'),
+('Red','Problema de conectividad');
+
+
+INSERT INTO incidencia_etiqueta
+(incidencia_id,etiqueta_id)
+VALUES
+(1,2),
+(2,3),
+(3,1),
+(3,4),
+(4,3);
