@@ -1,3 +1,4 @@
+
 package com.helpdeskpro.helpdesk_pro.Repositorio;
 
 import com.helpdeskpro.helpdesk_pro.Entidades.Comentarios;
@@ -8,9 +9,12 @@ import java.util.List;
 public interface ComentariosRepositorio
         extends JpaRepository<Comentarios, Long> {
 
-    List<Comentarios> findByIncidencia_Id(Long incidenciaId);
+    // Buscar comentarios de una incidencia
+    List<Comentarios> findByIncidencias_Id(Long incidenciaId);
 
-    List<Comentarios> findByUsuario_Id(Long usuarioId);
+    // Buscar comentarios de un usuario
+    List<Comentarios> findByUsuarios_Id(Long usuarioId);
 
-    boolean existsByIncidencia_Id(Long incidenciaId);
+    // Comprobar si existen comentarios para una incidencia
+    boolean existsByIncidencias_Id(Long incidenciaId);
 }

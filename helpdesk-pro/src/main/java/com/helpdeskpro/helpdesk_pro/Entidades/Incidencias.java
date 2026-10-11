@@ -71,4 +71,8 @@ public class Incidencias {
 
     @OneToMany(mappedBy = "incidencias", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<IncidenciasEtiquetas> incidenciasEtiquetasList = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tecnico_id")
+    private Usuarios tecnico;
 }

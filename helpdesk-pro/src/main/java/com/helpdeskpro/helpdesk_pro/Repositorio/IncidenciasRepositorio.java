@@ -1,3 +1,4 @@
+
 package com.helpdeskpro.helpdesk_pro.Repositorio;
 
 import com.helpdeskpro.helpdesk_pro.Entidades.Incidencias;
@@ -15,16 +16,16 @@ public interface IncidenciasRepositorio
     List<Incidencias> findByTecnico_Id(Long tecnicoId);
 
     // Incidencias filtradas por estado
-    List<Incidencias> findByEstado_Id(Long estadoId);
+    List<Incidencias> findByEstados_Id(Long estadoId);
 
     // Incidencias filtradas por prioridad
-    List<Incidencias> findByPrioridad_Id(Long prioridadId);
+    List<Incidencias> findByPrioridades_Id(Long prioridadId);
 
     // Incidencias filtradas por categoría
-    List<Incidencias> findByCategoria_Id(Long categoriaId);
+    List<Incidencias> findByCategorias_Id(Long categoriaId);
 
-    // Incidencias creadas por un usuario y con un estado concreto
-    List<Incidencias> findByUsuarios_IdAndEstado_Id(
+    // Incidencias de un usuario con un estado concreto
+    List<Incidencias> findByUsuarios_IdAndEstados_Id(
             Long usuarioId,
             Long estadoId
     );
