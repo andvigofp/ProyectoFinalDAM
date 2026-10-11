@@ -34,6 +34,9 @@ public class Usuarios {
     @Column(name = "password_hash", nullable = false, length = 100)
     private String passwordHash;
 
+    @Column(length = 50)
+    private String telefono;
+
     @Column(nullable = false)
     private Boolean activo = true;
 
