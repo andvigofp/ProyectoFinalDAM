@@ -2,8 +2,6 @@ package com.helpdeskpro.helpdesk_pro.Entidades;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +9,6 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@RestController
 @Builder
 @ToString(exclude = "usuariosList")
 @EqualsAndHashCode(exclude = "usuariosList")

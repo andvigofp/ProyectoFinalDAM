@@ -13,6 +13,7 @@ public class IncidenciaResponseDTO {
     private Long id;
     private String titulo;
     private String descripcion;
+    private String solucion;
 
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;

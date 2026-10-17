@@ -2,7 +2,6 @@ package com.helpdeskpro.helpdesk_pro.Entidades;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
 

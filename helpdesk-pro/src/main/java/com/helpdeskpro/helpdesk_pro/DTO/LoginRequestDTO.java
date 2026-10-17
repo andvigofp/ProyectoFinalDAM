@@ -1,4 +1,3 @@
-
 package com.helpdeskpro.helpdesk_pro.DTO;
 
 import lombok.*;
@@ -7,9 +6,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EtiquetaResponseDTO {
+public class LoginRequestDTO {
 
-    private Long id;
-    private String nombre;
-    private String descripcion;
+    private String email;
+    private String password;
 }

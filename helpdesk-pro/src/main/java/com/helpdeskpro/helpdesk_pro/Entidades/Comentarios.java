@@ -2,7 +2,6 @@ package com.helpdeskpro.helpdesk_pro.Entidades;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Data
@@ -20,7 +19,7 @@ public class Comentarios {
     private Long id;
 
     @NonNull
-    @Column(insertable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String mensaje;
 
     @Column(insertable = false, updatable = false)

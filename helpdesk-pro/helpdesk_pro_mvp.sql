@@ -64,6 +64,7 @@ CREATE TABLE incidencias (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150) NOT NULL,
     descripcion TEXT NOT NULL,
+    solucion TEXT NULL,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
@@ -158,12 +159,13 @@ VALUES
  '600444444', 3, 3); -- Empleado | contraseña: Helpdesk123!
 
 INSERT INTO incidencias
-(titulo, descripcion, usuario_id, tecnico_id, categoria_id, prioridad_id, estado_id)
+(titulo, descripcion, solucion, usuario_id, tecnico_id, categoria_id, prioridad_id, estado_id)
 VALUES
-('PC no enciende', 'No responde al pulsar el botón', 3, 2, 1, 3, 1),
-('Error de inicio de sesión', 'No permite iniciar sesión', 4, 2, 2, 2, 2),
-('Sin Internet', 'No hay conexión a la red interna', 3, 2, 3, 4, 2),
-('Correo bloqueado', 'No permite enviar correos electrónicos', 4, 2, 4, 2, 3);
+('PC no enciende', 'No responde al pulsar el botón', NULL, 3, 2, 1, 3, 1),
+('Error de inicio de sesión', 'No permite iniciar sesión', NULL, 4, 2, 2, 2, 2),
+('Sin Internet', 'No hay conexión a la red interna', NULL, 3, 2, 3, 4, 2),
+('Correo bloqueado', 'No permite enviar correos electrónicos',
+ 'Se ha desbloqueado la cuenta y restablecido el acceso.', 4, 2, 4, 2, 3);
 
 INSERT INTO comentarios (mensaje, usuario_id, incidencia_id) VALUES
 ('Estoy revisando la incidencia.', 2, 1),

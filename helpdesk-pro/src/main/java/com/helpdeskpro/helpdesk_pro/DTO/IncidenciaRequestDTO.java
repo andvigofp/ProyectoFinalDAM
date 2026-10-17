@@ -11,6 +11,7 @@ public class IncidenciaRequestDTO {
 
     private String titulo;
     private String descripcion;
+    private String solucion;
 
     private Long usuarioId;
     private Long tecnicoId;

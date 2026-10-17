@@ -60,17 +60,14 @@ public class Incidencias {
     @JoinColumn(name = "estado_id", nullable = false)
     private Estados estados;
 
+    @Column(columnDefinition = "TEXT")
+    private String solucion;
+
     @OneToMany(mappedBy = "incidencias", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comentarios> comentariosList = new ArrayList<>();
 
     @OneToMany(mappedBy = "incidencias", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Adjuntos> adjuntosList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "incidencias", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Historiales> historialesList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "incidencias", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<IncidenciasEtiquetas> incidenciasEtiquetasList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tecnico_id")
