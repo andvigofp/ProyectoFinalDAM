@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 private val LoginButtonColor = Color(0xFF8998AD)
 
 /**
- * Formulario reutilizable de acceso. El estado y la validación pertenecen a la página.
+ * Formulario reutilizable de acceso. El estado y la validación pertenecen al ViewModel.
  */
 @Composable
 fun LoginComponent(

@@ -1,6 +1,5 @@
 package com.example.helpdeskpro.vista.pagina
 
-import android.util.Patterns
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,51 +16,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.helpdeskpro.modelo.LoginDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.ustate.LoginUiState
 import com.example.helpdeskpro.vista.componente.LoginComponent
 
 private val LogoBorderColor = Color(0xFF65758B)
 
 /**
- * Primera pantalla de la aplicación. Las acciones externas se conectarán a navegación/backend.
+ * Pantalla de login sin estado propio: recibe LoginUiState y delega los eventos.
  */
 @Composable
 fun LoginPage(
-    modifier: Modifier = Modifier,
-    onLogin: (LoginDTO) -> Unit = {},
+    state: LoginUiState = LoginUiState(),
+    onEmailChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
+    onLogin: () -> Unit = {},
     onForgotPassword: () -> Unit = {},
-    onCreateAccount: () -> Unit = {}
+    onCreateAccount: () -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var emailError by rememberSaveable { mutableStateOf<String?>(null) }
-    var passwordError by rememberSaveable { mutableStateOf<String?>(null) }
-
-    fun validateAndLogin() {
-        val normalizedEmail = email.trim()
-        emailError = when {
-            normalizedEmail.isEmpty() -> "Introduce tu email"
-            !Patterns.EMAIL_ADDRESS.matcher(normalizedEmail).matches() ->
-                "Introduce un email válido"
-            else -> null
-        }
-        passwordError = if (password.isBlank()) "Introduce tu contraseña" else null
-
-        if (emailError == null && passwordError == null) {
-            onLogin(LoginDTO(email = normalizedEmail, password = password))
-        }
-    }
 
     Column(
         modifier = modifier
@@ -99,22 +78,17 @@ fun LoginPage(
         Spacer(modifier = Modifier.height(32.dp))
 
         LoginComponent(
-            email = email,
-            password = password,
-            onEmailChange = {
-                email = it
-                emailError = null
-            },
-            onPasswordChange = {
-                password = it
-                passwordError = null
-            },
-            onLogin = ::validateAndLogin,
+            email = state.email,
+            password = state.password,
+            onEmailChange = onEmailChange,
+            onPasswordChange = onPasswordChange,
+            onLogin = onLogin,
             onForgotPassword = onForgotPassword,
             onCreateAccount = onCreateAccount,
             modifier = Modifier.fillMaxWidth(),
-            emailError = emailError,
-            passwordError = passwordError
+            emailError = state.emailError,
+            passwordError = state.passwordError,
+            isLoading = state.isLoading
         )
     }
 }
