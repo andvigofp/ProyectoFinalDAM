@@ -14,6 +14,7 @@ import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
 import com.example.helpdeskpro.vista.pagina.CrearCuentaPage
 import com.example.helpdeskpro.vista.pagina.HomeEmpleadoPage
 import com.example.helpdeskpro.vista.pagina.LoginPage
+import com.example.helpdeskpro.vista.pagina.NuevaIncidenciaPage
 import com.example.helpdeskpro.vista.pagina.RecuperarContrasenaPage
 import kotlinx.coroutines.flow.collectLatest
 
@@ -129,7 +130,14 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             HomeEmpleadoPage(
                 incidencias = state.incidencias,
                 isLoading = state.isLoading,
-                errorMessage = state.errorMessage
+                errorMessage = state.errorMessage,
+                onNueva = { navigate(RouteNavigation.NuevaIncidencia) }
+            )
+        }
+
+        composable<RouteNavigation.NuevaIncidencia> {
+            NuevaIncidenciaPage(
+                onVolver = { navController.popBackStack() }
             )
         }
     }

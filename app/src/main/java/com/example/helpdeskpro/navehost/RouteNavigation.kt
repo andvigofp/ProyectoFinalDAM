@@ -19,4 +19,7 @@ sealed interface RouteNavigation {
 
     @Serializable
     data object HomeEmpleado : RouteNavigation
+
+    @Serializable
+    data object NuevaIncidencia : RouteNavigation
 }
