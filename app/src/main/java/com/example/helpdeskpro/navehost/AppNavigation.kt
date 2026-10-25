@@ -16,6 +16,7 @@ import com.example.helpdeskpro.vista.pagina.CrearCuentaPage
 import com.example.helpdeskpro.vista.pagina.HomeEmpleadoPage
 import com.example.helpdeskpro.vista.pagina.LoginPage
 import com.example.helpdeskpro.vista.pagina.NuevaIncidenciaPage
+import com.example.helpdeskpro.vista.pagina.PerfilPage
 import com.example.helpdeskpro.vista.pagina.RecuperarContrasenaPage
 import kotlinx.coroutines.flow.collectLatest
 
@@ -133,7 +134,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 incidencias = state.incidencias,
                 isLoading = state.isLoading,
                 errorMessage = state.errorMessage,
-                onNueva = { navigate(RouteNavigation.NuevaIncidencia) }
+                onNueva = { navigate(RouteNavigation.NuevaIncidencia) },
+                onPerfil = { navigate(RouteNavigation.Perfil) }
             )
         }
 
@@ -156,6 +158,19 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 prioridadError = state.prioridadError,
                 errorMessage = state.errorMessage,
                 isLoading = state.isLoading
+            )
+        }
+
+        composable<RouteNavigation.Perfil> {
+            PerfilPage(
+                onInicio = { navigate(RouteNavigation.HomeEmpleado) },
+                onNueva = { navigate(RouteNavigation.NuevaIncidencia) },
+                onCerrarSesion = {
+                    navController.navigate(RouteNavigation.Login) {
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
     }

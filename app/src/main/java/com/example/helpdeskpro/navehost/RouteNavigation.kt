@@ -22,4 +22,7 @@ sealed interface RouteNavigation {
 
     @Serializable
     data object NuevaIncidencia : RouteNavigation
+
+    @Serializable
+    data object Perfil : RouteNavigation
 }
