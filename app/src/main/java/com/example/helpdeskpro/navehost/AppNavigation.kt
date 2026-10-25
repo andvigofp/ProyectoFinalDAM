@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
+import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModel
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
 import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
 import com.example.helpdeskpro.vista.pagina.CrearCuentaPage
@@ -25,6 +26,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     val loginViewModel: LoginViewModel = viewModel()
     val recuperarViewModel: RecuperarContrasenaViewModel = viewModel()
     val crearCuentaViewModel: CrearCuentaViewModel = viewModel()
+    val homeEmpleadoViewModel: HomeEmpleadoViewModel = viewModel()
 
     fun navigate(route: RouteNavigation) {
         navController.navigate(route) {
@@ -123,7 +125,12 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         }
 
         composable<RouteNavigation.HomeEmpleado> {
-            HomeEmpleadoPage()
+            val state = homeEmpleadoViewModel.uiState
+            HomeEmpleadoPage(
+                incidencias = state.incidencias,
+                isLoading = state.isLoading,
+                errorMessage = state.errorMessage
+            )
         }
     }
 }

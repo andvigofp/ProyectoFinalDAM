@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -39,7 +40,9 @@ fun HomeEmpleadoPage(
     onNueva: () -> Unit = {},
     onPerfil: () -> Unit = {},
     onIncidenciaClick: (IncidenciaDTO) -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+    errorMessage: String? = null
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -87,30 +90,60 @@ fun HomeEmpleadoPage(
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
-            if (incidencias.isEmpty()) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 48.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
+            when {
+                isLoading -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 48.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+
+                errorMessage != null -> {
+                    item {
                         Text(
-                            text = "No tienes incidencias todavía",
-                            color = Color(0xFF8A8F98),
+                            text = errorMessage,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 48.dp),
+                            color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
                 }
-            } else {
-                items(
-                    items = incidencias,
-                    key = { incidencia -> incidencia.id }
-                ) { incidencia ->
-                    IncidenciaCard(
-                        incidencia = incidencia,
-                        onClick = { onIncidenciaClick(incidencia) }
-                    )
+
+                incidencias.isEmpty() -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 48.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "No tienes incidencias todavía",
+                                color = Color(0xFF8A8F98),
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+                }
+
+                else -> {
+                    items(
+                        items = incidencias,
+                        key = { incidencia -> incidencia.id }
+                    ) { incidencia ->
+                        IncidenciaCard(
+                            incidencia = incidencia,
+                            onClick = { onIncidenciaClick(incidencia) }
+                        )
+                    }
                 }
             }
         }
