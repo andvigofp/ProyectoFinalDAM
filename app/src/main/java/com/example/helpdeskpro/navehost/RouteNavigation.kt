@@ -16,4 +16,7 @@ sealed interface RouteNavigation {
 
     @Serializable
     data object CrearCuenta : RouteNavigation
+
+    @Serializable
+    data object HomeEmpleado : RouteNavigation
 }

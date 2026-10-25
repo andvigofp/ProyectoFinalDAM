@@ -11,6 +11,7 @@ import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
 import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
 import com.example.helpdeskpro.vista.pagina.CrearCuentaPage
+import com.example.helpdeskpro.vista.pagina.HomeEmpleadoPage
 import com.example.helpdeskpro.vista.pagina.LoginPage
 import com.example.helpdeskpro.vista.pagina.RecuperarContrasenaPage
 import kotlinx.coroutines.flow.collectLatest
@@ -62,7 +63,11 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 state = loginViewModel.uiState,
                 onEmailChange = loginViewModel::onEmailChange,
                 onPasswordChange = loginViewModel::onPasswordChange,
-                onLogin = { loginViewModel.iniciarSesion() },
+                onLogin = {
+                    loginViewModel.iniciarSesion {
+                        navigate(RouteNavigation.HomeEmpleado)
+                    }
+                },
                 onForgotPassword = {
                     navigate(RouteNavigation.RecuperarContrasena)
                 },
@@ -115,6 +120,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 errorMessage = state.errorMessage,
                 isLoading = state.isLoading
             )
+        }
+
+        composable<RouteNavigation.HomeEmpleado> {
+            HomeEmpleadoPage()
         }
     }
 }
