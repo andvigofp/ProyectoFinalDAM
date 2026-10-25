@@ -1,0 +1,9 @@
+{
+  "apk": "C:\\Intellij\\Curso 2025-2026\\ProyectoFinalDAM\\.android-build\\run-u8fapexi\\app-debug.apk",
+  "source_apk": "C:\\Intellij\\Curso 2025-2026\\ProyectoFinalDAM\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+  "package": "com.example.helpdeskpro",
+  "task": ":app:assembleDebug",
+  "build_log": "C:\\Intellij\\Curso 2025-2026\\ProyectoFinalDAM\\.android-build\\run-u8fapexi\\build.log",
+  "sha256": "7daa963a0068e161b0e823a061aeee18409aa0cb1d4051d14f59efe89ae5f24c",
+  "rendering": "unverified"
+}
