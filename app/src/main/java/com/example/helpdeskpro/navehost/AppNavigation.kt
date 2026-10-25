@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModel
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
+import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModel
 import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
 import com.example.helpdeskpro.vista.pagina.CrearCuentaPage
 import com.example.helpdeskpro.vista.pagina.HomeEmpleadoPage
@@ -28,6 +29,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     val recuperarViewModel: RecuperarContrasenaViewModel = viewModel()
     val crearCuentaViewModel: CrearCuentaViewModel = viewModel()
     val homeEmpleadoViewModel: HomeEmpleadoViewModel = viewModel()
+    val nuevaIncidenciaViewModel: NuevaIncidenciaViewModel = viewModel()
 
     fun navigate(route: RouteNavigation) {
         navController.navigate(route) {
@@ -136,8 +138,24 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         }
 
         composable<RouteNavigation.NuevaIncidencia> {
+            val state = nuevaIncidenciaViewModel.uiState
             NuevaIncidenciaPage(
-                onVolver = { navController.popBackStack() }
+                titulo = state.titulo,
+                descripcion = state.descripcion,
+                categoria = state.categoria,
+                prioridad = state.prioridad,
+                onTituloChange = nuevaIncidenciaViewModel::onTituloChange,
+                onDescripcionChange = nuevaIncidenciaViewModel::onDescripcionChange,
+                onCategoriaChange = nuevaIncidenciaViewModel::onCategoriaChange,
+                onPrioridadChange = nuevaIncidenciaViewModel::onPrioridadChange,
+                onCrear = { nuevaIncidenciaViewModel.crearIncidencia() },
+                onVolver = { navController.popBackStack() },
+                tituloError = state.tituloError,
+                descripcionError = state.descripcionError,
+                categoriaError = state.categoriaError,
+                prioridadError = state.prioridadError,
+                errorMessage = state.errorMessage,
+                isLoading = state.isLoading
             )
         }
     }
