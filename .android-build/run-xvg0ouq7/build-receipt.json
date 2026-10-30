@@ -1,0 +1,9 @@
+{
+  "apk": "C:\\Intellij\\Curso 2025-2026\\ProyectoFinalDAM\\.android-build\\run-xvg0ouq7\\app-debug.apk",
+  "source_apk": "C:\\Intellij\\Curso 2025-2026\\ProyectoFinalDAM\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+  "package": "com.example.helpdeskpro",
+  "task": ":app:assembleDebug",
+  "build_log": "C:\\Intellij\\Curso 2025-2026\\ProyectoFinalDAM\\.android-build\\run-xvg0ouq7\\build.log",
+  "sha256": "3a53c1f1911385a82306def909c6a5097811b442545562163fea663286461c06",
+  "rendering": "unverified"
+}

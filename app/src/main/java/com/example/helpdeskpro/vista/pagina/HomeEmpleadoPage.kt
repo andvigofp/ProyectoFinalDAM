@@ -20,9 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.IncidenciaDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.vista.componente.HomeBottomBar
@@ -34,13 +36,13 @@ import com.example.helpdeskpro.vista.componente.IncidenciaCard
  */
 @Composable
 fun HomeEmpleadoPage(
+    modifier: Modifier = Modifier,
     incidencias: List<IncidenciaDTO> = emptyList(),
     selectedTab: HomeTab = HomeTab.INICIO,
     onInicio: () -> Unit = {},
     onNueva: () -> Unit = {},
     onPerfil: () -> Unit = {},
     onIncidenciaClick: (IncidenciaDTO) -> Unit = {},
-    modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     errorMessage: String? = null
 ) {
@@ -83,7 +85,7 @@ fun HomeEmpleadoPage(
         ) {
             item {
                 Text(
-                    text = "Mis incidencias",
+                    text = stringResource(R.string.my_incidents),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
@@ -126,7 +128,7 @@ fun HomeEmpleadoPage(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "No tienes incidencias todavía",
+                                text = stringResource(R.string.no_incidents),
                                 color = Color(0xFF8A8F98),
                                 style = MaterialTheme.typography.bodyLarge
                             )

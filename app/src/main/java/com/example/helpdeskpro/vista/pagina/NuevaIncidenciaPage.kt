@@ -15,15 +15,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.vista.componente.NuevaIncidenciaComponent
 
 /** Pantalla para que el empleado registre una nueva incidencia. */
 @Composable
 fun NuevaIncidenciaPage(
+    modifier: Modifier = Modifier,
     titulo: String = "",
     descripcion: String = "",
     categoria: String = "",
@@ -34,7 +37,6 @@ fun NuevaIncidenciaPage(
     onPrioridadChange: (String) -> Unit = {},
     onCrear: () -> Unit = {},
     onVolver: () -> Unit = {},
-    modifier: Modifier = Modifier,
     tituloError: String? = null,
     descripcionError: String? = null,
     categoriaError: String? = null,
@@ -62,7 +64,7 @@ fun NuevaIncidenciaPage(
                 )
             }
             Text(
-                text = "Nueva incidencia",
+                text = stringResource(R.string.new_incident),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold
             )

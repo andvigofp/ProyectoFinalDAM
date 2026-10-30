@@ -26,10 +26,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.IncidenciaDTO
+import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 private val HomeSelectedColor = Color(0xFF637A99)
 private val HomeUnselectedColor = Color(0xFFD8DDE4)
@@ -75,7 +79,12 @@ fun IncidenciaCard(
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "${incidencia.categoria} · ${incidencia.prioridad} · ${incidencia.fecha}",
+                text = stringResource(
+                    R.string.incident_meta,
+                    incidencia.categoria,
+                    incidencia.prioridad,
+                    incidencia.fecha
+                ),
                 color = HomeSecondaryTextColor,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 2,
@@ -122,17 +131,17 @@ fun HomeBottomBar(
         containerColor = Color(0xFFF3F4F6)
     ) {
         HomeBottomBarItem(
-            label = "Inicio",
+            label = stringResource(R.string.home),
             selected = selectedTab == HomeTab.INICIO,
             onClick = onInicio
         )
         HomeBottomBarItem(
-            label = "Nueva",
+            label = stringResource(R.string.nav_new),
             selected = selectedTab == HomeTab.NUEVA,
             onClick = onNueva
         )
         HomeBottomBarItem(
-            label = "Perfil",
+            label = stringResource(R.string.profile),
             selected = selectedTab == HomeTab.PERFIL,
             onClick = onPerfil
         )
@@ -166,4 +175,35 @@ private fun androidx.compose.foundation.layout.RowScope.HomeBottomBarItem(
             indicatorColor = Color.Transparent
         )
     )
+}
+
+@Preview(showBackground = true, widthDp = 390)
+@Composable
+private fun IncidenciaCardPreview() {
+    HelpdeskProTheme(dynamicColor = false) {
+        IncidenciaCard(
+            incidencia = IncidenciaDTO(
+                id = 1,
+                titulo = "No enciende el ordenador",
+                categoria = "Hardware",
+                prioridad = "Alta",
+                fecha = "15/10/2026",
+                estado = "ABIERTA"
+            ),
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 390)
+@Composable
+private fun HomeBottomBarPreview() {
+    HelpdeskProTheme(dynamicColor = false) {
+        HomeBottomBar(
+            selectedTab = HomeTab.INICIO,
+            onInicio = {},
+            onNueva = {},
+            onPerfil = {}
+        )
+    }
 }

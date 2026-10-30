@@ -11,6 +11,7 @@ import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModel
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
 import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModel
+import com.example.helpdeskpro.viemodel.vm.PerfilViewModel
 import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
 import com.example.helpdeskpro.vista.pagina.CrearCuentaPage
 import com.example.helpdeskpro.vista.pagina.HomeEmpleadoPage
@@ -31,6 +32,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     val crearCuentaViewModel: CrearCuentaViewModel = viewModel()
     val homeEmpleadoViewModel: HomeEmpleadoViewModel = viewModel()
     val nuevaIncidenciaViewModel: NuevaIncidenciaViewModel = viewModel()
+    val perfilViewModel: PerfilViewModel = viewModel()
 
     fun navigate(route: RouteNavigation) {
         navController.navigate(route) {
@@ -162,10 +164,15 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         }
 
         composable<RouteNavigation.Perfil> {
+            val state = perfilViewModel.uiState
             PerfilPage(
+                perfil = state.perfil,
+                isLoading = state.isLoading,
+                errorMessage = state.errorMessage,
                 onInicio = { navigate(RouteNavigation.HomeEmpleado) },
                 onNueva = { navigate(RouteNavigation.NuevaIncidencia) },
                 onCerrarSesion = {
+                    perfilViewModel.limpiarPerfil()
                     navController.navigate(RouteNavigation.Login) {
                         popUpTo(0) { inclusive = true }
                         launchSingleTop = true

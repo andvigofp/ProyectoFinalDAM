@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.vista.componente.RecuperarContrasenaComponent
 
@@ -32,11 +34,11 @@ private val RecuperarLogoBorderColor = Color(0xFF65758B)
  */
 @Composable
 fun RecuperarContrasenaPage(
+    modifier: Modifier = Modifier,
     email: String = "",
     onEmailChange: (String) -> Unit = {},
     onEnviar: () -> Unit = {},
     onVolverLogin: () -> Unit = {},
-    modifier: Modifier = Modifier,
     emailError: String? = null,
     errorMessage: String? = null,
     successMessage: String? = null,
@@ -59,7 +61,7 @@ fun RecuperarContrasenaPage(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
-                    text = "LOGO",
+                    text = stringResource(R.string.logo),
                     color = RecuperarLogoBorderColor,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Medium
@@ -70,7 +72,7 @@ fun RecuperarContrasenaPage(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "Recuperar contraseña",
+            text = stringResource(R.string.recover_password),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
@@ -78,8 +80,7 @@ fun RecuperarContrasenaPage(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "Introduce tu email y te enviaremos una contraseña temporal " +
-                "para recuperar el acceso a tu cuenta.",
+            text = stringResource(R.string.recover_password_description),
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodyLarge

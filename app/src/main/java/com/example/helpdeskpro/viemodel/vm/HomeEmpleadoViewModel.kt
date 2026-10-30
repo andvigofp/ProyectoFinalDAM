@@ -1,16 +1,18 @@
 package com.example.helpdeskpro.viemodel.vm
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.IncidenciaDTO
 import com.example.helpdeskpro.viemodel.ustate.HomeEmpleadoUiState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
-class HomeEmpleadoViewModel : ViewModel() {
+class HomeEmpleadoViewModel(application: Application) : AndroidViewModel(application) {
 
     var uiState by mutableStateOf(HomeEmpleadoUiState())
         private set
@@ -41,7 +43,7 @@ class HomeEmpleadoViewModel : ViewModel() {
                 uiState = uiState.copy(
                     isLoading = false,
                     errorMessage = exception.message
-                        ?: "No se pudieron cargar las incidencias"
+                        ?: getApplication<Application>().getString(R.string.error_load_incidents)
                 )
             }
         }

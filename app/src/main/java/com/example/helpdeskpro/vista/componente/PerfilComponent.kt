@@ -17,9 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.PerfilDTO
+import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 private val PerfilSecondaryTextColor = Color(0xFF8A8F98)
 
@@ -64,7 +68,7 @@ fun PerfilComponent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "${perfil.nombre} ${perfil.apellidos}".trim(),
+            text = stringResource(R.string.full_name, perfil.nombre, perfil.apellidos).trim(),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
@@ -86,10 +90,10 @@ fun PerfilComponent(
         Spacer(modifier = Modifier.height(28.dp))
 
         Column(modifier = Modifier.fillMaxWidth()) {
-            DatoPerfil(label = "Email", value = perfil.email)
-            DatoPerfil(label = "Teléfono", value = perfil.telefono)
-            DatoPerfil(label = "Departamento", value = perfil.departamento)
-            DatoPerfil(label = "Miembro desde", value = perfil.miembroDesde)
+            DatoPerfil(label = stringResource(R.string.email), value = perfil.email)
+            DatoPerfil(label = stringResource(R.string.phone), value = perfil.telefono)
+            DatoPerfil(label = stringResource(R.string.department), value = perfil.departamento)
+            DatoPerfil(label = stringResource(R.string.member_since), value = perfil.miembroDesde)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -103,7 +107,7 @@ fun PerfilComponent(
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8998AD))
         ) {
             Text(
-                text = "Editar perfil",
+                text = stringResource(R.string.edit_profile),
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -119,7 +123,7 @@ fun PerfilComponent(
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB05A5A))
         ) {
             Text(
-                text = "Cerrar sesión",
+                text = stringResource(R.string.logout),
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -136,11 +140,32 @@ private fun DatoPerfil(label: String, value: String) {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = value.ifBlank { "No indicado" },
+            text = if (value.isBlank()) stringResource(R.string.not_provided) else value,
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
         HorizontalDivider(color = Color(0xFFE1E3E6))
         Spacer(modifier = Modifier.height(12.dp))
+    }
+}
+
+@Preview(showBackground = true, widthDp = 390, heightDp = 844)
+@Composable
+private fun PerfilComponentPreview() {
+    HelpdeskProTheme(dynamicColor = false) {
+        PerfilComponent(
+            perfil = PerfilDTO(
+                id = 1,
+                nombre = "Ana",
+                apellidos = "Pérez",
+                email = "ana@empresa.com",
+                telefono = "600 123 456",
+                departamento = "Ventas",
+                miembroDesde = "01/09/2026",
+                rol = "EMPLEADO"
+            ),
+            onEditarPerfil = {},
+            onCerrarSesion = {}
+        )
     }
 }

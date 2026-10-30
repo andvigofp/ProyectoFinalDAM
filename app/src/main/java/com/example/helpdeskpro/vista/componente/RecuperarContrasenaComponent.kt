@@ -16,10 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
+import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 private val RecuperarButtonColor = Color(0xFF8998AD)
 
@@ -49,7 +53,7 @@ fun RecuperarContrasenaComponent(
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text(
-                text = "Email",
+                text = stringResource(R.string.email),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -57,7 +61,7 @@ fun RecuperarContrasenaComponent(
                 value = email,
                 onValueChange = onEmailChange,
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("usuario@empresa.com") },
+                placeholder = { Text(stringResource(R.string.email_placeholder)) },
                 singleLine = true,
                 isError = emailError != null,
                 supportingText = {
@@ -105,7 +109,9 @@ fun RecuperarContrasenaComponent(
             colors = ButtonDefaults.buttonColors(containerColor = RecuperarButtonColor)
         ) {
             Text(
-                text = if (isLoading) "Enviando…" else "Enviar contraseña temporal",
+                text = stringResource(
+                    if (isLoading) R.string.sending else R.string.send_temporary_password
+                ),
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -114,7 +120,20 @@ fun RecuperarContrasenaComponent(
             onClick = onVolverLogin,
             enabled = !isLoading
         ) {
-            Text("‹ Volver al login")
+            Text(stringResource(R.string.back_to_login))
         }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 360)
+@Composable
+private fun RecuperarContrasenaComponentPreview() {
+    HelpdeskProTheme(dynamicColor = false) {
+        RecuperarContrasenaComponent(
+            email = "usuario@empresa.com",
+            onEmailChange = {},
+            onEnviar = {},
+            onVolverLogin = {}
+        )
     }
 }

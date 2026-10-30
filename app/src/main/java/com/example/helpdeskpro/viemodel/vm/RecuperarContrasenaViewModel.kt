@@ -1,14 +1,16 @@
 package com.example.helpdeskpro.viemodel.vm
 
+import android.app.Application
 import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.RecuperarContrasenaDTO
 import com.example.helpdeskpro.viemodel.ustate.RecuperarContrasenaUiState
 
-class RecuperarContrasenaViewModel : ViewModel() {
+class RecuperarContrasenaViewModel(application: Application) : AndroidViewModel(application) {
 
     var uiState by mutableStateOf(RecuperarContrasenaUiState())
         private set
@@ -30,9 +32,10 @@ class RecuperarContrasenaViewModel : ViewModel() {
         val normalizedEmail = uiState.email.trim()
 
         val emailError = when {
-            normalizedEmail.isEmpty() -> "Introduce tu email"
+            normalizedEmail.isEmpty() ->
+                getApplication<Application>().getString(R.string.error_email_required)
             !Patterns.EMAIL_ADDRESS.matcher(normalizedEmail).matches() ->
-                "Introduce un email válido"
+                getApplication<Application>().getString(R.string.error_email_invalid)
             else -> null
         }
 

@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.LoginUiState
 import com.example.helpdeskpro.vista.componente.LoginComponent
@@ -33,13 +35,13 @@ private val LogoBorderColor = Color(0xFF65758B)
  */
 @Composable
 fun LoginPage(
+    modifier: Modifier = Modifier,
     state: LoginUiState = LoginUiState(),
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onLogin: () -> Unit = {},
     onForgotPassword: () -> Unit = {},
-    onCreateAccount: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onCreateAccount: () -> Unit = {}
 ) {
 
     Column(
@@ -59,7 +61,7 @@ fun LoginPage(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
-                    text = "LOGO",
+                    text = stringResource(R.string.logo),
                     color = LogoBorderColor,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Medium
@@ -70,7 +72,7 @@ fun LoginPage(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "HelpDesk Pro",
+            text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )

@@ -19,12 +19,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
+import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 private val LoginButtonColor = Color(0xFF8998AD)
 
@@ -53,7 +57,7 @@ fun LoginComponent(
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
-                text = "Email",
+                text = stringResource(R.string.email),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -61,7 +65,7 @@ fun LoginComponent(
                 value = email,
                 onValueChange = onEmailChange,
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("usuario@empresa.com") },
+                placeholder = { Text(stringResource(R.string.email_placeholder)) },
                 singleLine = true,
                 isError = emailError != null,
                 supportingText = {
@@ -79,7 +83,7 @@ fun LoginComponent(
 
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
-                text = "Contraseña",
+                text = stringResource(R.string.password),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -87,7 +91,7 @@ fun LoginComponent(
                 value = password,
                 onValueChange = onPasswordChange,
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Introduce tu contraseña") },
+                placeholder = { Text(stringResource(R.string.password_placeholder)) },
                 singleLine = true,
                 isError = passwordError != null,
                 supportingText = {
@@ -105,7 +109,13 @@ fun LoginComponent(
                         onClick = { passwordVisible = !passwordVisible },
                         enabled = !isLoading
                     ) {
-                        Text(if (passwordVisible) "Ocultar" else "Mostrar")
+                        Text(
+                            if (passwordVisible) {
+                                stringResource(R.string.hide)
+                            } else {
+                                stringResource(R.string.show)
+                            }
+                        )
                     }
                 },
                 keyboardOptions = KeyboardOptions(
@@ -125,7 +135,11 @@ fun LoginComponent(
             colors = ButtonDefaults.buttonColors(containerColor = LoginButtonColor)
         ) {
             Text(
-                text = if (isLoading) "Iniciando sesión…" else "Iniciar sesión",
+                text = if (isLoading) {
+                    stringResource(R.string.logging_in)
+                } else {
+                    stringResource(R.string.login)
+                },
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -138,14 +152,30 @@ fun LoginComponent(
                 onClick = onForgotPassword,
                 enabled = !isLoading
             ) {
-                Text("¿Olvidaste tu contraseña?")
+                Text(stringResource(R.string.forgot_password))
             }
             TextButton(
                 onClick = onCreateAccount,
                 enabled = !isLoading
             ) {
-                Text("Crear cuenta")
+                Text(stringResource(R.string.create_account))
             }
         }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 360)
+@Composable
+private fun LoginComponentPreview() {
+    HelpdeskProTheme(dynamicColor = false) {
+        LoginComponent(
+            email = "usuario@empresa.com",
+            password = "123456",
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLogin = {},
+            onForgotPassword = {},
+            onCreateAccount = {}
+        )
     }
 }

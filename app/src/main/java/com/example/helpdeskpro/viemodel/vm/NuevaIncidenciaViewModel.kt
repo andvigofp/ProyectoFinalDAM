@@ -1,13 +1,15 @@
 package com.example.helpdeskpro.viemodel.vm
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.NuevaIncidenciaDTO
 import com.example.helpdeskpro.viemodel.ustate.NuevaIncidenciaUiState
 
-class NuevaIncidenciaViewModel : ViewModel() {
+class NuevaIncidenciaViewModel(application: Application) : AndroidViewModel(application) {
 
     var uiState by mutableStateOf(NuevaIncidenciaUiState())
         private set
@@ -59,19 +61,23 @@ class NuevaIncidenciaViewModel : ViewModel() {
         val categoria = currentState.categoria.trim()
         val prioridad = currentState.prioridad.trim()
 
-        val tituloError = if (titulo.isEmpty()) "Introduce un título" else null
+        val tituloError = if (titulo.isEmpty()) {
+            getApplication<Application>().getString(R.string.error_title_required)
+        } else {
+            null
+        }
         val descripcionError = if (descripcion.isEmpty()) {
-            "Describe el problema"
+            getApplication<Application>().getString(R.string.error_description_required)
         } else {
             null
         }
         val categoriaError = if (categoria.isEmpty()) {
-            "Selecciona una categoría"
+            getApplication<Application>().getString(R.string.error_category_required)
         } else {
             null
         }
         val prioridadError = if (prioridad.isEmpty()) {
-            "Selecciona una prioridad"
+            getApplication<Application>().getString(R.string.error_priority_required)
         } else {
             null
         }

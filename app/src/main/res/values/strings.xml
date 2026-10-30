@@ -1,3 +1,85 @@
 <resources>
-    <string name="app_name">helpdeskPro</string>
+    <string name="app_name">HelpDesk Pro</string>
+    <string name="logo">LOGO</string>
+
+    <!-- Comunes -->
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="phone">Teléfono</string>
+    <string name="department">Departamento</string>
+    <string name="email_placeholder">usuario@empresa.com</string>
+    <string name="password_placeholder">Introduce tu contraseña</string>
+    <string name="show">Mostrar</string>
+    <string name="hide">Ocultar</string>
+    <string name="save">Guardar</string>
+    <string name="saving">Guardando…</string>
+    <string name="back_to_login">‹ Volver al login</string>
+    <string name="home">Inicio</string>
+    <string name="nav_new">Nueva</string>
+    <string name="profile">Perfil</string>
+
+    <!-- Login y recuperación -->
+    <string name="login">Iniciar sesión</string>
+    <string name="logging_in">Iniciando sesión…</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="create_account">Crear cuenta</string>
+    <string name="recover_password">Recuperar contraseña</string>
+    <string name="recover_password_description">Introduce tu email y te enviaremos una contraseña temporal para recuperar el acceso a tu cuenta.</string>
+    <string name="send_temporary_password">Enviar contraseña temporal</string>
+    <string name="sending">Enviando…</string>
+    <string name="temporary_password_sent">Te hemos enviado una contraseña temporal.</string>
+
+    <!-- Crear cuenta -->
+    <string name="name">Nombre</string>
+    <string name="surnames">Apellidos</string>
+    <string name="role">Rol</string>
+    <string name="name_placeholder">Ana</string>
+    <string name="surnames_placeholder">Pérez García</string>
+    <string name="account_email_placeholder">ana@empresa.com</string>
+    <string name="phone_placeholder">600 123 456</string>
+    <string name="role_placeholder">EMPLEADO / TECNICO / ADMINISTRADOR</string>
+    <string name="department_placeholder">Ventas / Sistemas …</string>
+
+    <!-- Incidencias -->
+    <string name="my_incidents">Mis incidencias</string>
+    <string name="no_incidents">No tienes incidencias todavía</string>
+    <string name="incident_meta">%1$s · %2$s · %3$s</string>
+    <string name="new_incident">Nueva incidencia</string>
+    <string name="incident_title">Título</string>
+    <string name="description">Descripción</string>
+    <string name="category">Categoría</string>
+    <string name="priority">Prioridad</string>
+    <string name="incident_title_placeholder">Resumen del problema…</string>
+    <string name="incident_description_placeholder">Describe el problema…</string>
+    <string name="category_placeholder">Hardware / Software / Red …</string>
+    <string name="priority_placeholder">Baja / Media / Alta</string>
+    <string name="create_incident">Crear incidencia</string>
+    <string name="creating">Creando…</string>
+
+    <!-- Perfil -->
+    <string name="my_profile">Mi perfil</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="member_since">Miembro desde</string>
+    <string name="not_provided">No indicado</string>
+    <string name="no_profile_data">No hay datos de perfil disponibles</string>
+    <string name="full_name">%1$s %2$s</string>
+
+    <!-- Validaciones y errores -->
+    <string name="error_name_required">Introduce tu nombre</string>
+    <string name="error_surnames_required">Introduce tus apellidos</string>
+    <string name="error_email_required">Introduce tu email</string>
+    <string name="error_email_invalid">Introduce un email válido</string>
+    <string name="error_phone_required">Introduce tu teléfono</string>
+    <string name="error_password_required">Introduce tu contraseña</string>
+    <string name="error_new_password_required">Introduce una contraseña</string>
+    <string name="error_password_length">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="error_role_required">Selecciona un rol</string>
+    <string name="error_department_required">Selecciona un departamento</string>
+    <string name="error_title_required">Introduce un título</string>
+    <string name="error_description_required">Describe el problema</string>
+    <string name="error_category_required">Selecciona una categoría</string>
+    <string name="error_priority_required">Selecciona una prioridad</string>
+    <string name="error_load_incidents">No se pudieron cargar las incidencias</string>
+    <string name="error_load_profile">No se pudo cargar el perfil</string>
 </resources>

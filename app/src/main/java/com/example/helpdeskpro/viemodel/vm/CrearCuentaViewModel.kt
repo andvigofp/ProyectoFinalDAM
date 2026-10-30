@@ -1,14 +1,16 @@
 package com.example.helpdeskpro.viemodel.vm
 
+import android.app.Application
 import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.CrearCuentaDTO
 import com.example.helpdeskpro.viemodel.ustate.CrearCuentaUiState
 
-class CrearCuentaViewModel : ViewModel() {
+class CrearCuentaViewModel(application: Application) : AndroidViewModel(application) {
 
     var uiState by mutableStateOf(CrearCuentaUiState())
         private set
@@ -89,24 +91,42 @@ class CrearCuentaViewModel : ViewModel() {
         val rol = currentState.rol.trim()
         val departamento = currentState.departamento.trim()
 
-        val nombreError = if (nombre.isEmpty()) "Introduce tu nombre" else null
-        val apellidosError = if (apellidos.isEmpty()) "Introduce tus apellidos" else null
+        val nombreError = if (nombre.isEmpty()) {
+            getApplication<Application>().getString(R.string.error_name_required)
+        } else {
+            null
+        }
+        val apellidosError = if (apellidos.isEmpty()) {
+            getApplication<Application>().getString(R.string.error_surnames_required)
+        } else {
+            null
+        }
         val emailError = when {
-            email.isEmpty() -> "Introduce tu email"
+            email.isEmpty() ->
+                getApplication<Application>().getString(R.string.error_email_required)
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() ->
-                "Introduce un email válido"
+                getApplication<Application>().getString(R.string.error_email_invalid)
             else -> null
         }
-        val telefonoError = if (telefono.isEmpty()) "Introduce tu teléfono" else null
+        val telefonoError = if (telefono.isEmpty()) {
+            getApplication<Application>().getString(R.string.error_phone_required)
+        } else {
+            null
+        }
         val passwordError = when {
-            currentState.password.isBlank() -> "Introduce una contraseña"
+            currentState.password.isBlank() ->
+                getApplication<Application>().getString(R.string.error_new_password_required)
             currentState.password.length < 6 ->
-                "La contraseña debe tener al menos 6 caracteres"
+                getApplication<Application>().getString(R.string.error_password_length)
             else -> null
         }
-        val rolError = if (rol.isEmpty()) "Selecciona un rol" else null
+        val rolError = if (rol.isEmpty()) {
+            getApplication<Application>().getString(R.string.error_role_required)
+        } else {
+            null
+        }
         val departamentoError = if (departamento.isEmpty()) {
-            "Selecciona un departamento"
+            getApplication<Application>().getString(R.string.error_department_required)
         } else {
             null
         }

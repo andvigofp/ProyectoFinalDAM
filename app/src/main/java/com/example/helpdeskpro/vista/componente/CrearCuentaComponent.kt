@@ -24,12 +24,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
+import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 private val CrearCuentaButtonColor = Color(0xFF8998AD)
 
@@ -73,30 +77,30 @@ fun CrearCuentaComponent(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         CampoTextoCuenta(
-            label = "Nombre",
+            label = stringResource(R.string.name),
             value = nombre,
             onValueChange = onNombreChange,
-            placeholder = "Ana",
+            placeholder = stringResource(R.string.name_placeholder),
             error = nombreError,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             enabled = !isLoading
         )
 
         CampoTextoCuenta(
-            label = "Apellidos",
+            label = stringResource(R.string.surnames),
             value = apellidos,
             onValueChange = onApellidosChange,
-            placeholder = "Pérez García",
+            placeholder = stringResource(R.string.surnames_placeholder),
             error = apellidosError,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             enabled = !isLoading
         )
 
         CampoTextoCuenta(
-            label = "Email",
+            label = stringResource(R.string.email),
             value = email,
             onValueChange = onEmailChange,
-            placeholder = "ana@empresa.com",
+            placeholder = stringResource(R.string.account_email_placeholder),
             error = emailError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
@@ -106,10 +110,10 @@ fun CrearCuentaComponent(
         )
 
         CampoTextoCuenta(
-            label = "Teléfono",
+            label = stringResource(R.string.phone),
             value = telefono,
             onValueChange = onTelefonoChange,
-            placeholder = "600 123 456",
+            placeholder = stringResource(R.string.phone_placeholder),
             error = telefonoError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Phone,
@@ -119,10 +123,10 @@ fun CrearCuentaComponent(
         )
 
         CampoTextoCuenta(
-            label = "Contraseña",
+            label = stringResource(R.string.password),
             value = password,
             onValueChange = onPasswordChange,
-            placeholder = "Introduce tu contraseña",
+            placeholder = stringResource(R.string.password_placeholder),
             error = passwordError,
             visualTransformation = if (passwordVisible) {
                 VisualTransformation.None
@@ -134,7 +138,7 @@ fun CrearCuentaComponent(
                     onClick = { passwordVisible = !passwordVisible },
                     enabled = !isLoading
                 ) {
-                    Text(if (passwordVisible) "Ocultar" else "Mostrar")
+                    Text(stringResource(if (passwordVisible) R.string.hide else R.string.show))
                 }
             },
             keyboardOptions = KeyboardOptions(
@@ -150,9 +154,9 @@ fun CrearCuentaComponent(
         )
 
         SelectorCuenta(
-            label = "Rol",
+            label = stringResource(R.string.role),
             value = rol,
-            placeholder = "EMPLEADO / TECNICO / ADMINISTRADOR",
+            placeholder = stringResource(R.string.role_placeholder),
             options = roles,
             onOptionSelected = onRolChange,
             error = rolError,
@@ -160,9 +164,9 @@ fun CrearCuentaComponent(
         )
 
         SelectorCuenta(
-            label = "Departamento",
+            label = stringResource(R.string.department),
             value = departamento,
-            placeholder = "Ventas / Sistemas …",
+            placeholder = stringResource(R.string.department_placeholder),
             options = departamentos,
             onOptionSelected = onDepartamentoChange,
             error = departamentoError,
@@ -187,7 +191,7 @@ fun CrearCuentaComponent(
             colors = ButtonDefaults.buttonColors(containerColor = CrearCuentaButtonColor)
         ) {
             Text(
-                text = if (isLoading) "Guardando…" else "Guardar",
+                text = stringResource(if (isLoading) R.string.saving else R.string.save),
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -298,5 +302,29 @@ private fun SelectorCuenta(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 390, heightDp = 844)
+@Composable
+private fun CrearCuentaComponentPreview() {
+    HelpdeskProTheme(dynamicColor = false) {
+        CrearCuentaComponent(
+            nombre = "Ana",
+            apellidos = "Pérez García",
+            email = "ana@empresa.com",
+            telefono = "600 123 456",
+            password = "123456",
+            rol = "EMPLEADO",
+            departamento = "Ventas",
+            onNombreChange = {},
+            onApellidosChange = {},
+            onEmailChange = {},
+            onTelefonoChange = {},
+            onPasswordChange = {},
+            onRolChange = {},
+            onDepartamentoChange = {},
+            onGuardar = {}
+        )
     }
 }

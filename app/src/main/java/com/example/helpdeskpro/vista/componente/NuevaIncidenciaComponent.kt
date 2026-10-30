@@ -21,9 +21,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
+import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 private val NuevaIncidenciaButtonColor = Color(0xFF8998AD)
 
@@ -55,7 +59,7 @@ fun NuevaIncidenciaComponent(
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
-                text = "Título",
+                text = stringResource(R.string.incident_title),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -63,7 +67,7 @@ fun NuevaIncidenciaComponent(
                 value = titulo,
                 onValueChange = onTituloChange,
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Resumen del problema…") },
+                placeholder = { Text(stringResource(R.string.incident_title_placeholder)) },
                 singleLine = true,
                 isError = tituloError != null,
                 supportingText = {
@@ -76,7 +80,7 @@ fun NuevaIncidenciaComponent(
 
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
-                text = "Descripción",
+                text = stringResource(R.string.description),
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.SemiBold
             )
@@ -86,7 +90,7 @@ fun NuevaIncidenciaComponent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(112.dp),
-                placeholder = { Text("Describe el problema…") },
+                placeholder = { Text(stringResource(R.string.incident_description_placeholder)) },
                 isError = descripcionError != null,
                 supportingText = {
                     if (descripcionError != null) Text(descripcionError)
@@ -98,9 +102,9 @@ fun NuevaIncidenciaComponent(
         }
 
         SelectorNuevaIncidencia(
-            label = "Categoría",
+            label = stringResource(R.string.category),
             value = categoria,
-            placeholder = "Hardware / Software / Red …",
+            placeholder = stringResource(R.string.category_placeholder),
             options = categorias,
             onOptionSelected = onCategoriaChange,
             error = categoriaError,
@@ -108,9 +112,9 @@ fun NuevaIncidenciaComponent(
         )
 
         SelectorNuevaIncidencia(
-            label = "Prioridad",
+            label = stringResource(R.string.priority),
             value = prioridad,
-            placeholder = "Baja / Media / Alta",
+            placeholder = stringResource(R.string.priority_placeholder),
             options = prioridades,
             onOptionSelected = onPrioridadChange,
             error = prioridadError,
@@ -137,7 +141,7 @@ fun NuevaIncidenciaComponent(
             )
         ) {
             Text(
-                text = if (isLoading) "Creando…" else "Crear incidencia",
+                text = stringResource(if (isLoading) R.string.creating else R.string.create_incident),
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -206,5 +210,23 @@ private fun SelectorNuevaIncidencia(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 390, heightDp = 700)
+@Composable
+private fun NuevaIncidenciaComponentPreview() {
+    HelpdeskProTheme(dynamicColor = false) {
+        NuevaIncidenciaComponent(
+            titulo = "No enciende el ordenador",
+            descripcion = "El ordenador no responde al pulsar el botón de encendido.",
+            categoria = "Hardware",
+            prioridad = "Alta",
+            onTituloChange = {},
+            onDescripcionChange = {},
+            onCategoriaChange = {},
+            onPrioridadChange = {},
+            onCrear = {}
+        )
     }
 }

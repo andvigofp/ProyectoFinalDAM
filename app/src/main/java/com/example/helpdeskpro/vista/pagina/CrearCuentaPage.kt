@@ -15,9 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.vista.componente.CrearCuentaComponent
 
@@ -26,6 +28,7 @@ import com.example.helpdeskpro.vista.componente.CrearCuentaComponent
  */
 @Composable
 fun CrearCuentaPage(
+    modifier: Modifier = Modifier,
     nombre: String = "",
     apellidos: String = "",
     email: String = "",
@@ -42,7 +45,6 @@ fun CrearCuentaPage(
     onDepartamentoChange: (String) -> Unit = {},
     onGuardar: () -> Unit = {},
     onVolverLogin: () -> Unit = {},
-    modifier: Modifier = Modifier,
     nombreError: String? = null,
     apellidosError: String? = null,
     emailError: String? = null,
@@ -73,7 +75,7 @@ fun CrearCuentaPage(
                 )
             }
             Text(
-                text = "Crear cuenta",
+                text = stringResource(R.string.create_account),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold
             )

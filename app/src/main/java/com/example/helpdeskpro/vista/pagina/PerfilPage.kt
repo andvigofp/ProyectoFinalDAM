@@ -17,9 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.PerfilDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.vista.componente.HomeBottomBar
@@ -29,12 +31,12 @@ import com.example.helpdeskpro.vista.componente.PerfilComponent
 /** Pantalla de consulta del perfil del usuario autenticado. */
 @Composable
 fun PerfilPage(
+    modifier: Modifier = Modifier,
     perfil: PerfilDTO? = null,
     onInicio: () -> Unit = {},
     onNueva: () -> Unit = {},
     onEditarPerfil: () -> Unit = {},
     onCerrarSesion: () -> Unit = {},
-    modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     errorMessage: String? = null
 ) {
@@ -58,7 +60,7 @@ fun PerfilPage(
                 .padding(horizontal = 24.dp, vertical = 20.dp)
         ) {
             Text(
-                text = "Mi perfil",
+                text = stringResource(R.string.my_profile),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold
             )
@@ -88,7 +90,7 @@ fun PerfilPage(
 
                 perfil == null -> {
                     Text(
-                        text = "No hay datos de perfil disponibles",
+                        text = stringResource(R.string.no_profile_data),
                         modifier = Modifier.padding(top = 48.dp),
                         color = Color(0xFF8A8F98),
                         style = MaterialTheme.typography.bodyLarge
