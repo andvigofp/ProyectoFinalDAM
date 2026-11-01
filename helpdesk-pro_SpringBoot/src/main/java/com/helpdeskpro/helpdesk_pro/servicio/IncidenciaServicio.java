@@ -7,6 +7,7 @@ import com.helpdeskpro.helpdesk_pro.excepciones.RecursoNoEncontradoException;
 import com.helpdeskpro.helpdesk_pro.excepciones.SolicitudIncorrectaException;
 import com.helpdeskpro.helpdesk_pro.repositorio.*;
 import com.helpdeskpro.helpdesk_pro.seguridad.SeguridadServicio;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 @Transactional
 public class IncidenciaServicio {
 
@@ -24,24 +26,6 @@ public class IncidenciaServicio {
     private final EstadosRepositorio estadosRepositorio;
     private final HistorialesRepositorio historialesRepositorio;
     private final SeguridadServicio seguridadServicio;
-
-    public IncidenciaServicio(
-            IncidenciasRepositorio incidenciasRepositorio,
-            UsuariosRepositorio usuariosRepositorio,
-            CategoriasRepositorio categoriasRepositorio,
-            PrioridadesRepositorio prioridadesRepositorio,
-            EstadosRepositorio estadosRepositorio,
-            HistorialesRepositorio historialesRepositorio,
-            SeguridadServicio seguridadServicio) {
-
-        this.incidenciasRepositorio = incidenciasRepositorio;
-        this.usuariosRepositorio = usuariosRepositorio;
-        this.categoriasRepositorio = categoriasRepositorio;
-        this.prioridadesRepositorio = prioridadesRepositorio;
-        this.estadosRepositorio = estadosRepositorio;
-        this.historialesRepositorio = historialesRepositorio;
-        this.seguridadServicio = seguridadServicio;
-    }
 
     // Obtener todas las incidencias.
     // Un empleado solo ve las suyas; técnico y administrador ven todas.

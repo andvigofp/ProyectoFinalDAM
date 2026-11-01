@@ -12,12 +12,14 @@ import com.helpdeskpro.helpdesk_pro.repositorio.ComentariosRepositorio;
 import com.helpdeskpro.helpdesk_pro.repositorio.HistorialesRepositorio;
 import com.helpdeskpro.helpdesk_pro.repositorio.IncidenciasRepositorio;
 import com.helpdeskpro.helpdesk_pro.seguridad.SeguridadServicio;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 @Transactional
 public class ComentarioServicio {
 
@@ -26,17 +28,6 @@ public class ComentarioServicio {
     private final HistorialesRepositorio historialesRepositorio;
     private final SeguridadServicio seguridadServicio;
 
-    public ComentarioServicio(
-            ComentariosRepositorio comentariosRepositorio,
-            IncidenciasRepositorio incidenciasRepositorio,
-            HistorialesRepositorio historialesRepositorio,
-            SeguridadServicio seguridadServicio) {
-
-        this.comentariosRepositorio = comentariosRepositorio;
-        this.incidenciasRepositorio = incidenciasRepositorio;
-        this.historialesRepositorio = historialesRepositorio;
-        this.seguridadServicio = seguridadServicio;
-    }
 
     // Comentarios de una incidencia (el empleado solo las suyas)
     @Transactional(readOnly = true)

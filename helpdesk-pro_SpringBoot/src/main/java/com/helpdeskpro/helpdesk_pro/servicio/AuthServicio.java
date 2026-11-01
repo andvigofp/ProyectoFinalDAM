@@ -8,11 +8,13 @@ import com.helpdeskpro.helpdesk_pro.excepciones.SolicitudIncorrectaException;
 import com.helpdeskpro.helpdesk_pro.repositorio.UsuariosRepositorio;
 import com.helpdeskpro.helpdesk_pro.seguridad.JwtServicio;
 import com.helpdeskpro.helpdesk_pro.seguridad.SeguridadServicio;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@AllArgsConstructor
 @Transactional
 public class AuthServicio {
 
@@ -21,17 +23,6 @@ public class AuthServicio {
     private final JwtServicio jwtServicio;
     private final SeguridadServicio seguridadServicio;
 
-    public AuthServicio(
-            UsuariosRepositorio usuariosRepositorio,
-            PasswordEncoder passwordEncoder,
-            JwtServicio jwtServicio,
-            SeguridadServicio seguridadServicio) {
-
-        this.usuariosRepositorio = usuariosRepositorio;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtServicio = jwtServicio;
-        this.seguridadServicio = seguridadServicio;
-    }
 
     // Inicio de sesión: valida credenciales y devuelve un token JWT
     @Transactional(readOnly = true)

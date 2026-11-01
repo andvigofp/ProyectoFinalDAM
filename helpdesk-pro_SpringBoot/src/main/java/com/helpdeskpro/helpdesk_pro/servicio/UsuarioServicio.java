@@ -10,6 +10,7 @@ import com.helpdeskpro.helpdesk_pro.excepciones.RecursoNoEncontradoException;
 import com.helpdeskpro.helpdesk_pro.repositorio.DepartamentosRepositorio;
 import com.helpdeskpro.helpdesk_pro.repositorio.RolesRepositorio;
 import com.helpdeskpro.helpdesk_pro.repositorio.UsuariosRepositorio;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 @Transactional
 public class UsuarioServicio {
 
@@ -25,17 +27,6 @@ public class UsuarioServicio {
     private final DepartamentosRepositorio departamentosRepositorio;
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioServicio(
-            UsuariosRepositorio usuariosRepositorio,
-            RolesRepositorio rolesRepositorio,
-            DepartamentosRepositorio departamentosRepositorio,
-            PasswordEncoder passwordEncoder) {
-
-        this.usuariosRepositorio = usuariosRepositorio;
-        this.rolesRepositorio = rolesRepositorio;
-        this.departamentosRepositorio = departamentosRepositorio;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     // Obtener todos los usuarios
     @Transactional(readOnly = true)
