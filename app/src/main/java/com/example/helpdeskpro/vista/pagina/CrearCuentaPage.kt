@@ -1,5 +1,6 @@
 package com.example.helpdeskpro.vista.pagina
 
+import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.vista.componente.CrearCuentaComponent
 
 /**
@@ -28,33 +33,13 @@ import com.example.helpdeskpro.vista.componente.CrearCuentaComponent
  */
 @Composable
 fun CrearCuentaPage(
+    crearCuentaViewModel: CrearCuentaViewModel,
     modifier: Modifier = Modifier,
-    nombre: String = "",
-    apellidos: String = "",
-    email: String = "",
-    telefono: String = "",
-    password: String = "",
-    rol: String = "",
-    departamento: String = "",
-    onNombreChange: (String) -> Unit = {},
-    onApellidosChange: (String) -> Unit = {},
-    onEmailChange: (String) -> Unit = {},
-    onTelefonoChange: (String) -> Unit = {},
-    onPasswordChange: (String) -> Unit = {},
-    onRolChange: (String) -> Unit = {},
-    onDepartamentoChange: (String) -> Unit = {},
-    onGuardar: () -> Unit = {},
     onVolverLogin: () -> Unit = {},
-    nombreError: String? = null,
-    apellidosError: String? = null,
-    emailError: String? = null,
-    telefonoError: String? = null,
-    passwordError: String? = null,
-    rolError: String? = null,
-    departamentoError: String? = null,
-    errorMessage: String? = null,
-    isLoading: Boolean = false
 ) {
+
+    val uiState by crearCuentaViewModel.uiState.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -67,7 +52,7 @@ fun CrearCuentaPage(
         ) {
             IconButton(
                 onClick = onVolverLogin,
-                enabled = !isLoading
+                enabled = !uiState.isLoading
             ) {
                 Text(
                     text = "‹",
@@ -84,31 +69,37 @@ fun CrearCuentaPage(
         Spacer(modifier = Modifier.height(20.dp))
 
         CrearCuentaComponent(
-            nombre = nombre,
-            apellidos = apellidos,
-            email = email,
-            telefono = telefono,
-            password = password,
-            rol = rol,
-            departamento = departamento,
-            onNombreChange = onNombreChange,
-            onApellidosChange = onApellidosChange,
-            onEmailChange = onEmailChange,
-            onTelefonoChange = onTelefonoChange,
-            onPasswordChange = onPasswordChange,
-            onRolChange = onRolChange,
-            onDepartamentoChange = onDepartamentoChange,
-            onGuardar = onGuardar,
+            nombre = uiState.nombre,
+            apellidos = uiState.apellidos,
+            email = uiState.email,
+            telefono = uiState.telefono,
+            password = uiState.password,
+            rol = uiState.rol,
+            departamento = uiState.departamento,
+
+            onNombreChange = crearCuentaViewModel::onNombreChange,
+            onApellidosChange = crearCuentaViewModel::onApellidosChange,
+            onEmailChange = crearCuentaViewModel::onEmailChange,
+            onTelefonoChange = crearCuentaViewModel::onTelefonoChange,
+            onPasswordChange = crearCuentaViewModel::onPasswordChange,
+            onRolChange = crearCuentaViewModel::onRolChange,
+            onDepartamentoChange = crearCuentaViewModel::onDepartamentoChange,
+
+            onGuardar = {
+                crearCuentaViewModel.crearCuenta()
+            },
+
             modifier = Modifier.fillMaxWidth(),
-            nombreError = nombreError,
-            apellidosError = apellidosError,
-            emailError = emailError,
-            telefonoError = telefonoError,
-            passwordError = passwordError,
-            rolError = rolError,
-            departamentoError = departamentoError,
-            errorMessage = errorMessage,
-            isLoading = isLoading
+
+            nombreError = uiState.nombreError,
+            apellidosError = uiState.apellidosError,
+            emailError = uiState.emailError,
+            telefonoError = uiState.telefonoError,
+            passwordError = uiState.passwordError,
+            rolError = uiState.rolError,
+            departamentoError = uiState.departamentoError,
+            errorMessage = uiState.errorMessage,
+            isLoading = uiState.isLoading
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -119,6 +110,12 @@ fun CrearCuentaPage(
 @Composable
 private fun CrearCuentaPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        CrearCuentaPage()
+        val crearCuentaViewModel = remember { CrearCuentaViewModel(Application()) }
+
+        CrearCuentaPage(
+            crearCuentaViewModel = crearCuentaViewModel,
+            modifier = Modifier,
+            onVolverLogin = {}
+        )
     }
 }

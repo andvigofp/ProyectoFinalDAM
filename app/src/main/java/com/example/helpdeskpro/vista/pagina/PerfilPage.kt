@@ -1,5 +1,6 @@
 package com.example.helpdeskpro.vista.pagina
 
+import android.app.Application
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.PerfilDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.vm.PerfilViewModel
 import com.example.helpdeskpro.vista.componente.HomeBottomBar
 import com.example.helpdeskpro.vista.componente.HomeTab
 import com.example.helpdeskpro.vista.componente.PerfilComponent
@@ -31,15 +36,16 @@ import com.example.helpdeskpro.vista.componente.PerfilComponent
 /** Pantalla de consulta del perfil del usuario autenticado. */
 @Composable
 fun PerfilPage(
+    perfilViewModel: PerfilViewModel,
     modifier: Modifier = Modifier,
-    perfil: PerfilDTO? = null,
     onInicio: () -> Unit = {},
     onNueva: () -> Unit = {},
     onEditarPerfil: () -> Unit = {},
-    onCerrarSesion: () -> Unit = {},
-    isLoading: Boolean = false,
-    errorMessage: String? = null
+    onCerrarSesion: () -> Unit = {}
 ) {
+
+    val uiState by perfilViewModel.uiState.collectAsState()
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = Color.White,
@@ -68,7 +74,7 @@ fun PerfilPage(
             Spacer(modifier = Modifier.height(20.dp))
 
             when {
-                isLoading -> {
+                uiState.isLoading -> {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -79,16 +85,16 @@ fun PerfilPage(
                     }
                 }
 
-                errorMessage != null -> {
+                uiState.errorMessage != null -> {
                     Text(
-                        text = errorMessage,
+                        text = uiState.errorMessage!!,
                         modifier = Modifier.padding(top = 48.dp),
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
 
-                perfil == null -> {
+                uiState.perfil == null -> {
                     Text(
                         text = stringResource(R.string.no_profile_data),
                         modifier = Modifier.padding(top = 48.dp),
@@ -99,10 +105,10 @@ fun PerfilPage(
 
                 else -> {
                     PerfilComponent(
-                        perfil = perfil,
+                        perfil = uiState.perfil!!,
                         onEditarPerfil = onEditarPerfil,
                         onCerrarSesion = onCerrarSesion,
-                        isLoading = isLoading
+                        isLoading = uiState.isLoading
                     )
                 }
             }
@@ -116,17 +122,15 @@ fun PerfilPage(
 @Composable
 private fun PerfilPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
+        val perfilViewModel = remember { PerfilViewModel(Application()) }
+
         PerfilPage(
-            perfil = PerfilDTO(
-                id = 1,
-                nombre = "Ana",
-                apellidos = "Pérez",
-                email = "ana@empresa.com",
-                telefono = "600 123 456",
-                departamento = "Ventas",
-                miembroDesde = "01/09/2026",
-                rol = "EMPLEADO"
-            )
+            perfilViewModel = perfilViewModel,
+            modifier = Modifier,
+            onInicio = {},
+            onNueva = {},
+            onEditarPerfil = {},
+            onCerrarSesion = {}
         )
     }
 }

@@ -8,21 +8,17 @@ import kotlinx.serialization.Serializable
  */
 sealed interface RouteNavigation {
 
-    @Serializable
-    data object Login : RouteNavigation
+    @Serializable object Login : RouteNavigation
+    @Serializable object RecuperarContrasena : RouteNavigation
+    @Serializable object CrearCuenta : RouteNavigation
 
     @Serializable
-    data object RecuperarContrasena : RouteNavigation
+    class HomeEmpleado(val userId: String) : RouteNavigation
 
     @Serializable
-    data object CrearCuenta : RouteNavigation
+    class NuevaIncidencia(val userId: String) : RouteNavigation
 
     @Serializable
-    data object HomeEmpleado : RouteNavigation
+    class Perfil(val userId: String) : RouteNavigation
 
-    @Serializable
-    data object NuevaIncidencia : RouteNavigation
-
-    @Serializable
-    data object Perfil : RouteNavigation
 }

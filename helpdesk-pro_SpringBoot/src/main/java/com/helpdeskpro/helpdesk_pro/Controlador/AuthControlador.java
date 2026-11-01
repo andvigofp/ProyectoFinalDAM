@@ -4,6 +4,7 @@ import com.helpdeskpro.helpdesk_pro.DTO.LoginRequestDTO;
 import com.helpdeskpro.helpdesk_pro.DTO.TokenResponseDTO;
 import com.helpdeskpro.helpdesk_pro.DTO.UsuarioResponseDTO;
 import com.helpdeskpro.helpdesk_pro.Servicio.AuthServicio;
+import org.springframework.context.annotation.Role;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

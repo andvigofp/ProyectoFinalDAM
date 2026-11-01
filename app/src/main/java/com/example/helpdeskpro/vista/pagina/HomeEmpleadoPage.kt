@@ -1,5 +1,6 @@
 package com.example.helpdeskpro.vista.pagina
 
+import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +18,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,28 +31,34 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.IncidenciaDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModel
 import com.example.helpdeskpro.vista.componente.HomeBottomBar
 import com.example.helpdeskpro.vista.componente.HomeTab
 import com.example.helpdeskpro.vista.componente.IncidenciaCard
 
+
+
 /**
  * Página principal del empleado con su listado de incidencias.
+ * Recibe HomeEmpleadoViewModel y observa su estado.
  */
 @Composable
 fun HomeEmpleadoPage(
+    homeEmpleadoViewModel: HomeEmpleadoViewModel,
     modifier: Modifier = Modifier,
-    incidencias: List<IncidenciaDTO> = emptyList(),
     selectedTab: HomeTab = HomeTab.INICIO,
     onInicio: () -> Unit = {},
     onNueva: () -> Unit = {},
     onPerfil: () -> Unit = {},
-    onIncidenciaClick: (IncidenciaDTO) -> Unit = {},
-    isLoading: Boolean = false,
-    errorMessage: String? = null
+    onIncidenciaClick: (IncidenciaDTO) -> Unit = {}
 ) {
+
+    val uiState by homeEmpleadoViewModel.uiState.collectAsState()
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = Color.White,
+
         bottomBar = {
             HomeBottomBar(
                 selectedTab = selectedTab,
@@ -57,6 +67,7 @@ fun HomeEmpleadoPage(
                 onPerfil = onPerfil
             )
         },
+
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNueva,
@@ -70,30 +81,37 @@ fun HomeEmpleadoPage(
                 )
             }
         }
+
     ) { innerPadding ->
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
+
             contentPadding = PaddingValues(
                 start = 16.dp,
                 top = 20.dp,
                 end = 16.dp,
                 bottom = 24.dp
             ),
+
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
             item {
                 Text(
                     text = stringResource(R.string.my_incidents),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
+
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
             when {
-                isLoading -> {
+
+                uiState.isLoading -> {
                     item {
                         Box(
                             modifier = Modifier
@@ -106,10 +124,10 @@ fun HomeEmpleadoPage(
                     }
                 }
 
-                errorMessage != null -> {
+                uiState.errorMessage != null -> {
                     item {
                         Text(
-                            text = errorMessage,
+                            text = uiState.errorMessage.orEmpty(),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 48.dp),
@@ -119,7 +137,7 @@ fun HomeEmpleadoPage(
                     }
                 }
 
-                incidencias.isEmpty() -> {
+                uiState.incidencias.isEmpty() -> {
                     item {
                         Box(
                             modifier = Modifier
@@ -138,12 +156,15 @@ fun HomeEmpleadoPage(
 
                 else -> {
                     items(
-                        items = incidencias,
+                        items = uiState.incidencias,
                         key = { incidencia -> incidencia.id }
                     ) { incidencia ->
+
                         IncidenciaCard(
                             incidencia = incidencia,
-                            onClick = { onIncidenciaClick(incidencia) }
+                            onClick = {
+                                onIncidenciaClick(incidencia)
+                            }
                         )
                     }
                 }
@@ -156,33 +177,16 @@ fun HomeEmpleadoPage(
 @Composable
 private fun HomeEmpleadoPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
+        val homeEmpleadoViewModel = remember { HomeEmpleadoViewModel(Application()) }
+
         HomeEmpleadoPage(
-            incidencias = listOf(
-                IncidenciaDTO(
-                    id = 1,
-                    titulo = "No enciende el ordenador",
-                    categoria = "Hardware",
-                    prioridad = "Alta",
-                    fecha = "15/10/2026",
-                    estado = "ABIERTA"
-                ),
-                IncidenciaDTO(
-                    id = 2,
-                    titulo = "No puedo entrar al correo",
-                    categoria = "Software",
-                    prioridad = "Media",
-                    fecha = "10/10/2026",
-                    estado = "EN_PROGRESO"
-                ),
-                IncidenciaDTO(
-                    id = 3,
-                    titulo = "Instalar VPN en portátil",
-                    categoria = "Red",
-                    prioridad = "Baja",
-                    fecha = "02/10/2026",
-                    estado = "RESUELTA"
-                )
-            )
+            homeEmpleadoViewModel = homeEmpleadoViewModel,
+            modifier = Modifier,
+            selectedTab = HomeTab.INICIO,
+            onInicio = {},
+            onNueva = {},
+            onPerfil = {},
+            onIncidenciaClick = {}
         )
     }
 }

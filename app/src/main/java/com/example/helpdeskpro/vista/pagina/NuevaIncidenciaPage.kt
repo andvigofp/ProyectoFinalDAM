@@ -1,5 +1,6 @@
 package com.example.helpdeskpro.vista.pagina
 
+import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,29 +25,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModel
 import com.example.helpdeskpro.vista.componente.NuevaIncidenciaComponent
 
 /** Pantalla para que el empleado registre una nueva incidencia. */
 @Composable
 fun NuevaIncidenciaPage(
+    nuevaIncidenciaViewModel: NuevaIncidenciaViewModel,
     modifier: Modifier = Modifier,
-    titulo: String = "",
-    descripcion: String = "",
-    categoria: String = "",
-    prioridad: String = "",
-    onTituloChange: (String) -> Unit = {},
-    onDescripcionChange: (String) -> Unit = {},
-    onCategoriaChange: (String) -> Unit = {},
-    onPrioridadChange: (String) -> Unit = {},
-    onCrear: () -> Unit = {},
     onVolver: () -> Unit = {},
-    tituloError: String? = null,
-    descripcionError: String? = null,
-    categoriaError: String? = null,
-    prioridadError: String? = null,
-    errorMessage: String? = null,
-    isLoading: Boolean = false
+    onIncidenciaCreada: () -> Unit = {}
 ) {
+    val uiState by nuevaIncidenciaViewModel.uiState.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -56,7 +50,7 @@ fun NuevaIncidenciaPage(
         ) {
             IconButton(
                 onClick = onVolver,
-                enabled = !isLoading
+                enabled = !uiState.isLoading
             ) {
                 Text(
                     text = "‹",
@@ -73,25 +67,31 @@ fun NuevaIncidenciaPage(
         Spacer(modifier = Modifier.height(20.dp))
 
         NuevaIncidenciaComponent(
-            titulo = titulo,
-            descripcion = descripcion,
-            categoria = categoria,
-            prioridad = prioridad,
-            onTituloChange = onTituloChange,
-            onDescripcionChange = onDescripcionChange,
-            onCategoriaChange = onCategoriaChange,
-            onPrioridadChange = onPrioridadChange,
-            onCrear = onCrear,
+            titulo = uiState.titulo,
+            descripcion = uiState.descripcion,
+            categoria = uiState.categoria,
+            prioridad = uiState.prioridad,
+            onTituloChange = nuevaIncidenciaViewModel::onTituloChange,
+            onDescripcionChange = nuevaIncidenciaViewModel::onDescripcionChange,
+            onCategoriaChange = nuevaIncidenciaViewModel::onCategoriaChange,
+            onPrioridadChange = nuevaIncidenciaViewModel::onPrioridadChange,
+            onCrear = {
+                nuevaIncidenciaViewModel.crearIncidencia()
+            },
             modifier = Modifier.fillMaxWidth(),
-            tituloError = tituloError,
-            descripcionError = descripcionError,
-            categoriaError = categoriaError,
-            prioridadError = prioridadError,
-            errorMessage = errorMessage,
-            isLoading = isLoading
+            tituloError = uiState.tituloError,
+            descripcionError = uiState.descripcionError,
+            categoriaError = uiState.categoriaError,
+            prioridadError = uiState.prioridadError,
+            errorMessage = uiState.errorMessage,
+            isLoading = uiState.isLoading
         )
-
+        
         Spacer(modifier = Modifier.height(24.dp))
+    }
+
+    if (uiState.incidenciaCreada) {
+        onIncidenciaCreada()
     }
 }
 
@@ -99,6 +99,15 @@ fun NuevaIncidenciaPage(
 @Composable
 private fun NuevaIncidenciaPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        NuevaIncidenciaPage()
+        val nuevaIncidenciaViewModel = remember {
+            NuevaIncidenciaViewModel(Application())
+        }
+
+        NuevaIncidenciaPage(
+            nuevaIncidenciaViewModel = nuevaIncidenciaViewModel,
+            modifier = Modifier,
+            onVolver = {},
+            onIncidenciaCreada = {}
+        )
     }
 }

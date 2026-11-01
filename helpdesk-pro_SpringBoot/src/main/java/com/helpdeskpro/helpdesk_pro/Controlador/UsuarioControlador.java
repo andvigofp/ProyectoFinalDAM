@@ -3,6 +3,7 @@ package com.helpdeskpro.helpdesk_pro.Controlador;
 import com.helpdeskpro.helpdesk_pro.DTO.UsuarioRequestDTO;
 import com.helpdeskpro.helpdesk_pro.DTO.UsuarioResponseDTO;
 import com.helpdeskpro.helpdesk_pro.Servicio.UsuarioServicio;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@AllArgsConstructor
 public class UsuarioControlador {
 
     private final UsuarioServicio usuarioServicio;
 
-    public UsuarioControlador(UsuarioServicio usuarioServicio) {
-        this.usuarioServicio = usuarioServicio;
-    }
 
     // GET /api/usuarios
     @GetMapping

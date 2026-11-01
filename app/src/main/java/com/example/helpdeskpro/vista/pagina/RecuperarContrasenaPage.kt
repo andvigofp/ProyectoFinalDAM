@@ -1,5 +1,6 @@
 package com.example.helpdeskpro.vista.pagina
 
+import android.app.Application
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
 import com.example.helpdeskpro.vista.componente.RecuperarContrasenaComponent
 
 private val RecuperarLogoBorderColor = Color(0xFF65758B)
@@ -34,16 +39,12 @@ private val RecuperarLogoBorderColor = Color(0xFF65758B)
  */
 @Composable
 fun RecuperarContrasenaPage(
+    recuperarContrasenaViewModel: RecuperarContrasenaViewModel,
     modifier: Modifier = Modifier,
-    email: String = "",
-    onEmailChange: (String) -> Unit = {},
-    onEnviar: () -> Unit = {},
-    onVolverLogin: () -> Unit = {},
-    emailError: String? = null,
-    errorMessage: String? = null,
-    successMessage: String? = null,
-    isLoading: Boolean = false
+    onVolverLogin: () -> Unit = {}
 ) {
+    val uiState by recuperarContrasenaViewModel.uiState.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -89,15 +90,15 @@ fun RecuperarContrasenaPage(
         Spacer(modifier = Modifier.height(24.dp))
 
         RecuperarContrasenaComponent(
-            email = email,
-            onEmailChange = onEmailChange,
-            onEnviar = onEnviar,
+            email = uiState.email,
+            onEmailChange = recuperarContrasenaViewModel::onEmailChange,
+            onEnviar = recuperarContrasenaViewModel::recuperarContrasena,
             onVolverLogin = onVolverLogin,
             modifier = Modifier.fillMaxWidth(),
-            emailError = emailError,
-            errorMessage = errorMessage,
-            successMessage = successMessage,
-            isLoading = isLoading
+            emailError = uiState.emailError,
+            errorMessage = uiState.errorMessage,
+            successMessage = uiState.successMessage,
+            isLoading = uiState.isLoading
         )
     }
 }
@@ -106,17 +107,14 @@ fun RecuperarContrasenaPage(
 @Composable
 private fun RecuperarContrasenaPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        RecuperarContrasenaPage()
-    }
-}
+        val recuperarContrasenaViewModel = remember {
+            RecuperarContrasenaViewModel(Application())
+        }
 
-@Preview(showBackground = true, widthDp = 360, heightDp = 800)
-@Composable
-private fun RecuperarContrasenaExitoPreview() {
-    HelpdeskProTheme(dynamicColor = false) {
         RecuperarContrasenaPage(
-            email = "usuario@empresa.com",
-            successMessage = "Te hemos enviado una contraseña temporal."
+            recuperarContrasenaViewModel = recuperarContrasenaViewModel,
+            modifier = Modifier,
+            onVolverLogin = {}
         )
     }
 }
