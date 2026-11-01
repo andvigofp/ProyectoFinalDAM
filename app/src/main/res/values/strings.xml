@@ -55,6 +55,18 @@
     <string name="priority_placeholder">Baja / Media / Alta</string>
     <string name="create_incident">Crear incidencia</string>
     <string name="creating">Creando…</string>
+    <string name="incident_detail">Detalle de incidencia</string>
+    <string name="incident_number">Incidencia #%1$d</string>
+    <string name="comments">Comentarios</string>
+    <string name="comment_placeholder">Escribe un comentario…</string>
+    <string name="send">Enviar</string>
+    <string name="sending_comment">Enviando…</string>
+    <string name="history">Historial</string>
+    <string name="history_item">%1$s  %2$s</string>
+    <string name="comment_author_me">Yo</string>
+    <string name="no_comments">Todavía no hay comentarios</string>
+    <string name="no_history">Todavía no hay historial</string>
+    <string name="no_incident_detail">No hay datos de la incidencia</string>
 
     <!-- Perfil -->
     <string name="my_profile">Mi perfil</string>
@@ -82,4 +94,6 @@
     <string name="error_priority_required">Selecciona una prioridad</string>
     <string name="error_load_incidents">No se pudieron cargar las incidencias</string>
     <string name="error_load_profile">No se pudo cargar el perfil</string>
+    <string name="error_load_incident_detail">No se pudo cargar el detalle de la incidencia</string>
+    <string name="error_comment_required">Escribe un comentario</string>
 </resources>

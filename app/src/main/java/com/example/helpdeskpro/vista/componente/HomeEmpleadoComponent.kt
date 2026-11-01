@@ -95,7 +95,7 @@ fun IncidenciaCard(
 }
 
 @Composable
-private fun EstadoIncidenciaBadge(estado: String) {
+fun EstadoIncidenciaBadge(estado: String) {
     val normalizedState = estado.uppercase().replace(" ", "_")
     val backgroundColor = when (normalizedState) {
         "ABIERTA" -> Color(0xFFE5B85C)
