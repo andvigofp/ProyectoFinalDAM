@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class NuevaIncidenciaViewModel(application: Application) : AndroidViewModel(application) {
+class NuevaIncidenciaViewModel(
+    application: Application,
+    val userId: String
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(NuevaIncidenciaUiState())
     val uiState: StateFlow<NuevaIncidenciaUiState> = _uiState.asStateFlow()

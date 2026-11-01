@@ -177,7 +177,9 @@ fun HomeEmpleadoPage(
 @Composable
 private fun HomeEmpleadoPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        val homeEmpleadoViewModel = remember { HomeEmpleadoViewModel(Application()) }
+        val homeEmpleadoViewModel = remember {
+            HomeEmpleadoViewModel(Application(), userId = "preview")
+        }
 
         HomeEmpleadoPage(
             homeEmpleadoViewModel = homeEmpleadoViewModel,

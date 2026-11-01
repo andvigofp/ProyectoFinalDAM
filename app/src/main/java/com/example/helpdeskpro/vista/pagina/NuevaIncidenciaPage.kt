@@ -100,7 +100,7 @@ fun NuevaIncidenciaPage(
 private fun NuevaIncidenciaPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
         val nuevaIncidenciaViewModel = remember {
-            NuevaIncidenciaViewModel(Application())
+            NuevaIncidenciaViewModel(Application(), userId = "preview")
         }
 
         NuevaIncidenciaPage(

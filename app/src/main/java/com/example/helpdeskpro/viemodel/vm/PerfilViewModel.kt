@@ -13,7 +13,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class PerfilViewModel(application: Application) : AndroidViewModel(application) {
+class PerfilViewModel(
+    application: Application,
+    val userId: String
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(PerfilUiState())
     val uiState: StateFlow<PerfilUiState> = _uiState.asStateFlow()

@@ -122,7 +122,9 @@ fun PerfilPage(
 @Composable
 private fun PerfilPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        val perfilViewModel = remember { PerfilViewModel(Application()) }
+        val perfilViewModel = remember {
+            PerfilViewModel(Application(), userId = "preview")
+        }
 
         PerfilPage(
             perfilViewModel = perfilViewModel,

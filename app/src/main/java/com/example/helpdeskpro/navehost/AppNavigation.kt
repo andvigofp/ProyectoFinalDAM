@@ -1,18 +1,26 @@
 package com.example.helpdeskpro.navehost
 
+import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
+import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModel
+import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
+import com.example.helpdeskpro.viemodel.vm.LoginViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModel
+import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.PerfilViewModel
+import com.example.helpdeskpro.viemodel.vm.PerfilViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
+import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModelFactory
 import com.example.helpdeskpro.vista.componente.HomeTab
 import com.example.helpdeskpro.vista.pagina.CrearCuentaPage
 import com.example.helpdeskpro.vista.pagina.HomeEmpleadoPage
@@ -28,16 +36,8 @@ import com.example.helpdeskpro.vista.pagina.RecuperarContrasenaPage
 fun AppNavigation(modifier: Modifier = Modifier) {
 
     val navController = rememberNavController()
+    val application = LocalContext.current.applicationContext as Application
 
-    // ViewModels
-    val loginViewModel: LoginViewModel = viewModel()
-    val recuperarViewModel: RecuperarContrasenaViewModel = viewModel()
-    val crearCuentaViewModel: CrearCuentaViewModel = viewModel()
-    val homeEmpleadoViewModel: HomeEmpleadoViewModel = viewModel()
-    val nuevaIncidenciaViewModel: NuevaIncidenciaViewModel = viewModel()
-    val perfilViewModel: PerfilViewModel = viewModel()
-
-    // Navegación
     fun navigate(route: RouteNavigation) {
         navController.navigate(route) {
             launchSingleTop = true
@@ -59,6 +59,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         // ---------- LOGIN ----------
         composable<RouteNavigation.Login> {
 
+            val loginViewModel: LoginViewModel = viewModel(
+                factory = LoginViewModelFactory(application)
+            )
+
             LoginPage(
                 loginViewModel = loginViewModel,
                 onLoginSuccess = { userId ->
@@ -76,6 +80,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         // ---------- RECUPERAR CONTRASEÑA ----------
         composable<RouteNavigation.RecuperarContrasena> {
 
+            val recuperarViewModel: RecuperarContrasenaViewModel = viewModel(
+                factory = RecuperarContrasenaViewModelFactory(application)
+            )
+
             RecuperarContrasenaPage(
                 recuperarContrasenaViewModel = recuperarViewModel,
                 onVolverLogin = ::volverALogin
@@ -84,6 +92,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
         // ---------- CREAR CUENTA ----------
         composable<RouteNavigation.CrearCuenta> {
+
+            val crearCuentaViewModel: CrearCuentaViewModel = viewModel(
+                factory = CrearCuentaViewModelFactory(application)
+            )
 
             CrearCuentaPage(
                 crearCuentaViewModel = crearCuentaViewModel,
@@ -95,6 +107,13 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.HomeEmpleado> { backStackEntry ->
 
             val route = backStackEntry.toRoute<RouteNavigation.HomeEmpleado>()
+
+            val homeEmpleadoViewModel: HomeEmpleadoViewModel = viewModel(
+                factory = HomeEmpleadoViewModelFactory(
+                    application = application,
+                    userId = route.userId
+                )
+            )
 
             HomeEmpleadoPage(
                 homeEmpleadoViewModel = homeEmpleadoViewModel,
@@ -115,6 +134,13 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
             val route = backStackEntry.toRoute<RouteNavigation.NuevaIncidencia>()
 
+            val nuevaIncidenciaViewModel: NuevaIncidenciaViewModel = viewModel(
+                factory = NuevaIncidenciaViewModelFactory(
+                    application = application,
+                    userId = route.userId
+                )
+            )
+
             NuevaIncidenciaPage(
                 nuevaIncidenciaViewModel = nuevaIncidenciaViewModel,
                 onVolver = {
@@ -130,6 +156,13 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.Perfil> { backStackEntry ->
 
             val route = backStackEntry.toRoute<RouteNavigation.Perfil>()
+
+            val perfilViewModel: PerfilViewModel = viewModel(
+                factory = PerfilViewModelFactory(
+                    application = application,
+                    userId = route.userId
+                )
+            )
 
             PerfilPage(
                 perfilViewModel = perfilViewModel,
