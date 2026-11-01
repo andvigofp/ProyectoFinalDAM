@@ -1,7 +1,7 @@
 package com.helpdeskpro.helpdesk_pro;
 
-import com.helpdeskpro.helpdesk_pro.DTO.LoginRequestDTO;
-import com.helpdeskpro.helpdesk_pro.DTO.TokenResponseDTO;
+import com.helpdeskpro.helpdesk_pro.dto.LoginRequestDTO;
+import com.helpdeskpro.helpdesk_pro.dto.TokenResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
