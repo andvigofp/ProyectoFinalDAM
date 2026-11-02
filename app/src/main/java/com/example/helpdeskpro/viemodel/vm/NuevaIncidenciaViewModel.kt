@@ -13,6 +13,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+/**
+ * Mantiene y valida el formulario de creación de incidencias.
+ *
+ * @property uiState flujo observable del estado del formulario.
+ * @param application aplicación Android usada para acceder a recursos.
+ * @param userId identificador del usuario que registra la incidencia.
+ */
 class NuevaIncidenciaViewModel(
     application: Application,
     val userId: String
@@ -21,6 +28,11 @@ class NuevaIncidenciaViewModel(
     private val _uiState = MutableStateFlow(NuevaIncidenciaUiState())
     val uiState: StateFlow<NuevaIncidenciaUiState> = _uiState.asStateFlow()
 
+    /**
+     * Actualiza el título y limpia su error.
+     *
+     * @param titulo nuevo título introducido.
+     */
     fun onTituloChange(titulo: String) {
         _uiState.update {
             it.copy(
@@ -32,6 +44,11 @@ class NuevaIncidenciaViewModel(
         }
     }
 
+    /**
+     * Actualiza la descripción y limpia su error.
+     *
+     * @param descripcion nueva descripción introducida.
+     */
     fun onDescripcionChange(descripcion: String) {
         _uiState.update {
             it.copy(
@@ -43,6 +60,11 @@ class NuevaIncidenciaViewModel(
         }
     }
 
+    /**
+     * Actualiza la categoría y limpia su error.
+     *
+     * @param categoria categoría seleccionada.
+     */
     fun onCategoriaChange(categoria: String) {
         _uiState.update {
             it.copy(
@@ -54,6 +76,11 @@ class NuevaIncidenciaViewModel(
         }
     }
 
+    /**
+     * Actualiza la prioridad y limpia su error.
+     *
+     * @param prioridad prioridad seleccionada.
+     */
     fun onPrioridadChange(prioridad: String) {
         _uiState.update {
             it.copy(
@@ -68,6 +95,8 @@ class NuevaIncidenciaViewModel(
     /**
      * Valida el formulario y entrega el DTO cuando los datos son correctos.
      * La llamada al repositorio/API se añadirá en la iteración de integración.
+     *
+     * @param onDatosValidos acción que recibe los datos si el formulario es válido.
      */
     fun crearIncidencia(onDatosValidos: (NuevaIncidenciaDTO) -> Unit = {}) {
 
@@ -136,6 +165,7 @@ class NuevaIncidenciaViewModel(
         }
     }
 
+    /** Restablece el formulario a su estado inicial. */
     fun limpiarFormulario() {
         _uiState.update {
             NuevaIncidenciaUiState()
@@ -143,11 +173,23 @@ class NuevaIncidenciaViewModel(
     }
 }
 
+/**
+ * Crea instancias de [NuevaIncidenciaViewModel] asociadas a un usuario.
+ *
+ * @param application aplicación Android asociada al ViewModel.
+ * @param userId identificador del usuario que registra la incidencia.
+ */
 class NuevaIncidenciaViewModelFactory(
     private val application: Application,
     private val userId: String
 ) : ViewModelProvider.Factory {
 
+    /**
+     * Crea el ViewModel solicitado o falla si el tipo no está soportado.
+     *
+     * @param modelClass clase del ViewModel que se debe crear.
+     * @return instancia del tipo solicitado.
+     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(NuevaIncidenciaViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

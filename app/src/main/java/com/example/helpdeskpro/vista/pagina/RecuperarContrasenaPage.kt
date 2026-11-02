@@ -30,12 +30,16 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
-import com.example.helpdeskpro.vista.componente.RecuperarContrasenaComponent
+import com.example.helpdeskpro.vista.componente.recuperarContrasenaComponente.RecuperarContrasenaComponent
 
 private val RecuperarLogoBorderColor = Color(0xFF65758B)
 
 /**
  * Pantalla de recuperación de contraseña sin estado propio.
+ *
+ * @param recuperarContrasenaViewModel ViewModel que mantiene y valida el formulario.
+ * @param modifier modificador aplicado a la pantalla.
+ * @param onVolverLogin acción para regresar al inicio de sesión.
  */
 @Composable
 fun RecuperarContrasenaPage(

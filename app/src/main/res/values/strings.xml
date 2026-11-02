@@ -96,4 +96,22 @@
     <string name="error_load_profile">No se pudo cargar el perfil</string>
     <string name="error_load_incident_detail">No se pudo cargar el detalle de la incidencia</string>
     <string name="error_comment_required">Escribe un comentario</string>
+
+    <!-- Detalle de incidencia -->
+    <string name="pc_no_enciende">No enciende el ordenador</string>
+    <string name="pc_no_enciende_description">El ordenador no arranca al pulsar el botón de encendido.</string>
+    <string name="resolved">RESUELTA</string>
+    <string name="change_status">Cambiar estado</string>
+    <string name="select_status">Selecciona un estado</string>
+    <string name="save_status">Guardar estado</string>
+    <string name="all_statuses">ABIERTA / EN PROGRESO / RESUELTA</string>
+    <string name="open">ABIERTA</string>
+    <string name="in_process">EN PROGRESO</string>
+    <string name="volver">Volver</string>
+    <string name="incidents">Incidencias</string>
+    <string name="applied_solution">Solución aplicada</string>
+    <string name="solution_placeholder">Describe la resolución…</string>
+    <string name="register_solution">Registrar solución</string>
+    <string name="incident_comments_history">Comentarios e historial (mismos que empleado)</string>
+
 </resources>

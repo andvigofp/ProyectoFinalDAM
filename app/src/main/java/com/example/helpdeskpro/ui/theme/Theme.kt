@@ -33,6 +33,13 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+/**
+ * Aplica el tema visual de Helpdesk Pro al contenido Compose.
+ *
+ * @param darkTheme indica si se debe usar el esquema oscuro.
+ * @param dynamicColor indica si se deben usar colores dinámicos del sistema cuando estén disponibles.
+ * @param content contenido Compose al que se aplica el tema.
+ */
 @Composable
 fun HelpdeskProTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

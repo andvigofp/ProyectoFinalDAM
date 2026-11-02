@@ -26,9 +26,16 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModel
-import com.example.helpdeskpro.vista.componente.NuevaIncidenciaComponent
+import com.example.helpdeskpro.vista.componente.nuevaIncidenciaComponente.NuevaIncidenciaComponent
 
-/** Pantalla para que el empleado registre una nueva incidencia. */
+/**
+ * Pantalla para que el empleado registre una nueva incidencia.
+ *
+ * @param nuevaIncidenciaViewModel ViewModel que mantiene y valida el formulario.
+ * @param modifier modificador aplicado a la página.
+ * @param onVolver acción para regresar a la pantalla anterior.
+ * @param onIncidenciaCreada acción ejecutada tras crear la incidencia.
+ */
 @Composable
 fun NuevaIncidenciaPage(
     nuevaIncidenciaViewModel: NuevaIncidenciaViewModel,

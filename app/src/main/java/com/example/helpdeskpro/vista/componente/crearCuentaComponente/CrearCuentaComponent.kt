@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.vista.componente
+package com.example.helpdeskpro.vista.componente.crearCuentaComponente
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,6 +39,34 @@ private val CrearCuentaButtonColor = Color(0xFF8998AD)
 
 /**
  * Formulario reutilizable de registro. El estado y la validación se gestionan fuera.
+ *
+ * @param nombre nombre actual del usuario.
+ * @param apellidos apellidos actuales del usuario.
+ * @param email correo actual del usuario.
+ * @param telefono teléfono actual del usuario.
+ * @param password contraseña actual del usuario.
+ * @param rol rol seleccionado.
+ * @param departamento departamento seleccionado.
+ * @param onNombreChange callback para cambiar el nombre.
+ * @param onApellidosChange callback para cambiar los apellidos.
+ * @param onEmailChange callback para cambiar el correo.
+ * @param onTelefonoChange callback para cambiar el teléfono.
+ * @param onPasswordChange callback para cambiar la contraseña.
+ * @param onRolChange callback para cambiar el rol.
+ * @param onDepartamentoChange callback para cambiar el departamento.
+ * @param onGuardar callback para enviar el formulario.
+ * @param modifier modificador aplicado al formulario.
+ * @param roles opciones disponibles de rol.
+ * @param departamentos opciones disponibles de departamento.
+ * @param nombreError error de validación del nombre.
+ * @param apellidosError error de validación de los apellidos.
+ * @param emailError error de validación del correo.
+ * @param telefonoError error de validación del teléfono.
+ * @param passwordError error de validación de la contraseña.
+ * @param rolError error de validación del rol.
+ * @param departamentoError error de validación del departamento.
+ * @param errorMessage error general del formulario.
+ * @param isLoading indica si hay una operación en curso.
  */
 @Composable
 fun CrearCuentaComponent(
@@ -198,6 +226,21 @@ fun CrearCuentaComponent(
     }
 }
 
+/**
+ * Campo de texto con etiqueta, marcador, validación y opciones de teclado configurables.
+ *
+ * @param label etiqueta visible del campo.
+ * @param value texto actual del campo.
+ * @param onValueChange callback al modificar el texto.
+ * @param placeholder texto de ayuda cuando el campo está vacío.
+ * @param modifier modificador aplicado al campo.
+ * @param error mensaje de validación que se muestra, si existe.
+ * @param visualTransformation transformación visual del texto.
+ * @param trailingIcon contenido opcional al final del campo.
+ * @param keyboardOptions opciones del teclado virtual.
+ * @param keyboardActions acciones asociadas al teclado.
+ * @param enabled indica si el campo está habilitado.
+ */
 @Composable
 private fun CampoTextoCuenta(
     label: String,
@@ -240,6 +283,18 @@ private fun CampoTextoCuenta(
     }
 }
 
+/**
+ * Selector desplegable reutilizable para los datos de la cuenta.
+ *
+ * @param label etiqueta del selector.
+ * @param value valor seleccionado.
+ * @param placeholder texto de ayuda cuando no hay selección.
+ * @param options opciones disponibles.
+ * @param onOptionSelected callback al elegir una opción.
+ * @param modifier modificador aplicado al selector.
+ * @param error mensaje de validación que se muestra, si existe.
+ * @param enabled indica si el selector está habilitado.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SelectorCuenta(

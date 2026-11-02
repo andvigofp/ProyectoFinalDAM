@@ -31,12 +31,18 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
-import com.example.helpdeskpro.vista.componente.LoginComponent
+import com.example.helpdeskpro.vista.componente.logingComponente.LoginComponent
 
 private val LogoBorderColor = Color(0xFF65758B)
 
 /**
  * Pantalla de login sin estado propio: recibe LoginUiState y delega los eventos.
+ *
+ * @param loginViewModel ViewModel que mantiene y valida las credenciales.
+ * @param modifier modificador aplicado a la pantalla.
+ * @param onLoginSuccess acción ejecutada con el identificador tras iniciar sesión.
+ * @param onForgotPassword acción para abrir la recuperación de contraseña.
+ * @param onCreateAccount acción para abrir el registro de cuenta.
  */
 @Composable
 fun LoginPage(

@@ -13,11 +13,22 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+/**
+ * Mantiene el formulario y valida los datos de registro de una cuenta.
+ *
+ * @property uiState flujo observable del estado del formulario.
+ * @param application aplicación Android usada para acceder a recursos.
+ */
 class CrearCuentaViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(CrearCuentaUiState())
     val uiState: StateFlow<CrearCuentaUiState> = _uiState.asStateFlow()
 
+    /**
+     * Actualiza el nombre y limpia su error de validación.
+     *
+     * @param nombre nombre introducido.
+     */
     fun onNombreChange(nombre: String) {
         _uiState.update {
             it.copy(
@@ -29,6 +40,11 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    /**
+     * Actualiza los apellidos y limpia su error de validación.
+     *
+     * @param apellidos apellidos introducidos.
+     */
     fun onApellidosChange(apellidos: String) {
         _uiState.update {
             it.copy(
@@ -40,6 +56,11 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    /**
+     * Actualiza el email y limpia su error de validación.
+     *
+     * @param email correo introducido.
+     */
     fun onEmailChange(email: String) {
         _uiState.update {
             it.copy(
@@ -51,6 +72,11 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    /**
+     * Actualiza el teléfono y limpia su error de validación.
+     *
+     * @param telefono teléfono introducido.
+     */
     fun onTelefonoChange(telefono: String) {
         _uiState.update {
             it.copy(
@@ -62,6 +88,11 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    /**
+     * Actualiza la contraseña y limpia su error de validación.
+     *
+     * @param password contraseña introducida.
+     */
     fun onPasswordChange(password: String) {
         _uiState.update {
             it.copy(
@@ -73,6 +104,11 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    /**
+     * Actualiza el rol y limpia su error de validación.
+     *
+     * @param rol rol seleccionado.
+     */
     fun onRolChange(rol: String) {
         _uiState.update {
             it.copy(
@@ -84,6 +120,11 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    /**
+     * Actualiza el departamento y limpia su error de validación.
+     *
+     * @param departamento departamento seleccionado.
+     */
     fun onDepartamentoChange(departamento: String) {
         _uiState.update {
             it.copy(
@@ -98,6 +139,8 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
     /**
      * Valida el formulario y entrega el DTO cuando todos los datos son correctos.
      * La llamada al repositorio/API se añadirá en la iteración de integración.
+     *
+     * @param onDatosValidos acción que recibe los datos si el formulario es válido.
      */
     fun crearCuenta(onDatosValidos: (CrearCuentaDTO) -> Unit = {}) {
 
@@ -206,10 +249,21 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
     }
 }
 
+/**
+ * Crea instancias de [CrearCuentaViewModel].
+ *
+ * @param application aplicación Android asociada al ViewModel.
+ */
 class CrearCuentaViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
 
+    /**
+     * Crea el ViewModel solicitado o falla si el tipo no está soportado.
+     *
+     * @param modelClass clase del ViewModel que se debe crear.
+     * @return instancia del tipo solicitado.
+     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CrearCuentaViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

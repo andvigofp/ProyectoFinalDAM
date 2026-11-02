@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.vista.componente
+package com.example.helpdeskpro.vista.componente.nuevaIncidenciaComponente
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,7 +32,28 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 private val NuevaIncidenciaButtonColor = Color(0xFF8998AD)
 
-/** Formulario reutilizable para registrar una incidencia. */
+/**
+ * Formulario reutilizable para registrar una incidencia.
+ *
+ * @param titulo título actual de la incidencia.
+ * @param descripcion descripción actual del problema.
+ * @param categoria categoría seleccionada.
+ * @param prioridad prioridad seleccionada.
+ * @param onTituloChange callback para cambiar el título.
+ * @param onDescripcionChange callback para cambiar la descripción.
+ * @param onCategoriaChange callback para cambiar la categoría.
+ * @param onPrioridadChange callback para cambiar la prioridad.
+ * @param onCrear callback para enviar el formulario.
+ * @param modifier modificador aplicado al formulario.
+ * @param categorias opciones disponibles de categoría.
+ * @param prioridades opciones disponibles de prioridad.
+ * @param tituloError error de validación del título.
+ * @param descripcionError error de validación de la descripción.
+ * @param categoriaError error de validación de la categoría.
+ * @param prioridadError error de validación de la prioridad.
+ * @param errorMessage error general del formulario.
+ * @param isLoading indica si hay una operación en curso.
+ */
 @Composable
 fun NuevaIncidenciaComponent(
     titulo: String,
@@ -149,6 +170,18 @@ fun NuevaIncidenciaComponent(
     }
 }
 
+/**
+ * Selector desplegable reutilizable para el formulario de incidencias.
+ *
+ * @param label etiqueta del selector.
+ * @param value valor seleccionado.
+ * @param placeholder texto de ayuda cuando no hay selección.
+ * @param options opciones disponibles.
+ * @param onOptionSelected callback al elegir una opción.
+ * @param modifier modificador aplicado al selector.
+ * @param error mensaje de validación que se muestra, si existe.
+ * @param enabled indica si el selector está habilitado.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SelectorNuevaIncidencia(

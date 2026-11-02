@@ -15,6 +15,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * Mantiene los datos del perfil del usuario autenticado.
+ *
+ * @property uiState flujo observable del estado del perfil.
+ * @param application aplicación Android usada para obtener recursos.
+ * @param userId identificador del usuario cuyo perfil se muestra.
+ */
 class PerfilViewModel(
     application: Application,
     val userId: String
@@ -25,6 +32,8 @@ class PerfilViewModel(
 
     /**
      * Ejecuta la carga proporcionada por el futuro repositorio del perfil.
+     *
+     * @param cargar función suspendida que obtiene los datos del perfil.
      */
     fun cargarPerfil(cargar: suspend () -> PerfilDTO) {
 
@@ -67,7 +76,11 @@ class PerfilViewModel(
         }
     }
 
-    /** Actualiza los datos mostrados después de una edición correcta. */
+    /**
+     * Actualiza los datos mostrados después de una edición correcta.
+     *
+     * @param perfil datos actualizados del perfil.
+     */
     fun actualizarPerfil(perfil: PerfilDTO) {
         _uiState.update {
             it.copy(
@@ -77,6 +90,7 @@ class PerfilViewModel(
         }
     }
 
+    /** Elimina el mensaje de error actual. */
     fun limpiarError() {
         _uiState.update {
             it.copy(errorMessage = null)
@@ -89,11 +103,23 @@ class PerfilViewModel(
     }
 }
 
+/**
+ * Crea instancias de [PerfilViewModel] asociadas a un usuario.
+ *
+ * @param application aplicación Android asociada al ViewModel.
+ * @param userId identificador del usuario cuyo perfil se gestiona.
+ */
 class PerfilViewModelFactory(
     private val application: Application,
     private val userId: String
 ) : ViewModelProvider.Factory {
 
+    /**
+     * Crea el ViewModel solicitado o falla si el tipo no está soportado.
+     *
+     * @param modelClass clase del ViewModel que se debe crear.
+     * @return instancia del tipo solicitado.
+     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PerfilViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

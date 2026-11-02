@@ -30,11 +30,20 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.PerfilDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.PerfilViewModel
-import com.example.helpdeskpro.vista.componente.HomeBottomBar
-import com.example.helpdeskpro.vista.componente.HomeTab
-import com.example.helpdeskpro.vista.componente.PerfilComponent
+import com.example.helpdeskpro.vista.componente.homeEmpleadoComponete.HomeBottomBar
+import com.example.helpdeskpro.vista.componente.homeEmpleadoComponete.HomeTab
+import com.example.helpdeskpro.vista.componente.perfilComponente.PerfilComponent
 
-/** Pantalla de consulta del perfil del usuario autenticado. */
+/**
+ * Pantalla de consulta del perfil del usuario autenticado.
+ *
+ * @param perfilViewModel ViewModel que carga y mantiene los datos del perfil.
+ * @param modifier modificador aplicado a la página.
+ * @param onInicio acción de navegación a Inicio.
+ * @param onNueva acción de navegación al formulario de nueva incidencia.
+ * @param onEditarPerfil acción para iniciar la edición del perfil.
+ * @param onCerrarSesion acción para cerrar la sesión.
+ */
 @Composable
 fun PerfilPage(
     perfilViewModel: PerfilViewModel,

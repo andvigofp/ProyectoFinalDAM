@@ -26,10 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
-import com.example.helpdeskpro.vista.componente.CrearCuentaComponent
+import com.example.helpdeskpro.vista.componente.crearCuentaComponente.CrearCuentaComponent
 
 /**
  * Pantalla de registro sin estado propio: recibe los datos y delega los eventos.
+ *
+ * @param crearCuentaViewModel ViewModel que mantiene y valida el formulario.
+ * @param modifier modificador aplicado a la pantalla.
+ * @param onVolverLogin acción para regresar al inicio de sesión.
  */
 @Composable
 fun CrearCuentaPage(

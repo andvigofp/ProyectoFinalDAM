@@ -13,11 +13,22 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+/**
+ * Mantiene el estado y valida las credenciales del formulario de inicio de sesión.
+ *
+ * @property uiState flujo observable del estado del formulario.
+ * @param application aplicación Android usada para acceder a recursos.
+ */
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
+    /**
+     * Actualiza el email y limpia su error de validación.
+     *
+     * @param email correo electrónico introducido.
+     */
     fun onEmailChange(email: String) {
         _uiState.update {
             it.copy(
@@ -29,6 +40,11 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * Actualiza la contraseña y limpia su error de validación.
+     *
+     * @param password contraseña introducida.
+     */
     fun onPasswordChange(password: String) {
         _uiState.update {
             it.copy(
@@ -43,6 +59,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Valida el formulario y entrega las credenciales cuando son correctas.
      * La llamada al repositorio/API se añadirá en la iteración de integración.
+     *
+     * @param onCredencialesValidas acción que recibe las credenciales válidas.
      */
     fun iniciarSesion(onCredencialesValidas: (LoginDTO) -> Unit = {}) {
 
@@ -87,10 +105,21 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     }
 }
 
+/**
+ * Crea instancias de [LoginViewModel].
+ *
+ * @param application aplicación Android asociada al ViewModel.
+ */
 class LoginViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
 
+    /**
+     * Crea el ViewModel solicitado o falla si el tipo no está soportado.
+     *
+     * @param modelClass clase del ViewModel que se debe crear.
+     * @return instancia del tipo solicitado.
+     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

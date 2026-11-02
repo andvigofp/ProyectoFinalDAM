@@ -11,8 +11,14 @@ import androidx.compose.ui.Modifier
 import com.example.helpdeskpro.navehost.AppNavigation
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
+/** Activity that hosts the Compose navigation graph. */
 class MainActivity : ComponentActivity() {
 
+    /**
+     * Initializes the activity content and applies the application theme.
+     *
+     * @param savedInstanceState previously saved activity state, if available.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

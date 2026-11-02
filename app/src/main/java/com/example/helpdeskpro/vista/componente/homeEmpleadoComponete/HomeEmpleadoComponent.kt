@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.vista.componente
+package com.example.helpdeskpro.vista.componente.homeEmpleadoComponete
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -46,7 +47,13 @@ enum class HomeTab {
     PERFIL
 }
 
-/** Tarjeta reutilizable para mostrar el resumen de una incidencia. */
+/**
+ * Tarjeta reutilizable para mostrar el resumen de una incidencia.
+ *
+ * @param incidencia datos resumidos de la incidencia.
+ * @param onClick callback al seleccionar la tarjeta.
+ * @param modifier modificador aplicado a la tarjeta.
+ */
 @Composable
 fun IncidenciaCard(
     incidencia: IncidenciaDTO,
@@ -95,6 +102,11 @@ fun IncidenciaCard(
 }
 
 @Composable
+/**
+ * Muestra el estado de una incidencia con el color correspondiente.
+ *
+ * @param estado nombre del estado que se va a mostrar.
+ */
 fun EstadoIncidenciaBadge(estado: String) {
     val normalizedState = estado.uppercase().replace(" ", "_")
     val backgroundColor = when (normalizedState) {
@@ -117,7 +129,15 @@ fun EstadoIncidenciaBadge(estado: String) {
     }
 }
 
-/** Barra inferior con las tres secciones principales del empleado. */
+/**
+ * Barra inferior con las tres secciones principales del empleado.
+ *
+ * @param selectedTab pestaña actualmente seleccionada.
+ * @param onInicio callback para abrir Inicio.
+ * @param onNueva callback para abrir Nueva incidencia.
+ * @param onPerfil callback para abrir el perfil.
+ * @param modifier modificador aplicado a la barra.
+ */
 @Composable
 fun HomeBottomBar(
     selectedTab: HomeTab,
@@ -148,8 +168,15 @@ fun HomeBottomBar(
     }
 }
 
+/**
+ * Elemento de navegación inferior para una pestaña del empleado.
+ *
+ * @param label texto mostrado bajo el icono.
+ * @param selected indica si la pestaña está seleccionada.
+ * @param onClick callback al seleccionar el elemento.
+ */
 @Composable
-private fun androidx.compose.foundation.layout.RowScope.HomeBottomBarItem(
+private fun RowScope.HomeBottomBarItem(
     label: String,
     selected: Boolean,
     onClick: () -> Unit

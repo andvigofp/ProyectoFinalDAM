@@ -1,0 +1,194 @@
+package com.example.helpdeskpro.vista.pagina
+
+import android.app.Application
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
+import com.example.helpdeskpro.modelo.DetalleIncidenciaDTO
+import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
+import com.example.helpdeskpro.vista.componente.detalleIncidenciaTecnicoComponente.BotonGuardarEstadoComponent
+import com.example.helpdeskpro.vista.componente.detalleIncidenciaTecnicoComponente.BotonRegistrarSolucionComponent
+import com.example.helpdeskpro.vista.componente.detalleIncidenciaTecnicoComponente.CabeceraDetalleIncidenciaComponent
+import com.example.helpdeskpro.vista.componente.detalleIncidenciaTecnicoComponente.ComentariosHistorialComponent
+import com.example.helpdeskpro.vista.componente.detalleIncidenciaTecnicoComponente.NavegacionInferiorDetalleComponent
+import com.example.helpdeskpro.vista.componente.detalleIncidenciaTecnicoComponente.SelectorEstadoComponent
+import com.example.helpdeskpro.vista.componente.detalleIncidenciaTecnicoComponente.SolucionIncidenciaComponent
+
+/**
+ * Pantalla de detalle que conecta el estado del ViewModel con los componentes visuales.
+ *
+ * @param detalleEmpleadoViewModel ViewModel con el detalle y el estado de la pantalla.
+ * @param cargarDetalle función suspendida que obtiene los datos de la incidencia.
+ * @param modifier modificador aplicado a la pantalla.
+ * @param onVolver acción para regresar a la pantalla anterior.
+ * @param onGuardarEstado acción ejecutada con el nuevo estado seleccionado.
+ * @param onRegistrarSolucion acción ejecutada con el texto de la solución.
+ * @param onIncidencias acción de navegación al listado de incidencias.
+ * @param onPerfil acción de navegación al perfil.
+ */
+@Composable
+fun DetalleIncideciaTecnicoPage(
+    detalleEmpleadoViewModel: DetalleEmpleadoViewModel,
+    cargarDetalle: suspend () -> DetalleIncidenciaDTO,
+    modifier: Modifier = Modifier,
+    onVolver: () -> Unit = {},
+    onGuardarEstado: (String) -> Unit = {},
+    onRegistrarSolucion: (String) -> Unit = {},
+    onIncidencias: () -> Unit = {},
+    onPerfil: () -> Unit = {}
+) {
+    val uiState by detalleEmpleadoViewModel.uiState.collectAsState()
+
+    LaunchedEffect(detalleEmpleadoViewModel.incidenciaId) {
+        detalleEmpleadoViewModel.cargarDetalle(cargarDetalle)
+    }
+
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        containerColor = Color.White,
+        bottomBar = {
+            NavegacionInferiorDetalleComponent(
+                onIncidencias = onIncidencias,
+                onPerfil = onPerfil
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 22.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(22.dp)
+        ) {
+            when {
+                uiState.isLoading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 48.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                uiState.errorMessage != null -> {
+                    Text(
+                        text = uiState.errorMessage.orEmpty(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 48.dp),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+
+                uiState.detalle == null -> {
+                    Text(
+                        text = stringResource(R.string.no_incident_detail),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 48.dp),
+                        color = Color(0xFF8A8F98),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+
+                else -> {
+                    val incidencia = uiState.detalle!!
+                    CabeceraDetalleIncidenciaComponent(
+                        incidencia = incidencia,
+                        onVolver = onVolver
+                    )
+
+                    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        SelectorEstadoComponent(
+                            estado = uiState.estadoSeleccionado,
+                            estados = listOf(
+                                stringResource(R.string.open),
+                                stringResource(R.string.in_process),
+                                stringResource(R.string.resolved)
+                            ),
+                            onEstadoChange = detalleEmpleadoViewModel::onEstadoChange
+                        )
+                        BotonGuardarEstadoComponent(
+                            onGuardar = {
+                                detalleEmpleadoViewModel.guardarEstado(onGuardarEstado)
+                            },
+                            enabled = uiState.estadoSeleccionado.isNotBlank()
+                        )
+                    }
+
+                    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        SolucionIncidenciaComponent(
+                            solucion = uiState.solucion,
+                            onSolucionChange = detalleEmpleadoViewModel::onSolucionChange
+                        )
+                        BotonRegistrarSolucionComponent(
+                            onRegistrar = {
+                                detalleEmpleadoViewModel.registrarSolucion(onRegistrarSolucion)
+                            },
+                            enabled = uiState.solucion.isNotBlank()
+                        )
+                    }
+
+                    ComentariosHistorialComponent()
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 390, heightDp = 844)
+@Composable
+private fun DetalleIncidenciaTecnicoPreview() {
+    HelpdeskProTheme(dynamicColor = false) {
+        val viewModel = remember {
+            DetalleEmpleadoViewModel(
+                Application(),
+                userId = "preview",
+                incidenciaId = 1L
+            )
+        }
+
+        DetalleIncideciaTecnicoPage(
+            detalleEmpleadoViewModel = viewModel,
+            cargarDetalle = {
+                DetalleIncidenciaDTO(
+                    id = 1L,
+                    titulo = "No enciende el ordenador",
+                    descripcion = "El ordenador no arranca al pulsar el botón de encendido.",
+                    estado = "ABIERTA",
+                    creador = "Ana Pérez",
+                    departamento = "Ventas",
+                    categoria = "Hardware",
+                    prioridad = "Alta",
+                    fechaCreacion = "15/10/2026"
+                )
+            }
+        )
+    }
+}

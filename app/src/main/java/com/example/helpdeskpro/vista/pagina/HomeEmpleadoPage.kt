@@ -32,15 +32,23 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.IncidenciaDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModel
-import com.example.helpdeskpro.vista.componente.HomeBottomBar
-import com.example.helpdeskpro.vista.componente.HomeTab
-import com.example.helpdeskpro.vista.componente.IncidenciaCard
+import com.example.helpdeskpro.vista.componente.homeEmpleadoComponete.HomeBottomBar
+import com.example.helpdeskpro.vista.componente.homeEmpleadoComponete.HomeTab
+import com.example.helpdeskpro.vista.componente.homeEmpleadoComponete.IncidenciaCard
 
 
 
 /**
  * Página principal del empleado con su listado de incidencias.
  * Recibe HomeEmpleadoViewModel y observa su estado.
+ *
+ * @param homeEmpleadoViewModel ViewModel que proporciona la lista y su estado de carga.
+ * @param modifier modificador aplicado a la página.
+ * @param selectedTab pestaña seleccionada en la navegación inferior.
+ * @param onInicio acción de navegación a Inicio.
+ * @param onNueva acción de navegación al formulario de nueva incidencia.
+ * @param onPerfil acción de navegación al perfil.
+ * @param onIncidenciaClick acción ejecutada al seleccionar una incidencia.
  */
 @Composable
 fun HomeEmpleadoPage(

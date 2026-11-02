@@ -1,5 +1,6 @@
-package com.example.helpdeskpro.vista.componente
+package com.example.helpdeskpro.vista.componente.perfilComponente
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,7 +28,15 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 private val PerfilSecondaryTextColor = Color(0xFF8A8F98)
 
-/** Contenido reutilizable con los datos y acciones del perfil. */
+/**
+ * Contenido reutilizable con los datos y acciones del perfil.
+ *
+ * @param perfil datos del usuario que se muestran.
+ * @param onEditarPerfil callback para iniciar la edición del perfil.
+ * @param onCerrarSesion callback para cerrar la sesión.
+ * @param modifier modificador aplicado al contenido.
+ * @param isLoading indica si hay una operación en curso.
+ */
 @Composable
 fun PerfilComponent(
     perfil: PerfilDTO,
@@ -54,7 +63,7 @@ fun PerfilComponent(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = iniciales,
@@ -130,6 +139,12 @@ fun PerfilComponent(
     }
 }
 
+/**
+ * Muestra una etiqueta y el valor correspondiente de un dato del perfil.
+ *
+ * @param label etiqueta descriptiva del dato.
+ * @param value valor que se muestra.
+ */
 @Composable
 private fun DatoPerfil(label: String, value: String) {
     Column(modifier = Modifier.fillMaxWidth()) {

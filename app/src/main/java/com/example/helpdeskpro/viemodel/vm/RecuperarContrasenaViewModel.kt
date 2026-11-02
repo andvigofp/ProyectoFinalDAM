@@ -14,12 +14,23 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+/**
+ * Mantiene el formulario y valida las solicitudes de recuperación de contraseña.
+ *
+ * @property uiState flujo observable del estado del formulario.
+ * @param application aplicación Android usada para acceder a recursos.
+ */
 class RecuperarContrasenaViewModel(application: Application) :
     AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(RecuperarContrasenaUiState())
     val uiState: StateFlow<RecuperarContrasenaUiState> = _uiState.asStateFlow()
 
+    /**
+     * Actualiza el email y limpia los mensajes anteriores.
+     *
+     * @param email correo electrónico introducido.
+     */
     fun onEmailChange(email: String) {
         _uiState.update {
             it.copy(
@@ -34,6 +45,8 @@ class RecuperarContrasenaViewModel(application: Application) :
     /**
      * Valida el email y entrega el DTO cuando es correcto.
      * La llamada al repositorio/API se añadirá en la iteración de integración.
+     *
+     * @param onSolicitudValida acción que recibe la solicitud válida.
      */
     fun recuperarContrasena(
         onSolicitudValida: (RecuperarContrasenaDTO) -> Unit = {}
@@ -69,10 +82,21 @@ class RecuperarContrasenaViewModel(application: Application) :
     }
 }
 
+/**
+ * Crea instancias de [RecuperarContrasenaViewModel].
+ *
+ * @param application aplicación Android asociada al ViewModel.
+ */
 class RecuperarContrasenaViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
 
+    /**
+     * Crea el ViewModel solicitado o falla si el tipo no está soportado.
+     *
+     * @param modelClass clase del ViewModel que se debe crear.
+     * @return instancia del tipo solicitado.
+     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RecuperarContrasenaViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

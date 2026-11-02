@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.vista.componente
+package com.example.helpdeskpro.vista.componente.recuperarContrasenaComponente
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +30,16 @@ private val RecuperarButtonColor = Color(0xFF8998AD)
 /**
  * Formulario reutilizable para solicitar una contraseña temporal.
  * El estado, la validación y la llamada a la API se gestionan fuera del componente.
+ *
+ * @param email correo actual de la cuenta.
+ * @param onEmailChange callback para cambiar el correo.
+ * @param onEnviar callback para enviar la solicitud.
+ * @param onVolverLogin callback para regresar al inicio de sesión.
+ * @param modifier modificador aplicado al formulario.
+ * @param emailError error de validación del correo.
+ * @param errorMessage error general de la solicitud.
+ * @param successMessage confirmación de una solicitud correcta.
+ * @param isLoading indica si la solicitud está en curso.
  */
 @Composable
 fun RecuperarContrasenaComponent(

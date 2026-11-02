@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.vista.componente
+package com.example.helpdeskpro.vista.componente.logingComponente
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,6 +34,18 @@ private val LoginButtonColor = Color(0xFF8998AD)
 
 /**
  * Formulario reutilizable de acceso. El estado y la validación pertenecen al ViewModel.
+ *
+ * @param email correo actual del usuario.
+ * @param password contraseña actual del usuario.
+ * @param onEmailChange callback para cambiar el correo.
+ * @param onPasswordChange callback para cambiar la contraseña.
+ * @param onLogin callback para enviar las credenciales.
+ * @param onForgotPassword callback para abrir la recuperación de contraseña.
+ * @param onCreateAccount callback para abrir el registro.
+ * @param modifier modificador aplicado al formulario.
+ * @param emailError error de validación del correo.
+ * @param passwordError error de validación de la contraseña.
+ * @param isLoading indica si el inicio de sesión está en curso.
  */
 @Composable
 fun LoginComponent(
