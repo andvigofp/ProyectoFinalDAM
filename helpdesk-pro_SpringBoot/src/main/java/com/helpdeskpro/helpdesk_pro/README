@@ -1,0 +1,261 @@
+1- Comprobar un token del loging de un usuario tipo Administrador
+
+POST
+
+http://localhost:8080/api/auth/login
+
+{
+  "email": "andres@helpdesk.com",
+  "password": "Helpdesk123!"
+}
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbmRyZXNAaGVscGRlc2suY29tIiwiaWQiOjEsInJvbCI6IkFETUlOSVNUUkFET1IiLCJpYXQiOjE3OTM2MTI3OTgsImV4cCI6MTc5MzY5OTE5OH0.4y6QyXbVrAztLeLwcy2YS6r1s5QqPSjs-oSMImnjBgI",
+    "tipo": "Bearer",
+    "usuario": {
+        "id": 1,
+        "nombre": "Andrés",
+        "apellidos": "Fernández",
+        "email": "andres@helpdesk.com",
+        "telefono": "600111111",
+        "activo": true,
+        "rolId": 1,
+        "rolNombre": "Administrador",
+        "departamentoId": 1,
+        "departamentoNombre": "Informática"
+    }
+}
+
+----------------------------------------------------
+
+2- Estamos comprobando con token tiene autorizacion mediante ese token,
+si es correcto te devuelve los datos del usuario
+
+GET
+
+http://localhost:8080/api/auth/me
+
+Authorization
+Bearer Token
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbmRyZXNAaGVscGRlc2suY29tIiwiaWQiOjEsInJvbCI6IkFETUlOSVNUUkFET1IiLCJpYXQiOjE3OTM2MTI3OTgsImV4cCI6MTc5MzY5OTE5OH0.4y6QyXbVrAztLeLwcy2YS6r1s5QqPSjs-oSMImnjBgI
+
+------------------------------------------------------------------
+
+3- Comprobar un token del loging de un usuario tipo Técnico
+
+POST
+
+{
+    "email": "laura@helpdesk.com",
+    "password": "Helpdesk123!"
+}
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJsYXVyYUBoZWxwZGVzay5jb20iLCJpZCI6Miwicm9sIjoiVEVDTklDTyIsImlhdCI6MTc5MzYxMzc1NiwiZXhwIjoxNzkzNzAwMTU2fQ.E2fRDYELCQgXy2lHvD-Dk3bMSmn4MLsDzYuvwVfHuk4",
+    "tipo": "Bearer",
+    "usuario": {
+        "id": 2,
+        "nombre": "Laura",
+        "apellidos": "García",
+        "email": "laura@helpdesk.com",
+        "telefono": "600222222",
+        "activo": true,
+        "rolId": 2,
+        "rolNombre": "Técnico",
+        "departamentoId": 1,
+        "departamentoNombre": "Informática"
+    }
+}
+
+-------------------------------------------------------
+
+4- Estamos comprobando con token tiene autorizacion mediante ese token,
+si es correcto te devuelve los datos del usuario
+
+GET
+
+http://localhost:8080/api/auth/me
+
+Authorization
+Bearer Token
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJsYXVyYUBoZWxwZGVzay5jb20iLCJpZCI6Miwicm9sIjoiVEVDTklDTyIsImlhdCI6MTc5MzYxMzc1NiwiZXhwIjoxNzkzNzAwMTU2fQ.E2fRDYELCQgXy2lHvD-Dk3bMSmn4MLsDzYuvwVfHuk4
+
+{
+    "id": 2,
+    "nombre": "Laura",
+    "apellidos": "García",
+    "email": "laura@helpdesk.com",
+    "telefono": "600222222",
+    "activo": true,
+    "rolId": 2,
+    "rolNombre": "Técnico",
+    "departamentoId": 1,
+    "departamentoNombre": "Informática"
+}
+
+---------------------------------------------------------
+
+5- Comprobar un token del loging de un usuario tipo Empleado
+
+POST
+
+{
+    "email": "carlos@helpdesk.com",
+    "password": "Helpdesk123!"
+}
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYXJsb3NAaGVscGRlc2suY29tIiwiaWQiOjMsInJvbCI6IkVNUExFQURPIiwiaWF0IjoxNzkzNjE0MTM0LCJleHAiOjE3OTM3MDA1MzR9.g1niPwktQonBkPEkwl6cYMwE2pF3y95Yd3Rc-VTJuSw",
+    "tipo": "Bearer",
+    "usuario": {
+        "id": 3,
+        "nombre": "Carlos",
+        "apellidos": "Martín",
+        "email": "carlos@helpdesk.com",
+        "telefono": "600333333",
+        "activo": true,
+        "rolId": 3,
+        "rolNombre": "Empleado",
+        "departamentoId": 2,
+        "departamentoNombre": "Recursos Humanos"
+    }
+}
+
+----------------------------------------------------
+
+6- Estamos comprobando con token tiene autorizacion mediante ese token,
+si es correcto te devuelve los datos del usuario
+
+GET
+
+http://localhost:8080/api/auth/me
+
+Authorization
+Bearer Token
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYXJsb3NAaGVscGRlc2suY29tIiwiaWQiOjMsInJvbCI6IkVNUExFQURPIiwiaWF0IjoxNzkzNjE0MTM0LCJleHAiOjE3OTM3MDA1MzR9.g1niPwktQonBkPEkwl6cYMwE2pF3y95Yd3Rc-VTJuSw
+
+{
+    "id": 3,
+    "nombre": "Carlos",
+    "apellidos": "Martín",
+    "email": "carlos@helpdesk.com",
+    "telefono": "600333333",
+    "activo": true,
+    "rolId": 3,
+    "rolNombre": "Empleado",
+    "departamentoId": 2,
+    "departamentoNombre": "Recursos Humanos"
+}
+
+7- Prueba con token autorizado en ver las incidencias
+Probamos con administrador/Técnico.
+Si van a poder ver las incidencias porque están actualizados
+
+GET
+
+http://localhost:8080/api/incidencias
+
+Authorization
+Bearer Token
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbmRyZXNAaGVscGRlc2suY29tIiwiaWQiOjEsInJvbCI6IkFETUlOSVNUUkFET1IiLCJpYXQiOjE3OTM2MTI3OTgsImV4cCI6MTc5MzY5OTE5OH0.4y6QyXbVrAztLeLwcy2YS6r1s5QqPSjs-oSMImnjBgI
+--------------------------------------------------------
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJsYXVyYUBoZWxwZGVzay5jb20iLCJpZCI6Miwicm9sIjoiVEVDTklDTyIsImlhdCI6MTc5MzYxMzc1NiwiZXhwIjoxNzkzNzAwMTU2fQ.E2fRDYELCQgXy2lHvD-Dk3bMSmn4MLsDzYuvwVfHuk4
+
+
+[
+    {
+        "id": 1,
+        "titulo": "PC no enciende",
+        "descripcion": "No responde al pulsar el botón",
+        "solucion": "fuente sustituida",
+        "fechaCreacion": "2026-10-17T12:21:06",
+        "fechaActualizacion": "2026-10-17T12:23:27",
+        "usuarioId": 3,
+        "usuarioNombre": "Carlos Martín",
+        "tecnicoId": 2,
+        "tecnicoNombre": "Laura García",
+        "categoriaId": 1,
+        "categoriaNombre": "Hardware",
+        "prioridadId": 3,
+        "prioridadNombre": "Alta",
+        "estadoId": 3,
+        "estadoNombre": "Resuelta"
+    },
+    {
+        "id": 2,
+        "titulo": "Error de inicio de sesión",
+        "descripcion": "No permite iniciar sesión",
+        "solucion": null,
+        "fechaCreacion": "2026-10-17T12:21:06",
+        "fechaActualizacion": "2026-10-17T12:21:06",
+        "usuarioId": 4,
+        "usuarioNombre": "Marta Ruiz",
+        "tecnicoId": 2,
+        "tecnicoNombre": "Laura García",
+        "categoriaId": 2,
+        "categoriaNombre": "Software",
+        "prioridadId": 2,
+        "prioridadNombre": "Media",
+        "estadoId": 2,
+        "estadoNombre": "En proceso"
+    },
+    {
+        "id": 3,
+        "titulo": "Sin Internet",
+        "descripcion": "No hay conexión a la red interna",
+        "solucion": null,
+        "fechaCreacion": "2026-10-17T12:21:06",
+        "fechaActualizacion": "2026-10-17T12:21:06",
+        "usuarioId": 3,
+        "usuarioNombre": "Carlos Martín",
+        "tecnicoId": 2,
+        "tecnicoNombre": "Laura García",
+        "categoriaId": 3,
+        "categoriaNombre": "Red",
+        "prioridadId": 4,
+        "prioridadNombre": "Urgente",
+        "estadoId": 2,
+        "estadoNombre": "En proceso"
+    },
+    {
+        "id": 4,
+        "titulo": "Correo bloqueado",
+        "descripcion": "No permite enviar correos electrónicos",
+        "solucion": "Se ha desbloqueado la cuenta y restablecido el acceso.",
+        "fechaCreacion": "2026-10-17T12:21:06",
+        "fechaActualizacion": "2026-10-17T12:21:06",
+        "usuarioId": 4,
+        "usuarioNombre": "Marta Ruiz",
+        "tecnicoId": 2,
+        "tecnicoNombre": "Laura García",
+        "categoriaId": 4,
+        "categoriaNombre": "Correo",
+        "prioridadId": 2,
+        "prioridadNombre": "Media",
+        "estadoId": 3,
+        "estadoNombre": "Resuelta"
+    }
+]
+
+8- Prueba con token autorizado en ver las incidencias
+Probamos con un Empleado.
+Si vemos no va poder verlos no tiene actualización las incidencias
+
+GET
+
+http://localhost:8080/api/incidencias
+
+Authorization
+Bearer Token
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYXJsb3NAaGVscGRlc2suY29tIiwiaWQiOjMsInJvbCI6IkVNUExFQURPIiwiaWF0IjoxNzkzNjE0MTM0LCJleHAiOjE3OTM3MDA1MzR9.g1niPwktQonBkPEkwl6cYMwE2pF3y95Yd3Rc-VTJuSw
+
+{
+    "estado": 403,
+    "error": "Prohibido",
+    "mensaje": "Tu rol no tiene permiso para esta operación"
+}
