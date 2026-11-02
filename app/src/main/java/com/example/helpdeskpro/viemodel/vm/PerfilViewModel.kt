@@ -2,6 +2,8 @@ package com.example.helpdeskpro.viemodel.vm
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.PerfilDTO
@@ -84,5 +86,22 @@ class PerfilViewModel(
     /** Elimina los datos locales del perfil al cerrar la sesión. */
     fun limpiarPerfil() {
         _uiState.value = PerfilUiState()
+    }
+}
+
+class PerfilViewModelFactory(
+    private val application: Application,
+    private val userId: String
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(PerfilViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return PerfilViewModel(
+                application = application,
+                userId = userId
+            ) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -2,6 +2,8 @@ package com.example.helpdeskpro.viemodel.vm
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO
@@ -132,5 +134,24 @@ class DetalleEmpleadoViewModel(
         _uiState.update {
             it.copy(errorMessage = null)
         }
+    }
+}
+
+class DetalleEmpleadoViewModelFactory(
+    private val application: Application,
+    private val userId: String,
+    private val incidenciaId: Long
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(DetalleEmpleadoViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return DetalleEmpleadoViewModel(
+                application = application,
+                userId = userId,
+                incidenciaId = incidenciaId
+            ) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

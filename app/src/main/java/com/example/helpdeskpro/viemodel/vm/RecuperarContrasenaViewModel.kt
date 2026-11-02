@@ -4,6 +4,8 @@ package com.example.helpdeskpro.viemodel.vm
 import android.app.Application
 import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.RecuperarContrasenaDTO
 import com.example.helpdeskpro.viemodel.ustate.RecuperarContrasenaUiState
@@ -64,5 +66,18 @@ class RecuperarContrasenaViewModel(application: Application) :
                 RecuperarContrasenaDTO(email = normalizedEmail)
             )
         }
+    }
+}
+
+class RecuperarContrasenaViewModelFactory(
+    private val application: Application
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(RecuperarContrasenaViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return RecuperarContrasenaViewModel(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

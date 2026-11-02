@@ -3,6 +3,8 @@ package com.example.helpdeskpro.viemodel.vm
 import android.app.Application
 import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.CrearCuentaDTO
 import com.example.helpdeskpro.viemodel.ustate.CrearCuentaUiState
@@ -201,5 +203,18 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
                 )
             )
         }
+    }
+}
+
+class CrearCuentaViewModelFactory(
+    private val application: Application
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(CrearCuentaViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return CrearCuentaViewModel(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

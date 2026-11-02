@@ -140,7 +140,9 @@ private fun DatoPerfil(label: String, value: String) {
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = if (value.isBlank()) stringResource(R.string.not_provided) else value,
+            text = value.ifBlank {
+                stringResource(R.string.not_provided)
+            },
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(8.dp))

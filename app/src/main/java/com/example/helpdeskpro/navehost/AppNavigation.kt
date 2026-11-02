@@ -2,6 +2,7 @@ package com.example.helpdeskpro.navehost
 
 import android.app.Application
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -28,6 +29,7 @@ import com.example.helpdeskpro.vista.pagina.LoginPage
 import com.example.helpdeskpro.vista.pagina.NuevaIncidenciaPage
 import com.example.helpdeskpro.vista.pagina.PerfilPage
 import com.example.helpdeskpro.vista.pagina.RecuperarContrasenaPage
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Configura la navegación y conecta cada página con su ViewModel.
@@ -37,6 +39,32 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
     val navController = rememberNavController()
     val application = LocalContext.current.applicationContext as Application
+
+    // ---------- CONTROL DE SESIÓN ----------
+    LaunchedEffect(Unit) {
+        SessionEvents.forbidden.collect {
+            navController.navigate(RouteNavigation.Login) {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        }
+    }
+
+// ---------- NAVEGACIÓN GLOBAL ----------
+    LaunchedEffect(Unit) {
+        SessionEvents.navigation.collectLatest { route ->
+            when (route) {
+                is RouteNavigation.Login,
+                is RouteNavigation.CrearCuenta,
+                is RouteNavigation.RecuperarContrasena,
+                is RouteNavigation.HomeEmpleado,
+                is RouteNavigation.NuevaIncidencia,
+                is RouteNavigation.Perfil -> navController.navigate(route)
+            }
+        }
+    }
 
     fun navigate(route: RouteNavigation) {
         navController.navigate(route) {
