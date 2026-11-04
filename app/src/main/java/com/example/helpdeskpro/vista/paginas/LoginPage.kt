@@ -1,8 +1,6 @@
 package com.example.helpdeskpro.vista.paginas
 
-import android.app.Application
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,20 +18,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.ustate.LoginUiState
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
-import com.example.helpdeskpro.vista.componentes.logingComponente.LoginComponent
-
-private val LogoBorderColor = Color(0xFF65758B)
+import com.example.helpdeskpro.vista.componentes.logingComponente.BotonLoginComponent
+import com.example.helpdeskpro.vista.componentes.logingComponente.CamposLoginComponent
+import com.example.helpdeskpro.vista.componentes.logingComponente.LoginActionsComponent
 
 /**
  * Pantalla de login sin estado propio: recibe LoginUiState y delega los eventos.
@@ -63,6 +63,27 @@ fun LoginPage(
         }
     }
 
+    LoginPageContent(
+        uiState = uiState,
+        onEmailChange = loginViewModel::onEmailChange,
+        onPasswordChange = loginViewModel::onPasswordChange,
+        onLogin = { loginViewModel.iniciarSesion() },
+        onForgotPassword = onForgotPassword,
+        onCreateAccount = onCreateAccount,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun LoginPageContent(
+    uiState: LoginUiState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onLogin: () -> Unit,
+    onForgotPassword: () -> Unit,
+    onCreateAccount: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -75,17 +96,14 @@ fun LoginPage(
         Surface(
             modifier = Modifier.size(104.dp),
             shape = CircleShape,
-            color = Color.Transparent,
-            border = BorderStroke(2.dp, LogoBorderColor)
+            color = Color.Transparent
         ) {
-            Box(contentAlignment = Alignment.Center) {
-                Text(
-                    text = stringResource(R.string.logo),
-                    color = LogoBorderColor,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Medium
-                )
-            }
+            Image(
+                painter = painterResource(R.drawable.ic_logo),
+                contentDescription = stringResource(R.string.logo),
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -98,17 +116,22 @@ fun LoginPage(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        LoginComponent(
-            email = uiState.email,
-            password = uiState.password,
-            onEmailChange = loginViewModel::onEmailChange,
-            onPasswordChange = loginViewModel::onPasswordChange,
-            onLogin = { loginViewModel.iniciarSesion() },
+        CamposLoginComponent(
+            uiState = uiState,
+            onEmailChange = onEmailChange,
+            onPasswordChange = onPasswordChange,
+            onLogin = onLogin,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        BotonLoginComponent(
+            onClick = onLogin,
+            isLoading = uiState.isLoading
+        )
+        LoginActionsComponent(
             onForgotPassword = onForgotPassword,
             onCreateAccount = onCreateAccount,
             modifier = Modifier.fillMaxWidth(),
-            emailError = uiState.emailError,
-            passwordError = uiState.passwordError,
             isLoading = uiState.isLoading
         )
     }
@@ -119,12 +142,11 @@ fun LoginPage(
 @Composable
 private fun LoginPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        val loginViewModel = remember { LoginViewModel(Application()) }
-
-        LoginPage(
-            loginViewModel = loginViewModel,
-            modifier = Modifier,
-            onLoginSuccess = {},
+        LoginPageContent(
+            uiState = LoginUiState(),
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLogin = {},
             onForgotPassword = {},
             onCreateAccount = {}
         )
