@@ -329,6 +329,15 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             PerfilPage(
                 perfilViewModel = perfilViewModel,
                 modoTecnico = route.esTecnico,
+                onVolver = {
+                    if (!navController.popBackStack()) {
+                        if (route.esTecnico) {
+                            navigate(RouteNavigation.HomeTecnico(route.userId))
+                        } else {
+                            navigate(RouteNavigation.HomeEmpleado(route.userId))
+                        }
+                    }
+                },
                 onInicio = {
                     if (route.esTecnico) {
                         navigate(RouteNavigation.HomeTecnico(route.userId))

@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
@@ -33,7 +38,10 @@ import com.example.helpdeskpro.viemodel.vm.PerfilViewModel
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.NavegacionInferiorDetalleComponent
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeBottomBarComponent
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeTab
-import com.example.helpdeskpro.vista.componentes.perfilComponente.PerfilComponent
+import com.example.helpdeskpro.vista.componentes.perfilComponente.AccionesPerfilComponent
+import com.example.helpdeskpro.vista.componentes.perfilComponente.AvatarPerfilComponent
+import com.example.helpdeskpro.vista.componentes.perfilComponente.BotonVolverPerfilComponent
+import com.example.helpdeskpro.vista.componentes.perfilComponente.CamposPerfilComponent
 
 /**
  * Pantalla de consulta del perfil del usuario autenticado.
@@ -52,6 +60,7 @@ fun PerfilPage(
     modoTecnico: Boolean = false,
     onInicio: () -> Unit = {},
     onNueva: () -> Unit = {},
+    onVolver: () -> Unit = onInicio,
     onEditarPerfil: () -> Unit = {},
     onCerrarSesion: () -> Unit = {}
 ) {
@@ -100,11 +109,20 @@ fun PerfilPage(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp, vertical = 20.dp)
         ) {
-            Text(
-                text = stringResource(R.string.my_profile),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BotonVolverPerfilComponent(onClick = onVolver)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = stringResource(R.string.my_profile),
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Start
+                )
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -139,11 +157,45 @@ fun PerfilPage(
                 }
 
                 else -> {
-                    PerfilComponent(
-                        perfil = uiState.perfil!!,
+                    val perfil = uiState.perfil!!
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        AvatarPerfilComponent(
+                            nombre = perfil.nombre,
+                            apellidos = perfil.apellidos
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = stringResource(
+                                R.string.full_name,
+                                perfil.nombre,
+                                perfil.apellidos
+                            ).trim(),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Surface(
+                            shape = CircleShape,
+                            color = Color(0xFF637A99),
+                            contentColor = Color.White
+                        ) {
+                            Text(
+                                text = perfil.rol.replace('_', ' ').uppercase(),
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(28.dp))
+                    CamposPerfilComponent(perfil = perfil)
+                    Spacer(modifier = Modifier.height(32.dp))
+                    AccionesPerfilComponent(
                         onEditarPerfil = onEditarPerfil,
-                        onCerrarSesion = onCerrarSesion,
-                        isLoading = uiState.isLoading
+                        onCerrarSesion = onCerrarSesion
                     )
                 }
             }

@@ -21,8 +21,7 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 fun AccionesPerfilComponent(
     onEditarPerfil: () -> Unit,
     onCerrarSesion: () -> Unit,
-    modifier: Modifier = Modifier,
-    isLoading: Boolean = false
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -31,7 +30,6 @@ fun AccionesPerfilComponent(
         Button(
             onClick = onEditarPerfil,
             modifier = Modifier.fillMaxWidth().height(52.dp),
-            enabled = !isLoading,
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8998AD))
         ) {
             Text(stringResource(R.string.edit_profile), fontWeight = FontWeight.SemiBold)
@@ -39,7 +37,6 @@ fun AccionesPerfilComponent(
         Button(
             onClick = onCerrarSesion,
             modifier = Modifier.fillMaxWidth().height(52.dp),
-            enabled = !isLoading,
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB05A5A))
         ) {
             Text(stringResource(R.string.logout), fontWeight = FontWeight.SemiBold)

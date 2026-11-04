@@ -21,7 +21,7 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 private val PerfilSecondaryTextColor = Color(0xFF8A8F98)
 
 @Composable
-fun DatosPerfilComponent(perfil: PerfilDTO, modifier: Modifier = Modifier) {
+fun CamposPerfilComponent(perfil: PerfilDTO, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         DatoPerfilComponent(label = stringResource(R.string.email), value = perfil.email)
         DatoPerfilComponent(label = stringResource(R.string.phone), value = perfil.telefono)
@@ -51,9 +51,9 @@ fun DatoPerfilComponent(label: String, value: String, modifier: Modifier = Modif
 
 @Preview(showBackground = true, widthDp = 360)
 @Composable
-private fun DatosPerfilComponentPreview() {
+private fun CamposPerfilComponentPreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        DatosPerfilComponent(
+        CamposPerfilComponent(
             perfil = PerfilDTO(
                 id = 1,
                 nombre = "Ana",
@@ -65,13 +65,5 @@ private fun DatosPerfilComponentPreview() {
                 rol = "EMPLEADO"
             )
         )
-    }
-}
-
-@Preview(showBackground = true, widthDp = 360)
-@Composable
-private fun DatoPerfilComponentPreview() {
-    HelpdeskProTheme(dynamicColor = false) {
-        DatoPerfilComponent(label = "Teléfono", value = "600 123 456")
     }
 }
