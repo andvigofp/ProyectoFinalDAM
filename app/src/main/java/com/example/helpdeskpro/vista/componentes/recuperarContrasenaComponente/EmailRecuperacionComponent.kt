@@ -60,7 +60,7 @@ fun EmailRecuperacionComponent(
 private fun EmailRecuperacionComponentPreview() {
     HelpdeskProTheme(dynamicColor = false) {
         EmailRecuperacionComponent(
-            email = "ana@empresa.com",
+            email = "",
             onEmailChange = {},
             onEnviar = {}
         )

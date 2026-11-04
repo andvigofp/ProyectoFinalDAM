@@ -46,8 +46,8 @@ fun MensajesRecuperacionComponent(
 private fun MensajesRecuperacionComponentPreview() {
     HelpdeskProTheme(dynamicColor = false) {
         MensajesRecuperacionComponent(
-            errorMessage = "No se pudo enviar la solicitud.",
-            successMessage = "Si la cuenta existe, recibirás instrucciones."
+            errorMessage = null,
+            successMessage = null
         )
     }
 }
