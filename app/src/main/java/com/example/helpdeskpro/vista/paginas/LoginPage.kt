@@ -1,0 +1,132 @@
+package com.example.helpdeskpro.vista.paginas
+
+import android.app.Application
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
+import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.vm.LoginViewModel
+import com.example.helpdeskpro.vista.componentes.logingComponente.LoginComponent
+
+private val LogoBorderColor = Color(0xFF65758B)
+
+/**
+ * Pantalla de login sin estado propio: recibe LoginUiState y delega los eventos.
+ *
+ * @param loginViewModel ViewModel que mantiene y valida las credenciales.
+ * @param modifier modificador aplicado a la pantalla.
+ * @param onLoginSuccess acción ejecutada con el identificador tras iniciar sesión.
+ * @param onForgotPassword acción para abrir la recuperación de contraseña.
+ * @param onCreateAccount acción para abrir el registro de cuenta.
+ */
+@Composable
+fun LoginPage(
+    loginViewModel: LoginViewModel,
+    modifier: Modifier = Modifier,
+    onLoginSuccess: (String) -> Unit = {},
+    onForgotPassword: () -> Unit = {},
+    onCreateAccount: () -> Unit = {}
+) {
+    val uiState by loginViewModel.uiState.collectAsState()
+
+    // Detectar inicio de sesión correcto
+    LaunchedEffect(uiState.loginSuccess, uiState.userId) {
+        if (uiState.loginSuccess) {
+            uiState.userId?.let { userId ->
+                onLoginSuccess(userId)
+            }
+        }
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp, vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Surface(
+            modifier = Modifier.size(104.dp),
+            shape = CircleShape,
+            color = Color.Transparent,
+            border = BorderStroke(2.dp, LogoBorderColor)
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Text(
+                    text = stringResource(R.string.logo),
+                    color = LogoBorderColor,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = stringResource(R.string.app_name),
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        LoginComponent(
+            email = uiState.email,
+            password = uiState.password,
+            onEmailChange = loginViewModel::onEmailChange,
+            onPasswordChange = loginViewModel::onPasswordChange,
+            onLogin = { loginViewModel.iniciarSesion() },
+            onForgotPassword = onForgotPassword,
+            onCreateAccount = onCreateAccount,
+            modifier = Modifier.fillMaxWidth(),
+            emailError = uiState.emailError,
+            passwordError = uiState.passwordError,
+            isLoading = uiState.isLoading
+        )
+    }
+}
+
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 800)
+@Composable
+private fun LoginPagePreview() {
+    HelpdeskProTheme(dynamicColor = false) {
+        val loginViewModel = remember { LoginViewModel(Application()) }
+
+        LoginPage(
+            loginViewModel = loginViewModel,
+            modifier = Modifier,
+            onLoginSuccess = {},
+            onForgotPassword = {},
+            onCreateAccount = {}
+        )
+    }
+}

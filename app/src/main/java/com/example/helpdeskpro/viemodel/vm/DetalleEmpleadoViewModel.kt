@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO
-import com.example.helpdeskpro.modelo.DetalleIncidenciaDTO
+import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.viemodel.ustate.DetalleEmpleadoUiState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -100,7 +100,7 @@ class DetalleEmpleadoViewModel(
      *
      * @param cargar función suspendida que obtiene el detalle.
      */
-    fun cargarDetalle(cargar: suspend () -> DetalleIncidenciaDTO) {
+    fun cargarDetalle(cargar: suspend () -> DetalleIncidenciaTecnicoDTO) {
 
         if (_uiState.value.isLoading) return
 
@@ -147,7 +147,7 @@ class DetalleEmpleadoViewModel(
      *
      * @param detalle nuevos datos de la incidencia.
      */
-    fun establecerDetalle(detalle: DetalleIncidenciaDTO) {
+    fun establecerDetalle(detalle: DetalleIncidenciaTecnicoDTO) {
         _uiState.update {
             it.copy(
                 detalle = detalle,

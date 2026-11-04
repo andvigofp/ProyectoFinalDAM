@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.helpdeskpro.R
-import com.example.helpdeskpro.modelo.DetalleIncidenciaDTO
+import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
@@ -26,14 +26,14 @@ import com.example.helpdeskpro.viemodel.vm.PerfilViewModel
 import com.example.helpdeskpro.viemodel.vm.PerfilViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
 import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModelFactory
-import com.example.helpdeskpro.vista.componente.homeEmpleadoComponete.HomeTab
-import com.example.helpdeskpro.vista.pagina.CrearCuentaPage
-import com.example.helpdeskpro.vista.pagina.DetalleIncideciaTecnicoPage
-import com.example.helpdeskpro.vista.pagina.HomeEmpleadoPage
-import com.example.helpdeskpro.vista.pagina.LoginPage
-import com.example.helpdeskpro.vista.pagina.NuevaIncidenciaPage
-import com.example.helpdeskpro.vista.pagina.PerfilPage
-import com.example.helpdeskpro.vista.pagina.RecuperarContrasenaPage
+import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeTab
+import com.example.helpdeskpro.vista.paginas.CrearCuentaPage
+import com.example.helpdeskpro.vista.paginas.DetalleIncideciaTecnicoPage
+import com.example.helpdeskpro.vista.paginas.HomeEmpleadoPage
+import com.example.helpdeskpro.vista.paginas.LoginPage
+import com.example.helpdeskpro.vista.paginas.NuevaIncidenciaPage
+import com.example.helpdeskpro.vista.paginas.PerfilPage
+import com.example.helpdeskpro.vista.paginas.RecuperarContrasenaPage
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -198,7 +198,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             DetalleIncideciaTecnicoPage(
                 detalleEmpleadoViewModel = detalleViewModel,
                 cargarDetalle = {
-                    DetalleIncidenciaDTO(
+                    DetalleIncidenciaTecnicoDTO(
                         id = route.incidenciaId,
                         titulo = route.titulo,
                         descripcion = application.getString(R.string.not_provided),

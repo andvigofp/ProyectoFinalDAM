@@ -1,6 +1,6 @@
 package com.example.helpdeskpro.viemodel.ustate
 
-import com.example.helpdeskpro.modelo.DetalleIncidenciaDTO
+import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 
 /**
  * Estado único de la pantalla de detalle de incidencia del empleado.
@@ -15,7 +15,7 @@ import com.example.helpdeskpro.modelo.DetalleIncidenciaDTO
  * @param errorMessage error general de carga o de la operación.
  */
 data class DetalleEmpleadoUiState(
-    val detalle: DetalleIncidenciaDTO? = null,
+    val detalle: DetalleIncidenciaTecnicoDTO? = null,
     val estadoSeleccionado: String = "",
     val solucion: String = "",
     val comentario: String = "",
