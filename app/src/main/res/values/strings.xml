@@ -33,16 +33,28 @@
     <string name="name">Nombre</string>
     <string name="surnames">Apellidos</string>
     <string name="role">Rol</string>
-    <string name="name_placeholder">Ana</string>
-    <string name="surnames_placeholder">Pérez García</string>
-    <string name="account_email_placeholder">ana@empresa.com</string>
-    <string name="phone_placeholder">600 123 456</string>
-    <string name="role_placeholder">EMPLEADO / TECNICO / ADMINISTRADOR</string>
-    <string name="department_placeholder">Ventas / Sistemas …</string>
+    <string name="name_placeholder">Introduce tu nombre</string>
+    <string name="surnames_placeholder">Introduce tus apellidos</string>
+    <string name="account_email_placeholder">Introduce tu email</string>
+    <string name="phone_placeholder">Introduce tu teléfono</string>
+    <string name="role_placeholder">Selecciona un rol</string>
+    <string name="department_placeholder">Selecciona un departamento</string>
 
     <!-- Incidencias -->
     <string name="my_incidents">Mis incidencias</string>
     <string name="no_incidents">No tienes incidencias todavía</string>
+    <string name="assigned_incidents">Incidencias asignadas</string>
+    <string name="no_assigned_incidents">No tienes incidencias asignadas</string>
+    <string name="no_incidents_for_filter">No hay incidencias con este estado</string>
+    <string name="filter_open">Abiertas</string>
+    <string name="filter_in_progress">En progreso</string>
+    <string name="filter_resolved">Resueltas</string>
+    <string name="incident_created_by">De: %1$s</string>
+    <string name="vpn_no_conecta">VPN no conecta en casa</string>
+    <string name="hardware">Hardware</string>
+    <string name="network">Red</string>
+    <string name="high">Alta</string>
+    <string name="medium">Media</string>
     <string name="incident_meta">%1$s · %2$s · %3$s</string>
     <string name="new_incident">Nueva incidencia</string>
     <string name="incident_title">Título</string>
@@ -93,6 +105,7 @@
     <string name="error_category_required">Selecciona una categoría</string>
     <string name="error_priority_required">Selecciona una prioridad</string>
     <string name="error_load_incidents">No se pudieron cargar las incidencias</string>
+    <string name="error_load_technician_incidents">No se pudieron cargar las incidencias asignadas</string>
     <string name="error_load_profile">No se pudo cargar el perfil</string>
     <string name="error_load_incident_detail">No se pudo cargar el detalle de la incidencia</string>
     <string name="error_comment_required">Escribe un comentario</string>

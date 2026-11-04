@@ -1,6 +1,5 @@
 package com.example.helpdeskpro.vista.paginas
 
-import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,25 +7,29 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.viemodel.ustate.CrearCuentaUiState
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
-import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.CrearCuentaComponent
+import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.BotonGuardarCuentaComponent
+import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.BotonVolverCrearCuentaComponent
+import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.CamposCrearCuentaComponent
 
 /**
  * Pantalla de registro sin estado propio: recibe los datos y delega los eventos.
@@ -44,25 +47,50 @@ fun CrearCuentaPage(
 
     val uiState by crearCuentaViewModel.uiState.collectAsState()
 
+    CrearCuentaPageContent(
+        uiState = uiState,
+        onNombreChange = crearCuentaViewModel::onNombreChange,
+        onApellidosChange = crearCuentaViewModel::onApellidosChange,
+        onEmailChange = crearCuentaViewModel::onEmailChange,
+        onTelefonoChange = crearCuentaViewModel::onTelefonoChange,
+        onPasswordChange = crearCuentaViewModel::onPasswordChange,
+        onRolChange = crearCuentaViewModel::onRolChange,
+        onDepartamentoChange = crearCuentaViewModel::onDepartamentoChange,
+        onGuardar = { crearCuentaViewModel.crearCuenta() },
+        onVolverLogin = onVolverLogin,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun CrearCuentaPageContent(
+    uiState: CrearCuentaUiState,
+    onNombreChange: (String) -> Unit,
+    onApellidosChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onTelefonoChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onRolChange: (String) -> Unit,
+    onDepartamentoChange: (String) -> Unit,
+    onGuardar: () -> Unit,
+    onVolverLogin: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(Color.White)
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp, vertical = 16.dp)
+            .padding(horizontal = 22.dp, vertical = 16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
+            BotonVolverCrearCuentaComponent(
                 onClick = onVolverLogin,
                 enabled = !uiState.isLoading
-            ) {
-                Text(
-                    text = "‹",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-            }
+            )
             Text(
                 text = stringResource(R.string.create_account),
                 style = MaterialTheme.typography.headlineSmall,
@@ -72,41 +100,23 @@ fun CrearCuentaPage(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        CrearCuentaComponent(
-            nombre = uiState.nombre,
-            apellidos = uiState.apellidos,
-            email = uiState.email,
-            telefono = uiState.telefono,
-            password = uiState.password,
-            rol = uiState.rol,
-            departamento = uiState.departamento,
-
-            onNombreChange = crearCuentaViewModel::onNombreChange,
-            onApellidosChange = crearCuentaViewModel::onApellidosChange,
-            onEmailChange = crearCuentaViewModel::onEmailChange,
-            onTelefonoChange = crearCuentaViewModel::onTelefonoChange,
-            onPasswordChange = crearCuentaViewModel::onPasswordChange,
-            onRolChange = crearCuentaViewModel::onRolChange,
-            onDepartamentoChange = crearCuentaViewModel::onDepartamentoChange,
-
-            onGuardar = {
-                crearCuentaViewModel.crearCuenta()
-            },
-
-            modifier = Modifier.fillMaxWidth(),
-
-            nombreError = uiState.nombreError,
-            apellidosError = uiState.apellidosError,
-            emailError = uiState.emailError,
-            telefonoError = uiState.telefonoError,
-            passwordError = uiState.passwordError,
-            rolError = uiState.rolError,
-            departamentoError = uiState.departamentoError,
-            errorMessage = uiState.errorMessage,
+        CamposCrearCuentaComponent(
+            uiState = uiState,
+            onNombreChange = onNombreChange,
+            onApellidosChange = onApellidosChange,
+            onEmailChange = onEmailChange,
+            onTelefonoChange = onTelefonoChange,
+            onPasswordChange = onPasswordChange,
+            onRolChange = onRolChange,
+            onDepartamentoChange = onDepartamentoChange,
+            onGuardar = onGuardar,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(72.dp))
+        BotonGuardarCuentaComponent(
+            onClick = onGuardar,
             isLoading = uiState.isLoading
         )
-
-        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
@@ -114,12 +124,22 @@ fun CrearCuentaPage(
 @Composable
 private fun CrearCuentaPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        val crearCuentaViewModel = remember { CrearCuentaViewModel(Application()) }
-
-        CrearCuentaPage(
-            crearCuentaViewModel = crearCuentaViewModel,
-            modifier = Modifier,
-            onVolverLogin = {}
-        )
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color.White
+        ) {
+            CrearCuentaPageContent(
+                uiState = CrearCuentaUiState(),
+                onNombreChange = {},
+                onApellidosChange = {},
+                onEmailChange = {},
+                onTelefonoChange = {},
+                onPasswordChange = {},
+                onRolChange = {},
+                onDepartamentoChange = {},
+                onGuardar = {},
+                onVolverLogin = {}
+            )
+        }
     }
 }

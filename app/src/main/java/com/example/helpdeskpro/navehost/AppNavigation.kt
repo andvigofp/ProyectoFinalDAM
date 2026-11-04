@@ -12,12 +12,15 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
+import com.example.helpdeskpro.modelo.HomeTecnicoDTO
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModel
 import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModelFactory
+import com.example.helpdeskpro.viemodel.vm.HomeTecnicoViewModel
+import com.example.helpdeskpro.viemodel.vm.HomeTecnicoViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
 import com.example.helpdeskpro.viemodel.vm.LoginViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModel
@@ -30,6 +33,7 @@ import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeTab
 import com.example.helpdeskpro.vista.paginas.CrearCuentaPage
 import com.example.helpdeskpro.vista.paginas.DetalleIncideciaTecnicoPage
 import com.example.helpdeskpro.vista.paginas.HomeEmpleadoPage
+import com.example.helpdeskpro.vista.paginas.HomeTecnicoPage
 import com.example.helpdeskpro.vista.paginas.LoginPage
 import com.example.helpdeskpro.vista.paginas.NuevaIncidenciaPage
 import com.example.helpdeskpro.vista.paginas.PerfilPage
@@ -67,6 +71,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 is RouteNavigation.CrearCuenta,
                 is RouteNavigation.RecuperarContrasena,
                 is RouteNavigation.HomeEmpleado,
+                is RouteNavigation.HomeTecnico,
                 is RouteNavigation.NuevaIncidencia,
                 is RouteNavigation.DetalleIncidenciaTecnico,
                 is RouteNavigation.Perfil -> navController.navigate(route)
@@ -183,6 +188,61 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             )
         }
 
+        // ---------- HOME TÉCNICO ----------
+        composable<RouteNavigation.HomeTecnico> { backStackEntry ->
+
+            val route = backStackEntry.toRoute<RouteNavigation.HomeTecnico>()
+            val homeTecnicoViewModel: HomeTecnicoViewModel = viewModel(
+                factory = HomeTecnicoViewModelFactory(
+                    application = application,
+                    userId = route.userId
+                )
+            )
+
+            HomeTecnicoPage(
+                homeTecnicoViewModel = homeTecnicoViewModel,
+                cargarIncidencias = {
+                    listOf(
+                        HomeTecnicoDTO(
+                            id = 1L,
+                            titulo = application.getString(R.string.pc_no_enciende),
+                            categoria = application.getString(R.string.hardware),
+                            prioridad = application.getString(R.string.high),
+                            fecha = "15/10/2026",
+                            estado = application.getString(R.string.open),
+                            creador = "Ana Pérez"
+                        ),
+                        HomeTecnicoDTO(
+                            id = 2L,
+                            titulo = application.getString(R.string.vpn_no_conecta),
+                            categoria = application.getString(R.string.network),
+                            prioridad = application.getString(R.string.medium),
+                            fecha = "16/10/2026",
+                            estado = application.getString(R.string.in_process),
+                            creador = "Carlos Ruiz"
+                        )
+                    )
+                },
+                onIncidenciaClick = { incidencia ->
+                    navigate(
+                        RouteNavigation.DetalleIncidenciaTecnico(
+                            userId = route.userId,
+                            incidenciaId = incidencia.id,
+                            titulo = incidencia.titulo,
+                            categoria = incidencia.categoria,
+                            prioridad = incidencia.prioridad,
+                            fecha = incidencia.fecha,
+                            estado = incidencia.estado,
+                            desdeHomeTecnico = true
+                        )
+                    )
+                },
+                onPerfil = {
+                    navigate(RouteNavigation.Perfil(route.userId, esTecnico = true))
+                }
+            )
+        }
+
         // ---------- DETALLE DE INCIDENCIA ----------
         composable<RouteNavigation.DetalleIncidenciaTecnico> { backStackEntry ->
 
@@ -214,10 +274,19 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                     navController.popBackStack()
                 },
                 onIncidencias = {
-                    navigate(RouteNavigation.HomeEmpleado(route.userId))
+                    if (route.desdeHomeTecnico) {
+                        navigate(RouteNavigation.HomeTecnico(route.userId))
+                    } else {
+                        navigate(RouteNavigation.HomeEmpleado(route.userId))
+                    }
                 },
                 onPerfil = {
-                    navigate(RouteNavigation.Perfil(route.userId))
+                    navigate(
+                        RouteNavigation.Perfil(
+                            route.userId,
+                            esTecnico = route.desdeHomeTecnico
+                        )
+                    )
                 }
             )
         }
@@ -259,11 +328,20 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
             PerfilPage(
                 perfilViewModel = perfilViewModel,
+                modoTecnico = route.esTecnico,
                 onInicio = {
-                    navigate(RouteNavigation.HomeEmpleado(route.userId))
+                    if (route.esTecnico) {
+                        navigate(RouteNavigation.HomeTecnico(route.userId))
+                    } else {
+                        navigate(RouteNavigation.HomeEmpleado(route.userId))
+                    }
                 },
                 onNueva = {
-                    navigate(RouteNavigation.NuevaIncidencia(route.userId))
+                    if (route.esTecnico) {
+                        navigate(RouteNavigation.HomeTecnico(route.userId))
+                    } else {
+                        navigate(RouteNavigation.NuevaIncidencia(route.userId))
+                    }
                 },
                 onCerrarSesion = {
                     perfilViewModel.limpiarPerfil()

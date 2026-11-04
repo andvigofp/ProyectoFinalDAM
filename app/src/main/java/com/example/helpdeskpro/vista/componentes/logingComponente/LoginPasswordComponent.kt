@@ -7,7 +7,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,12 +57,11 @@ fun LoginPasswordComponent(
                 PasswordVisualTransformation()
             },
             trailingIcon = {
-                TextButton(
+                BotonVisibilidadContrasenaLoginComponent(
+                    visible = passwordVisible,
                     onClick = { passwordVisible = !passwordVisible },
                     enabled = enabled
-                ) {
-                    Text(stringResource(if (passwordVisible) R.string.hide else R.string.show))
-                }
+                )
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,

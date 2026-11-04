@@ -37,7 +37,8 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 fun NavegacionInferiorDetalleComponent(
     onIncidencias: () -> Unit,
     onPerfil: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    perfilSeleccionado: Boolean = false
 ) {
     Row(
         modifier = modifier
@@ -48,13 +49,13 @@ fun NavegacionInferiorDetalleComponent(
     ) {
         NavegacionInferiorDetalleItem(
             label = stringResource(R.string.incidents),
-            selected = true,
+            selected = !perfilSeleccionado,
             onClick = onIncidencias,
             modifier = Modifier.weight(1f)
         )
         NavegacionInferiorDetalleItem(
             label = stringResource(R.string.profile),
-            selected = false,
+            selected = perfilSeleccionado,
             onClick = onPerfil,
             modifier = Modifier.weight(1f)
         )

@@ -30,6 +30,7 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.PerfilDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.PerfilViewModel
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.NavegacionInferiorDetalleComponent
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeBottomBarComponent
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeTab
 import com.example.helpdeskpro.vista.componentes.perfilComponente.PerfilComponent
@@ -48,6 +49,7 @@ import com.example.helpdeskpro.vista.componentes.perfilComponente.PerfilComponen
 fun PerfilPage(
     perfilViewModel: PerfilViewModel,
     modifier: Modifier = Modifier,
+    modoTecnico: Boolean = false,
     onInicio: () -> Unit = {},
     onNueva: () -> Unit = {},
     onEditarPerfil: () -> Unit = {},
@@ -75,12 +77,20 @@ fun PerfilPage(
         modifier = modifier.fillMaxSize(),
         containerColor = Color.White,
         bottomBar = {
-            HomeBottomBarComponent(
-                selectedTab = HomeTab.PERFIL,
-                onInicio = onInicio,
-                onNueva = onNueva,
-                onPerfil = {}
-            )
+            if (modoTecnico) {
+                NavegacionInferiorDetalleComponent(
+                    onIncidencias = onInicio,
+                    onPerfil = {},
+                    perfilSeleccionado = true
+                )
+            } else {
+                HomeBottomBarComponent(
+                    selectedTab = HomeTab.PERFIL,
+                    onInicio = onInicio,
+                    onNueva = onNueva,
+                    onPerfil = {}
+                )
+            }
         }
     ) { innerPadding ->
         Column(

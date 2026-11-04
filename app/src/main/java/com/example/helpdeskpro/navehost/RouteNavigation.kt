@@ -24,6 +24,14 @@ sealed interface RouteNavigation {
     class HomeEmpleado(val userId: String) : RouteNavigation
 
     /**
+     * Destino de la página principal del técnico.
+     *
+     * @param userId identificador del técnico autenticado.
+     */
+    @Serializable
+    class HomeTecnico(val userId: String) : RouteNavigation
+
+    /**
      * Destino del formulario para crear una incidencia.
      *
      * @param userId identificador del usuario que crea la incidencia.
@@ -41,6 +49,7 @@ sealed interface RouteNavigation {
      * @param prioridad prioridad de la incidencia.
      * @param fecha fecha de creación de la incidencia.
      * @param estado estado actual de la incidencia.
+     * @param desdeHomeTecnico indica si el detalle se abrió desde el listado del técnico.
      */
     @Serializable
     class DetalleIncidenciaTecnico(
@@ -50,7 +59,8 @@ sealed interface RouteNavigation {
         val categoria: String,
         val prioridad: String,
         val fecha: String,
-        val estado: String
+        val estado: String,
+        val desdeHomeTecnico: Boolean = false
     ) : RouteNavigation
 
     /**
@@ -59,6 +69,9 @@ sealed interface RouteNavigation {
      * @param userId identificador del usuario cuyo perfil se muestra.
      */
     @Serializable
-    class Perfil(val userId: String) : RouteNavigation
+    class Perfil(
+        val userId: String,
+        val esTecnico: Boolean = false
+    ) : RouteNavigation
 
 }

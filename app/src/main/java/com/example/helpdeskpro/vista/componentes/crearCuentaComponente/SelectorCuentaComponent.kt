@@ -17,9 +17,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,9 +92,9 @@ fun SelectorCuentaComponent(
 private fun SelectorCuentaComponentPreview() {
     HelpdeskProTheme(dynamicColor = false) {
         SelectorCuentaComponent(
-            label = "Departamento",
-            value = "Ventas",
-            placeholder = "Selecciona un departamento",
+            label = stringResource(R.string.department),
+            value = "",
+            placeholder = stringResource(R.string.department_placeholder),
             options = listOf("Ventas", "Sistemas"),
             onOptionSelected = {}
         )

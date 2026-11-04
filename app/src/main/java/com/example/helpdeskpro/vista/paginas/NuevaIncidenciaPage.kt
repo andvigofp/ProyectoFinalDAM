@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModel
+import com.example.helpdeskpro.vista.componentes.nuevaIncidenciaComponente.BotonVolverNuevaIncidenciaComponent
 import com.example.helpdeskpro.vista.componentes.nuevaIncidenciaComponente.NuevaIncidenciaComponent
 
 /**
@@ -55,15 +55,10 @@ fun NuevaIncidenciaPage(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
+            BotonVolverNuevaIncidenciaComponent(
                 onClick = onVolver,
                 enabled = !uiState.isLoading
-            ) {
-                Text(
-                    text = "‹",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-            }
+            )
             Text(
                 text = stringResource(R.string.new_incident),
                 style = MaterialTheme.typography.headlineSmall,
