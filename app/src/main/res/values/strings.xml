@@ -12,11 +12,25 @@
     <string name="show">Mostrar</string>
     <string name="hide">Ocultar</string>
     <string name="save">Guardar</string>
+    <string name="create">Crear</string>
     <string name="saving">Guardando…</string>
     <string name="back_to_login">‹ Volver al login</string>
     <string name="home">Inicio</string>
     <string name="nav_new">Nueva</string>
     <string name="profile">Perfil</string>
+    <string name="users">Usuarios</string>
+    <string name="admin_panel">Panel de administración</string>
+    <string name="admin_nav_panel">Panel</string>
+    <string name="manage_incidents">Gestionar incidencias  &gt;</string>
+    <string name="manage_users">Gestionar usuarios  &gt;</string>
+    <string name="active">ACTIVO</string>
+    <string name="inactive">INACTIVO</string>
+    <string name="edit_user">Editar usuario</string>
+    <string name="add_user">Añadir usuario</string>
+    <string name="active_label">Activo</string>
+    <string name="password_mask">••••••••</string>
+    <string name="edit_user_action">Editar ›</string>
+    <string name="no_admin_users">No hay usuarios para mostrar</string>
 
     <!-- Login y recuperación -->
     <string name="login">Iniciar sesión</string>
@@ -27,7 +41,6 @@
     <string name="recover_password_description">Introduce tu email y te enviaremos una contraseña temporal para recuperar el acceso a tu cuenta.</string>
     <string name="send_temporary_password">Enviar contraseña temporal</string>
     <string name="sending">Enviando…</string>
-    <string name="temporary_password_sent">Te hemos enviado una contraseña temporal.</string>
 
     <!-- Crear cuenta -->
     <string name="name">Nombre</string>
@@ -68,16 +81,7 @@
     <string name="create_incident">Crear incidencia</string>
     <string name="creating">Creando…</string>
     <string name="incident_detail">Detalle de incidencia</string>
-    <string name="incident_number">Incidencia #%1$d</string>
-    <string name="comments">Comentarios</string>
-    <string name="comment_placeholder">Escribe un comentario…</string>
-    <string name="send">Enviar</string>
-    <string name="sending_comment">Enviando…</string>
-    <string name="history">Historial</string>
-    <string name="history_item">%1$s  %2$s</string>
     <string name="comment_author_me">Yo</string>
-    <string name="no_comments">Todavía no hay comentarios</string>
-    <string name="no_history">Todavía no hay historial</string>
     <string name="no_incident_detail">No hay datos de la incidencia</string>
 
     <!-- Perfil -->
@@ -106,6 +110,8 @@
     <string name="error_priority_required">Selecciona una prioridad</string>
     <string name="error_load_incidents">No se pudieron cargar las incidencias</string>
     <string name="error_load_technician_incidents">No se pudieron cargar las incidencias asignadas</string>
+    <string name="error_load_admin_summary">No se pudo cargar el resumen de administración</string>
+    <string name="error_load_admin_users">No se pudieron cargar los usuarios</string>
     <string name="error_load_profile">No se pudo cargar el perfil</string>
     <string name="error_load_incident_detail">No se pudo cargar el detalle de la incidencia</string>
     <string name="error_comment_required">Escribe un comentario</string>
@@ -115,7 +121,6 @@
     <string name="pc_no_enciende_description">El ordenador no arranca al pulsar el botón de encendido.</string>
     <string name="resolved">RESUELTA</string>
     <string name="change_status">Cambiar estado</string>
-    <string name="select_status">Selecciona un estado</string>
     <string name="save_status">Guardar estado</string>
     <string name="all_statuses">ABIERTA / EN PROGRESO / RESUELTA</string>
     <string name="open">ABIERTA</string>

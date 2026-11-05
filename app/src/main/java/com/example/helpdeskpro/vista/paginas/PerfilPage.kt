@@ -35,7 +35,9 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.PerfilDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.PerfilViewModel
-import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.NavegacionInferiorDetalleComponent
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.NavegacionInferiorDetalleComponent
+import com.example.helpdeskpro.vista.componentes.homeAdminComponente.AdminBottomBarComponent
+import com.example.helpdeskpro.vista.componentes.homeAdminComponente.AdminTab
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeBottomBarComponent
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeTab
 import com.example.helpdeskpro.vista.componentes.perfilComponente.AccionesPerfilComponent
@@ -58,8 +60,10 @@ fun PerfilPage(
     perfilViewModel: PerfilViewModel,
     modifier: Modifier = Modifier,
     modoTecnico: Boolean = false,
+    modoAdmin: Boolean = false,
     onInicio: () -> Unit = {},
     onNueva: () -> Unit = {},
+    onUsuarios: () -> Unit = {},
     onVolver: () -> Unit = onInicio,
     onEditarPerfil: () -> Unit = {},
     onCerrarSesion: () -> Unit = {}
@@ -86,7 +90,15 @@ fun PerfilPage(
         modifier = modifier.fillMaxSize(),
         containerColor = Color.White,
         bottomBar = {
-            if (modoTecnico) {
+            if (modoAdmin) {
+                AdminBottomBarComponent(
+                    selectedTab = AdminTab.PERFIL,
+                    onPanel = onInicio,
+                    onIncidencias = onNueva,
+                    onUsuarios = onUsuarios,
+                    onPerfil = {}
+                )
+            } else if (modoTecnico) {
                 NavegacionInferiorDetalleComponent(
                     onIncidencias = onInicio,
                     onPerfil = {},

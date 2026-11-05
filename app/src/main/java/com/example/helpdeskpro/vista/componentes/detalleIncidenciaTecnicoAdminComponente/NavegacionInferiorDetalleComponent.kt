@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente
+package com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

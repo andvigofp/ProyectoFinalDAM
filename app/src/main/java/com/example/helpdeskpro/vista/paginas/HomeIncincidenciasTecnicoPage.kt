@@ -32,7 +32,9 @@ import com.example.helpdeskpro.modelo.HomeTecnicoDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.HomeTecnicoUiState
 import com.example.helpdeskpro.viemodel.vm.HomeTecnicoViewModel
-import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.NavegacionInferiorDetalleComponent
+import com.example.helpdeskpro.vista.componentes.homeAdminComponente.AdminBottomBarComponent
+import com.example.helpdeskpro.vista.componentes.homeAdminComponente.AdminTab
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.NavegacionInferiorDetalleComponent
 import com.example.helpdeskpro.vista.componentes.homeTecnicoComponente.FiltrosEstadoTecnicoComponent
 import com.example.helpdeskpro.vista.componentes.homeTecnicoComponente.IncidenciaAsignadaCardComponent
 
@@ -51,7 +53,11 @@ fun HomeTecnicoPage(
     cargarIncidencias: suspend () -> List<HomeTecnicoDTO>,
     modifier: Modifier = Modifier,
     onIncidenciaClick: (HomeTecnicoDTO) -> Unit = {},
-    onPerfil: () -> Unit = {}
+    onPerfil: () -> Unit = {},
+    modoAdmin: Boolean = false,
+    onPanel: () -> Unit = {},
+    onUsuarios: () -> Unit = {},
+    tituloPersonalizado: String? = null
 ) {
     val uiState by homeTecnicoViewModel.uiState.collectAsState()
 
@@ -64,7 +70,10 @@ fun HomeTecnicoPage(
         onFiltroEstadoChange = homeTecnicoViewModel::onFiltroEstadoChange,
         onIncidenciaClick = onIncidenciaClick,
         onPerfil = onPerfil,
-        titulo = stringResource(R.string.assigned_incidents),
+        modoAdmin = modoAdmin,
+        onPanel = onPanel,
+        onUsuarios = onUsuarios,
+        titulo = tituloPersonalizado ?: stringResource(R.string.assigned_incidents),
         etiquetasFiltro = listOf(
             stringResource(R.string.filter_open),
             stringResource(R.string.filter_in_progress),
@@ -86,16 +95,29 @@ private fun HomeTecnicoPageContent(
     titulo: String,
     etiquetasFiltro: List<String>,
     textoCreador: @Composable (String) -> String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    modoAdmin: Boolean = false,
+    onPanel: () -> Unit = {},
+    onUsuarios: () -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = Color.White,
         bottomBar = {
-            NavegacionInferiorDetalleComponent(
-                onIncidencias = {},
-                onPerfil = onPerfil
-            )
+            if (modoAdmin) {
+                AdminBottomBarComponent(
+                    selectedTab = AdminTab.INCIDENCIAS,
+                    onPanel = onPanel,
+                    onIncidencias = {},
+                    onUsuarios = onUsuarios,
+                    onPerfil = onPerfil
+                )
+            } else {
+                NavegacionInferiorDetalleComponent(
+                    onIncidencias = {},
+                    onPerfil = onPerfil
+                )
+            }
         }
     ) { innerPadding ->
         LazyColumn(

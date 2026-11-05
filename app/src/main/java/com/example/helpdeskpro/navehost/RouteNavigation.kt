@@ -1,5 +1,6 @@
 package com.example.helpdeskpro.navehost
 
+import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import kotlinx.serialization.Serializable
 
 /**
@@ -31,6 +32,25 @@ sealed interface RouteNavigation {
     @Serializable
     class HomeTecnico(val userId: String) : RouteNavigation
 
+    /** Destino del panel de administración. */
+    @Serializable
+    class HomeAdmin(val userId: String) : RouteNavigation
+
+    /** Destino del listado general de incidencias del administrador. */
+    @Serializable
+    class AdminIncidencias(val userId: String) : RouteNavigation
+
+    /** Destino del listado de usuarios de administración. */
+    @Serializable
+    class AdminUsuarios(val userId: String) : RouteNavigation
+
+    /** Destino del formulario de alta o edición de un usuario. */
+    @Serializable
+    class AdminUsuario(
+        val userId: String,
+        val usuario: AdminUsuarioDTO? = null
+    ) : RouteNavigation
+
     /**
      * Destino del formulario para crear una incidencia.
      *
@@ -60,7 +80,8 @@ sealed interface RouteNavigation {
         val prioridad: String,
         val fecha: String,
         val estado: String,
-        val desdeHomeTecnico: Boolean = false
+        val desdeHomeTecnico: Boolean = false,
+        val desdeHomeAdmin: Boolean = false
     ) : RouteNavigation
 
     /**
@@ -71,7 +92,8 @@ sealed interface RouteNavigation {
     @Serializable
     class Perfil(
         val userId: String,
-        val esTecnico: Boolean = false
+        val esTecnico: Boolean = false,
+        val esAdmin: Boolean = false
     ) : RouteNavigation
 
 }
