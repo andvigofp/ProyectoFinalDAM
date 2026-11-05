@@ -70,7 +70,7 @@ private fun HomeAdminPageContent(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         bottomBar = {
             AdminBottomBarComponent(
                 selectedTab = AdminTab.PANEL,
@@ -92,7 +92,7 @@ private fun HomeAdminPageContent(
                 text = stringResource(R.string.admin_panel),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF414A5A)
+                color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(48.dp))
 
@@ -133,7 +133,7 @@ private fun HomeAdminPageContent(
 @Composable
 private fun HomeAdminPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        Surface(color = Color.White) {
+        Surface(color = MaterialTheme.colorScheme.surface) {
             HomeAdminPageContent(
                 uiState = HomeAdminUiState(resumen = HomeAdminDTO(12, 5, 48)),
                 onIncidencias = {},

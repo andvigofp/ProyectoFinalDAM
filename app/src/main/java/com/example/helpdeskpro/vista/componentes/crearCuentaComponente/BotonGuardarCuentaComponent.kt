@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.componentes.crearCuentaComponente
 
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
@@ -27,7 +29,7 @@ fun BotonGuardarCuentaComponent(
         modifier = modifier.fillMaxWidth().height(52.dp),
         enabled = !isLoading,
         shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8998AD))
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
     ) {
         Text(
             text = stringResource(if (isLoading) R.string.saving else R.string.save),

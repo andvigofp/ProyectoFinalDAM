@@ -96,4 +96,13 @@ sealed interface RouteNavigation {
         val esAdmin: Boolean = false
     ) : RouteNavigation
 
+    /** Destino común para editar los datos personales de cualquier tipo de usuario. */
+    @Serializable
+    class EditarPerfil(
+        val userId: String,
+        val perfil: com.example.helpdeskpro.modelo.PerfilDTO,
+        val esTecnico: Boolean = false,
+        val esAdmin: Boolean = false
+    ) : RouteNavigation
+
 }

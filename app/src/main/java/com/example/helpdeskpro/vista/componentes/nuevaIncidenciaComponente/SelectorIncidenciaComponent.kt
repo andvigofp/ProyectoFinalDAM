@@ -17,9 +17,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,11 +92,15 @@ fun SelectorIncidenciaComponent(
 private fun SelectorIncidenciaComponentPreview() {
     HelpdeskProTheme(dynamicColor = false) {
         SelectorIncidenciaComponent(
-            value = "Hardware",
-            placeholder = "Selecciona una categoría",
-            options = listOf("Hardware", "Software", "Red"),
+            value = stringResource(R.string.hardware),
+            placeholder = stringResource(R.string.select_category),
+            options = listOf(
+                stringResource(R.string.hardware),
+                stringResource(R.string.software),
+                stringResource(R.string.network)
+            ),
             onOptionSelected = {},
-            label = "Categoría"
+            label = stringResource(R.string.category)
         )
     }
 }

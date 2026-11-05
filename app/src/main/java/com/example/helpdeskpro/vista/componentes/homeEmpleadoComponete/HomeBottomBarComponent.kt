@@ -20,9 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
-private val HomeSelectedColor = Color(0xFF637A99)
-private val HomeUnselectedColor = Color(0xFFD8DDE4)
-private val HomeSecondaryTextColor = Color(0xFF8A8F98)
 
 @Composable
 fun HomeBottomBarComponent(
@@ -32,7 +29,7 @@ fun HomeBottomBarComponent(
     onPerfil: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    NavigationBar(modifier = modifier.fillMaxWidth(), containerColor = Color(0xFFF3F4F6)) {
+    NavigationBar(modifier = modifier.fillMaxWidth(), containerColor = MaterialTheme.colorScheme.surfaceVariant) {
         HomeBottomBarItemComponent(
             label = stringResource(R.string.home),
             selected = selectedTab == HomeTab.INICIO,
@@ -65,7 +62,7 @@ private fun RowScope.HomeBottomBarItemComponent(
                 modifier = Modifier
                     .size(32.dp)
                     .background(
-                        color = if (selected) HomeSelectedColor else HomeUnselectedColor,
+                        color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
                         shape = CircleShape
                     )
             )
@@ -74,7 +71,7 @@ private fun RowScope.HomeBottomBarItemComponent(
         alwaysShowLabel = true,
         colors = NavigationBarItemDefaults.colors(
             selectedTextColor = MaterialTheme.colorScheme.onSurface,
-            unselectedTextColor = HomeSecondaryTextColor,
+            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
             indicatorColor = Color.Transparent
         )
     )

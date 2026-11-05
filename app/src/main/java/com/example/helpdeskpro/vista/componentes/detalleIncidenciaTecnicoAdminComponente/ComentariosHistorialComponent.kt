@@ -29,7 +29,7 @@ fun ComentariosHistorialComponent(
             fontSize = 12.sp,
             lineHeight = 16.sp
         ),
-        color = Color(0xFF8796AD)
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }
 

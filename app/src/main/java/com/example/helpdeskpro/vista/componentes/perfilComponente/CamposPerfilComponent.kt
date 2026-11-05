@@ -18,7 +18,6 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.PerfilDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
-private val PerfilSecondaryTextColor = Color(0xFF8A8F98)
 
 @Composable
 fun CamposPerfilComponent(perfil: PerfilDTO, modifier: Modifier = Modifier) {
@@ -35,7 +34,7 @@ fun DatoPerfilComponent(label: String, value: String, modifier: Modifier = Modif
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = label,
-            color = PerfilSecondaryTextColor,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodySmall
         )
         Spacer(modifier = Modifier.height(4.dp))
@@ -44,7 +43,7 @@ fun DatoPerfilComponent(label: String, value: String, modifier: Modifier = Modif
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(8.dp))
-        HorizontalDivider(color = Color(0xFFE1E3E6))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Spacer(modifier = Modifier.height(12.dp))
     }
 }

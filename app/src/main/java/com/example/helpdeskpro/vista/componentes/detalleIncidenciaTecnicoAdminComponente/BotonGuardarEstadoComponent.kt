@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente
 
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
@@ -70,8 +72,8 @@ private fun BotonAccionDetalleIncidencia(
         enabled = enabled && !isLoading,
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF8191AD),
-            contentColor = Color.White
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         )
     ) {
         Text(

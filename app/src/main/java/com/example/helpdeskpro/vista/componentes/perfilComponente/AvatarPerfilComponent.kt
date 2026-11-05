@@ -32,7 +32,7 @@ fun AvatarPerfilComponent(
     Surface(
         modifier = modifier.size(96.dp),
         shape = CircleShape,
-        color = Color(0xFFD7DEE8)
+        color = MaterialTheme.colorScheme.outlineVariant
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -40,7 +40,7 @@ fun AvatarPerfilComponent(
         ) {
             Text(
                 text = iniciales,
-                color = Color(0xFF4E5F78),
+                color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold
             )

@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.componentes.homeAdminComponente
 
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +37,7 @@ fun AdminBottomBarComponent(
         modifier = modifier
             .fillMaxWidth()
             .height(66.dp)
-            .background(Color(0xFFE8ECF0)),
+            .background(MaterialTheme.colorScheme.secondaryContainer),
         verticalAlignment = Alignment.CenterVertically
     ) {
         listOf(
@@ -56,13 +58,13 @@ fun AdminBottomBarComponent(
                     modifier = Modifier
                         .size(32.dp)
                         .background(
-                            if (selectedTab == tab) Color(0xFF596F91) else Color(0xFFD0D6DE),
+                            if (selectedTab == tab) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
                             CircleShape
                         )
                 )
                 Text(
                     text = label,
-                    color = if (selectedTab == tab) Color(0xFF414A5A) else Color(0xFF8796AD)
+                    color = if (selectedTab == tab) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }

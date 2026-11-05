@@ -26,9 +26,9 @@ fun NuevaIncidenciaComponent(
     onCategoriaChange: (String) -> Unit,
     onPrioridadChange: (String) -> Unit,
     onCrear: () -> Unit,
+    categorias: List<String>,
+    prioridades: List<String>,
     modifier: Modifier = Modifier,
-    categorias: List<String> = listOf("Hardware", "Software", "Red"),
-    prioridades: List<String> = listOf("Baja", "Media", "Alta"),
     tituloError: String? = null,
     descripcionError: String? = null,
     categoriaError: String? = null,
@@ -101,7 +101,17 @@ private fun NuevaIncidenciaComponentPreview() {
             onDescripcionChange = {},
             onCategoriaChange = {},
             onPrioridadChange = {},
-            onCrear = {}
+            onCrear = {},
+            categorias = listOf(
+                stringResource(R.string.hardware),
+                stringResource(R.string.software),
+                stringResource(R.string.network)
+            ),
+            prioridades = listOf(
+                stringResource(R.string.low),
+                stringResource(R.string.medium),
+                stringResource(R.string.high)
+            )
         )
     }
 }

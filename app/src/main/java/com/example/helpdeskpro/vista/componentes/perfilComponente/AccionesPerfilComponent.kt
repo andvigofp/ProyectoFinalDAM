@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.componentes.perfilComponente
 
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,14 +32,14 @@ fun AccionesPerfilComponent(
         Button(
             onClick = onEditarPerfil,
             modifier = Modifier.fillMaxWidth().height(52.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8998AD))
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
             Text(stringResource(R.string.edit_profile), fontWeight = FontWeight.SemiBold)
         }
         Button(
             onClick = onCerrarSesion,
             modifier = Modifier.fillMaxWidth().height(52.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB05A5A))
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
         ) {
             Text(stringResource(R.string.logout), fontWeight = FontWeight.SemiBold)
         }

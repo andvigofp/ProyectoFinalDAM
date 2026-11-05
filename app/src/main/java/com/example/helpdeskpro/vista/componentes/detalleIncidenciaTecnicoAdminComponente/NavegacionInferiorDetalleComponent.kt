@@ -44,7 +44,7 @@ fun NavegacionInferiorDetalleComponent(
         modifier = modifier
             .fillMaxWidth()
             .height(66.dp)
-            .background(Color(0xFFE8ECF0)),
+            .background(MaterialTheme.colorScheme.secondaryContainer),
         verticalAlignment = Alignment.CenterVertically
     ) {
         NavegacionInferiorDetalleItem(
@@ -89,7 +89,7 @@ private fun NavegacionInferiorDetalleItem(
             modifier = Modifier
                 .size(32.dp)
                 .background(
-                    color = if (selected) Color(0xFF596F91) else Color(0xFFD0D6DE),
+                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
                     shape = CircleShape
                 )
         )
@@ -100,7 +100,7 @@ private fun NavegacionInferiorDetalleItem(
                 fontSize = 12.sp,
                 lineHeight = 16.sp
             ),
-            color = if (selected) Color(0xFF414A5A) else Color(0xFF8796AD)
+            color = if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

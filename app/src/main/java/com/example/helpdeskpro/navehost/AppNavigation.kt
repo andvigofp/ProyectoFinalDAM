@@ -22,6 +22,8 @@ import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModelFactory
+import com.example.helpdeskpro.viemodel.vm.EditarPerfilViewModel
+import com.example.helpdeskpro.viemodel.vm.EditarPerfilViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModel
 import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.HomeAdminViewModel
@@ -41,6 +43,7 @@ import com.example.helpdeskpro.vista.paginas.AdminCrearUsuarioCrearPage
 import com.example.helpdeskpro.vista.paginas.AdminUsuariosPage
 import com.example.helpdeskpro.vista.paginas.CrearCuentaPage
 import com.example.helpdeskpro.vista.paginas.DetalleIncideciaTecnicoPage
+import com.example.helpdeskpro.vista.paginas.EditarPerfilPage
 import com.example.helpdeskpro.vista.paginas.HomeEmpleadoPage
 import com.example.helpdeskpro.vista.paginas.HomeAdminPage
 import com.example.helpdeskpro.vista.paginas.HomeTecnicoPage
@@ -88,7 +91,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 is RouteNavigation.AdminUsuario,
                 is RouteNavigation.NuevaIncidencia,
                 is RouteNavigation.DetalleIncidenciaTecnico,
-                is RouteNavigation.Perfil -> navController.navigate(route)
+                is RouteNavigation.Perfil,
+                is RouteNavigation.EditarPerfil -> navController.navigate(route)
             }
         }
     }
@@ -464,8 +468,16 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.Perfil> { backStackEntry ->
 
             val route = backStackEntry.toRoute<RouteNavigation.Perfil>()
+            val perfilOwner = remember(backStackEntry) {
+                when {
+                    route.esAdmin -> navController.getBackStackEntry<RouteNavigation.HomeAdmin>()
+                    route.esTecnico -> navController.getBackStackEntry<RouteNavigation.HomeTecnico>()
+                    else -> navController.getBackStackEntry<RouteNavigation.HomeEmpleado>()
+                }
+            }
 
             val perfilViewModel: PerfilViewModel = viewModel(
+                viewModelStoreOwner = perfilOwner,
                 factory = PerfilViewModelFactory(
                     application = application,
                     userId = route.userId
@@ -510,6 +522,16 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                         navigate(RouteNavigation.AdminUsuarios(route.userId))
                     }
                 },
+                onEditarPerfil = { perfil ->
+                    navigate(
+                        RouteNavigation.EditarPerfil(
+                            userId = route.userId,
+                            perfil = perfil,
+                            esTecnico = route.esTecnico,
+                            esAdmin = route.esAdmin
+                        )
+                    )
+                },
                 onCerrarSesion = {
                     perfilViewModel.limpiarPerfil()
 
@@ -519,6 +541,42 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                         }
                         launchSingleTop = true
                     }
+                }
+            )
+        }
+
+        // ---------- EDITAR PERFIL ----------
+        composable<RouteNavigation.EditarPerfil> { backStackEntry ->
+            val route = backStackEntry.toRoute<RouteNavigation.EditarPerfil>()
+            val perfilOwner = remember(backStackEntry) {
+                when {
+                    route.esAdmin -> navController.getBackStackEntry<RouteNavigation.HomeAdmin>()
+                    route.esTecnico -> navController.getBackStackEntry<RouteNavigation.HomeTecnico>()
+                    else -> navController.getBackStackEntry<RouteNavigation.HomeEmpleado>()
+                }
+            }
+            val perfilViewModel: PerfilViewModel = viewModel(
+                viewModelStoreOwner = perfilOwner,
+                factory = PerfilViewModelFactory(application, route.userId)
+            )
+            val editarPerfilViewModel: EditarPerfilViewModel = viewModel(
+                factory = EditarPerfilViewModelFactory(application, route.userId)
+            )
+
+            EditarPerfilPage(
+                editarPerfilViewModel = editarPerfilViewModel,
+                perfil = route.perfil,
+                onVolver = { navController.popBackStack() },
+                onGuardar = { datos ->
+                    perfilViewModel.actualizarPerfil(
+                        route.perfil.copy(
+                            nombre = datos.nombre,
+                            apellidos = datos.apellidos,
+                            email = datos.email,
+                            telefono = datos.telefono
+                        )
+                    )
+                    navController.popBackStack()
                 }
             )
         }

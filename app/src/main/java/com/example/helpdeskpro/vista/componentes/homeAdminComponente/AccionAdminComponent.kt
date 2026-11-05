@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.componentes.homeAdminComponente
 
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -21,7 +23,7 @@ fun AccionAdminComponent(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(32.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8092B0))
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
     ) {
         Text(texto, fontWeight = FontWeight.SemiBold)
     }

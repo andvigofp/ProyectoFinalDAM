@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.componentes.nuevaIncidenciaComponente
 
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
@@ -15,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
-private val NuevaIncidenciaButtonColor = Color(0xFF8998AD)
 
 @Composable
 fun BotonCrearIncidenciaComponent(
@@ -27,7 +28,7 @@ fun BotonCrearIncidenciaComponent(
         onClick = onClick,
         modifier = modifier.fillMaxWidth().height(52.dp),
         enabled = !isLoading,
-        colors = ButtonDefaults.buttonColors(containerColor = NuevaIncidenciaButtonColor)
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
     ) {
         Text(
             text = stringResource(if (isLoading) R.string.creating else R.string.create_incident),

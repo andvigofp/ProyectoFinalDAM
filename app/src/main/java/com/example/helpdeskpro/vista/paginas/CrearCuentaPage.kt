@@ -79,7 +79,7 @@ private fun CrearCuentaPageContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 22.dp, vertical = 16.dp)
     ) {
@@ -126,7 +126,7 @@ private fun CrearCuentaPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = Color.White
+            color = MaterialTheme.colorScheme.surface
         ) {
             CrearCuentaPageContent(
                 uiState = CrearCuentaUiState(),

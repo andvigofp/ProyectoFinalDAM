@@ -54,8 +54,8 @@ private fun TarjetaResumenAdminComponent(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
-        color = Color(0xFFFCFCFD),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFD4DCE7))
+        color = MaterialTheme.colorScheme.surface,
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(modifier = Modifier.padding(vertical = 18.dp, horizontal = 4.dp)) {
             Text(
@@ -64,14 +64,14 @@ private fun TarjetaResumenAdminComponent(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF596F91)
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 text = etiqueta,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelMedium,
-                color = Color(0xFF8796AD)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

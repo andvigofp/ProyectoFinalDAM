@@ -95,7 +95,10 @@ private fun SelectorCuentaComponentPreview() {
             label = stringResource(R.string.department),
             value = "",
             placeholder = stringResource(R.string.department_placeholder),
-            options = listOf("Ventas", "Sistemas"),
+            options = listOf(
+                stringResource(R.string.department_sales),
+                stringResource(R.string.department_systems)
+            ),
             onOptionSelected = {}
         )
     }

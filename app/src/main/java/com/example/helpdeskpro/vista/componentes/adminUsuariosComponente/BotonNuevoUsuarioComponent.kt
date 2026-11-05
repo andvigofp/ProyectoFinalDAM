@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.componentes.adminUsuariosComponente
 
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -19,8 +21,8 @@ fun BotonNuevoUsuarioComponent(onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier.size(60.dp),
         shape = CircleShape,
-        containerColor = Color(0xFF596F91),
-        contentColor = Color.White
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
     ) {
         Icon(
             imageVector = Icons.Default.Add,

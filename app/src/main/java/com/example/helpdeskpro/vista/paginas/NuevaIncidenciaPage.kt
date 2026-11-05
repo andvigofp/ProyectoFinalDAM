@@ -80,6 +80,16 @@ fun NuevaIncidenciaPage(
             onCrear = {
                 nuevaIncidenciaViewModel.crearIncidencia()
             },
+            categorias = listOf(
+                stringResource(R.string.hardware),
+                stringResource(R.string.software),
+                stringResource(R.string.network)
+            ),
+            prioridades = listOf(
+                stringResource(R.string.low),
+                stringResource(R.string.medium),
+                stringResource(R.string.high)
+            ),
             modifier = Modifier.fillMaxWidth(),
             tituloError = uiState.tituloError,
             descripcionError = uiState.descripcionError,

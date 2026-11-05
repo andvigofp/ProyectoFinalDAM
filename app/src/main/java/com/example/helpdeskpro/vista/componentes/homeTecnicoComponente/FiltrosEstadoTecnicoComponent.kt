@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.componentes.homeTecnicoComponente
 
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -49,16 +51,16 @@ fun FiltrosEstadoTecnicoComponent(
                         onFiltroSeleccionado(if (selected) null else filtro.estado)
                     },
                 shape = RoundedCornerShape(18.dp),
-                color = if (selected) Color(0xFFDCE4EF) else Color(0xFFF3F5F7),
+                color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
                 border = androidx.compose.foundation.BorderStroke(
                     1.dp,
-                    if (selected) Color(0xFF637A99) else Color(0xFFAAB8CC)
+                    if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
                 )
             ) {
                 Text(
                     text = filtro.etiqueta,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                    color = Color(0xFF414A5A),
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 12.sp,
                     lineHeight = 16.sp,
                     fontWeight = FontWeight.Normal

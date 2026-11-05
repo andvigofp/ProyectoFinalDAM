@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="status_warning">#FFE5B85C</color>
+
+    <color name="md_primary">#FF596F91</color>
+    <color name="md_on_primary">#FFFFFFFF</color>
+    <color name="md_primary_container">#FFDCE4EF</color>
+    <color name="md_on_primary_container">#FF414A5A</color>
+    <color name="md_secondary">#FF64748B</color>
+    <color name="md_on_secondary">#FFFFFFFF</color>
+    <color name="md_secondary_container">#FFE8ECF0</color>
+    <color name="md_on_secondary_container">#FF414A5A</color>
+    <color name="md_tertiary">#FF68A380</color>
+    <color name="md_on_tertiary">#FFFFFFFF</color>
+    <color name="md_background">#FFFFFFFF</color>
+    <color name="md_on_background">#FF414A5A</color>
+    <color name="md_surface">#FFFCFCFD</color>
+    <color name="md_on_surface">#FF414A5A</color>
+    <color name="md_surface_variant">#FFF3F4F6</color>
+    <color name="md_on_surface_variant">#FF8796AD</color>
+    <color name="md_outline">#FFAAB9D0</color>
+    <color name="md_outline_variant">#FFD0D6DE</color>
+    <color name="md_error">#FFB05A5A</color>
+    <color name="md_on_error">#FFFFFFFF</color>
+
+    <color name="md_primary_dark">#FFB7C7E0</color>
+    <color name="md_on_primary_dark">#FF293B56</color>
+    <color name="md_primary_container_dark">#FF405574</color>
+    <color name="md_on_primary_container_dark">#FFDCE4EF</color>
+    <color name="md_secondary_dark">#FFB8C5D8</color>
+    <color name="md_on_secondary_dark">#FF29313D</color>
+    <color name="md_secondary_container_dark">#FF3B4655</color>
+    <color name="md_on_secondary_container_dark">#FFE8ECF0</color>
+    <color name="md_tertiary_dark">#FF9BC8A8</color>
+    <color name="md_on_tertiary_dark">#FF183B25</color>
+    <color name="md_background_dark">#FF111820</color>
+    <color name="md_on_background_dark">#FFE1E7EF</color>
+    <color name="md_surface_dark">#FF19222D</color>
+    <color name="md_on_surface_dark">#FFE1E7EF</color>
+    <color name="md_surface_variant_dark">#FF303B49</color>
+    <color name="md_on_surface_variant_dark">#FFB8C5D8</color>
+    <color name="md_outline_dark">#FF8999AF</color>
+    <color name="md_outline_variant_dark">#FF465363</color>
+    <color name="md_error_dark">#FFFFB4AB</color>
+    <color name="md_on_error_dark">#FF690005</color>
+</resources>

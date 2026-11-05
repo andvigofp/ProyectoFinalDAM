@@ -19,8 +19,8 @@ fun BotonNuevaIncidenciaFlotanteComponent(
         onClick = onClick,
         modifier = modifier,
         shape = CircleShape,
-        containerColor = Color(0xFF637A99),
-        contentColor = Color.White
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
     ) {
         Text(
             text = "+",

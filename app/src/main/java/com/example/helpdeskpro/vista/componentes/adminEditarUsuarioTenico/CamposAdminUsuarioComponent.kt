@@ -79,14 +79,23 @@ fun CamposAdminUsuarioComponent(
             label = stringResource(R.string.role),
             value = rol,
             placeholder = stringResource(R.string.role_placeholder),
-            options = listOf("EMPLEADO", "TECNICO", "ADMINISTRADOR"),
+            options = listOf(
+                stringResource(R.string.role_employee),
+                stringResource(R.string.role_technician),
+                stringResource(R.string.role_administrator)
+            ),
             onOptionSelected = onRolChange
         )
         SelectorCuentaComponent(
             label = stringResource(R.string.department),
             value = departamento,
             placeholder = stringResource(R.string.department_placeholder),
-            options = listOf("Ventas", "Sistemas", "Dirección", "RRHH"),
+            options = listOf(
+                stringResource(R.string.department_sales),
+                stringResource(R.string.department_systems),
+                stringResource(R.string.department_management),
+                stringResource(R.string.department_hr)
+            ),
             onOptionSelected = onDepartamentoChange
         )
     }
@@ -114,12 +123,12 @@ private fun CampoAdminUsuario(
             visualTransformation = visualTransformation,
             shape = RoundedCornerShape(8.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFFAAB9D0),
-                unfocusedBorderColor = Color(0xFFAAB9D0),
-                focusedContainerColor = Color(0xFFFCFCFD),
-                unfocusedContainerColor = Color(0xFFFCFCFD),
-                focusedPlaceholderColor = Color(0xFF8796AD),
-                unfocusedPlaceholderColor = Color(0xFF8796AD)
+                focusedBorderColor = MaterialTheme.colorScheme.outline,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
         )
     }

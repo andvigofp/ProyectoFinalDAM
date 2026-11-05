@@ -102,7 +102,7 @@ private fun HomeTecnicoPageContent(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         bottomBar = {
             if (modoAdmin) {
                 AdminBottomBarComponent(
@@ -142,7 +142,7 @@ private fun HomeTecnicoPageContent(
                         letterSpacing = 0.sp
                     ),
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF414A5A)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(54.dp))
             }
@@ -186,7 +186,7 @@ private fun HomeTecnicoPageContent(
                                     R.string.no_incidents_for_filter
                                 }
                             ),
-                            color = Color(0xFF8796AD),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
@@ -245,7 +245,7 @@ private fun HomeTecnicoPagePreview() {
         )
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = Color.White
+            color = MaterialTheme.colorScheme.surface
         ) {
             HomeTecnicoPageContent(
                 uiState = HomeTecnicoUiState(incidencias = incidencias),

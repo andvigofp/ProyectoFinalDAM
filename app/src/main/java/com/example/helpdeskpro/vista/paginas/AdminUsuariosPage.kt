@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.paginas
 
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -49,7 +51,7 @@ fun AdminUsuariosPage(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { BotonNuevoUsuarioComponent(onClick = onNuevoUsuario) }
     ) { padding ->
         LazyColumn(
@@ -68,7 +70,7 @@ fun AdminUsuariosPage(
                         text = stringResource(R.string.users),
                         modifier = Modifier.padding(start = 8.dp),
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF414A5A),
+                        color = MaterialTheme.colorScheme.onSurface,
                         style = androidx.compose.material3.MaterialTheme.typography.headlineSmall
                     )
                 }
@@ -92,7 +94,7 @@ fun AdminUsuariosPage(
                     Text(
                         text = stringResource(R.string.no_admin_users),
                         modifier = Modifier.fillMaxWidth().padding(top = 36.dp),
-                        color = Color(0xFF8796AD)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 else -> items(uiState.usuarios, key = { it.id }) { usuario ->
@@ -117,7 +119,7 @@ private fun AdminUsuariosPagePreview() {
 @Composable
 private fun AdminUsuariosPageContentPreview() {
     androidx.compose.material3.Scaffold(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { BotonNuevoUsuarioComponent(onClick = {}) }
     ) { padding ->
         LazyColumn(
@@ -136,7 +138,7 @@ private fun AdminUsuariosPageContentPreview() {
                         text = stringResource(R.string.users),
                         modifier = Modifier.padding(start = 8.dp),
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF414A5A),
+                        color = MaterialTheme.colorScheme.onSurface,
                         style = androidx.compose.material3.MaterialTheme.typography.headlineSmall
                     )
                 }

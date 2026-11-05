@@ -64,7 +64,7 @@ fun HomeEmpleadoPage(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
 
         bottomBar = {
             HomeBottomBarComponent(
@@ -144,7 +144,7 @@ fun HomeEmpleadoPage(
                         ) {
                             Text(
                                 text = stringResource(R.string.no_incidents),
-                                color = Color(0xFF8A8F98),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }

@@ -118,7 +118,7 @@ fun AdminCrearUsuarioCrearPage(
             enabled = nombre.isNotBlank() && apellidos.isNotBlank() &&
                 email.isNotBlank() && rol.isNotBlank() && departamento.isNotBlank() &&
                 (usuario != null || password.isNotBlank()),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8092B0)),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             shape = MaterialTheme.shapes.extraLarge
         ) {
             Text(
@@ -134,7 +134,7 @@ fun AdminCrearUsuarioCrearPage(
 @Composable
 private fun AdminUsuarioPagePreview() {
     HelpdeskProTheme(dynamicColor = false) {
-        Surface(color = Color.White) {
+        Surface(color = MaterialTheme.colorScheme.surface) {
             AdminCrearUsuarioCrearPage(usuario = null, idNuevoUsuario = 1)
         }
     }

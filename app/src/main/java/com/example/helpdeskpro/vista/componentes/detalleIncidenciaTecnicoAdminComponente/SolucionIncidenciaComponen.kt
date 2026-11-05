@@ -49,7 +49,7 @@ fun SolucionIncidenciaComponent(
                 lineHeight = 20.sp
             ),
             fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF414A5A)
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         OutlinedTextField(
@@ -61,7 +61,7 @@ fun SolucionIncidenciaComponent(
             placeholder = {
                 Text(
                     text = stringResource(R.string.solution_placeholder),
-                    color = Color(0xFF8796AD),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 14.sp,
                     lineHeight = 20.sp
                 )
@@ -69,7 +69,7 @@ fun SolucionIncidenciaComponent(
             textStyle = MaterialTheme.typography.bodyMedium.copy(
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                color = Color(0xFF3D4A5E)
+                color = MaterialTheme.colorScheme.onSurface
             ),
             enabled = enabled,
             isError = errorMessage != null,
@@ -80,16 +80,16 @@ fun SolucionIncidenciaComponent(
             },
             shape = RoundedCornerShape(8.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFFAAB8CC),
-                unfocusedBorderColor = Color(0xFFAAB8CC),
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                disabledBorderColor = Color(0xFFAAB8CC),
-                disabledContainerColor = Color.White,
-                focusedTextColor = Color(0xFF3D4A5E),
-                unfocusedTextColor = Color(0xFF3D4A5E),
-                disabledTextColor = Color(0xFF3D4A5E),
-                cursorColor = Color(0xFF596F91)
+                focusedBorderColor = MaterialTheme.colorScheme.outline,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledContainerColor = MaterialTheme.colorScheme.surface,
+                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                cursorColor = MaterialTheme.colorScheme.primary
             )
         )
     }

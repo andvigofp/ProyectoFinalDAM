@@ -29,6 +29,7 @@
     <string name="add_user">Añadir usuario</string>
     <string name="active_label">Activo</string>
     <string name="password_mask">••••••••</string>
+    <string name="password_optional_placeholder">Dejar vacío para mantener la contraseña actual</string>
     <string name="edit_user_action">Editar ›</string>
     <string name="no_admin_users">No hay usuarios para mostrar</string>
 
@@ -74,6 +75,17 @@
     <string name="description">Descripción</string>
     <string name="category">Categoría</string>
     <string name="priority">Prioridad</string>
+    <string name="select_category">Selecciona una categoría</string>
+    <string name="software">Software</string>
+    <string name="low">Baja</string>
+    <string name="role_employee">EMPLEADO</string>
+    <string name="role_technician">TECNICO</string>
+    <string name="role_administrator">ADMINISTRADOR</string>
+    <string name="department_sales">Ventas</string>
+    <string name="department_systems">Sistemas</string>
+    <string name="department_management">Dirección</string>
+    <string name="department_hr">RRHH</string>
+    <string name="user_role_department">%1$s · %2$s</string>
     <string name="incident_title_placeholder">Resumen del problema…</string>
     <string name="incident_description_placeholder">Describe el problema…</string>
     <string name="category_placeholder">Hardware / Software / Red …</string>
@@ -81,6 +93,9 @@
     <string name="create_incident">Crear incidencia</string>
     <string name="creating">Creando…</string>
     <string name="incident_detail">Detalle de incidencia</string>
+    <string name="incident_detail_created_by">De: %1$s (%2$s)</string>
+    <string name="incident_detail_category_priority">Categoría: %1$s    Prioridad: %2$s</string>
+    <string name="incident_detail_created">Creada: %1$s</string>
     <string name="comment_author_me">Yo</string>
     <string name="no_incident_detail">No hay datos de la incidencia</string>
 

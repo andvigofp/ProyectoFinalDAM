@@ -145,7 +145,11 @@ fun CamposCrearCuentaComponent(
             label = stringResource(R.string.role),
             value = uiState.rol,
             placeholder = stringResource(R.string.role_placeholder),
-            options = listOf("EMPLEADO", "TECNICO", "ADMINISTRADOR"),
+            options = listOf(
+                stringResource(R.string.role_employee),
+                stringResource(R.string.role_technician),
+                stringResource(R.string.role_administrator)
+            ),
             onOptionSelected = onRolChange,
             error = uiState.rolError,
             enabled = !uiState.isLoading
@@ -154,7 +158,10 @@ fun CamposCrearCuentaComponent(
             label = stringResource(R.string.department),
             value = uiState.departamento,
             placeholder = stringResource(R.string.department_placeholder),
-            options = listOf("Ventas", "Sistemas"),
+            options = listOf(
+                stringResource(R.string.department_sales),
+                stringResource(R.string.department_systems)
+            ),
             onOptionSelected = onDepartamentoChange,
             error = uiState.departamentoError,
             enabled = !uiState.isLoading

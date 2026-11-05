@@ -36,8 +36,8 @@ fun UsuarioAdminCardComponent(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp),
-        color = Color(0xFFFCFCFD),
-        border = BorderStroke(1.dp, Color(0xFFAAB9D0))
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 11.dp, vertical = 8.dp),
@@ -46,7 +46,7 @@ fun UsuarioAdminCardComponent(
             Box(
                 modifier = Modifier
                     .size(40.dp)
-                    .background(Color(0xFFD0D6DE), CircleShape)
+                    .background(MaterialTheme.colorScheme.outlineVariant, CircleShape)
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column(
@@ -54,19 +54,27 @@ fun UsuarioAdminCardComponent(
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
-                    text = "${usuario.nombre} ${usuario.apellidos}",
+                    text = stringResource(
+                        R.string.full_name,
+                        usuario.nombre,
+                        usuario.apellidos
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF414A5A)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "${usuario.rol} · ${usuario.departamento}",
+                    text = stringResource(
+                        R.string.user_role_department,
+                        usuario.rol,
+                        usuario.departamento
+                    ),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFF8796AD)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Surface(
                     shape = RoundedCornerShape(5.dp),
-                    color = if (usuario.activo) Color(0xFF72AA7C) else Color(0xFF9AA1AA)
+                    color = if (usuario.activo) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outline
                 ) {
                     Text(
                         text = stringResource(
@@ -74,14 +82,18 @@ fun UsuarioAdminCardComponent(
                         ),
                         modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp),
                         style = MaterialTheme.typography.labelSmall,
-                        color = Color.White
+                        color = if (usuario.activo) {
+                            MaterialTheme.colorScheme.onTertiary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        }
                     )
                 }
             }
             TextButton(onClick = onEditar) {
                 Text(
                     text = stringResource(R.string.edit_user_action),
-                    color = Color(0xFF596F91),
+                    color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.labelLarge
                 )
             }

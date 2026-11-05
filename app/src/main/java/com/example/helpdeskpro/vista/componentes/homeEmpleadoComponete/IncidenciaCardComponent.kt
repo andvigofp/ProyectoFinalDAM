@@ -27,7 +27,6 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.IncidenciaDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 
-private val HomeSecondaryTextColor = Color(0xFF8A8F98)
 
 @Composable
 fun IncidenciaCardComponent(
@@ -39,8 +38,8 @@ fun IncidenciaCardComponent(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, Color(0xFFD4D4D8))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(
@@ -67,7 +66,7 @@ fun IncidenciaCardComponent(
                     incidencia.prioridad,
                     incidencia.fecha
                 ),
-                color = HomeSecondaryTextColor,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis

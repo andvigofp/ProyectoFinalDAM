@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.vista.componentes.homeTecnicoComponente
 
+import androidx.compose.ui.res.colorResource
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,8 +42,8 @@ fun IncidenciaAsignadaCardComponent(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFCFCFD)),
-        border = BorderStroke(1.dp, Color(0xFFAAB8CC))
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
@@ -60,7 +62,7 @@ fun IncidenciaAsignadaCardComponent(
                         letterSpacing = 0.sp
                     ),
                     fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF414A5A),
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -74,7 +76,7 @@ fun IncidenciaAsignadaCardComponent(
                     incidencia.prioridad,
                     incidencia.fecha
                 ),
-                color = Color(0xFF8796AD),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontSize = 12.sp,
                     lineHeight = 16.sp,
@@ -83,7 +85,7 @@ fun IncidenciaAsignadaCardComponent(
             )
             Text(
                 text = textoCreador(incidencia.creador),
-                color = Color(0xFF8796AD),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontSize = 12.sp,
                     lineHeight = 16.sp,
@@ -100,16 +102,20 @@ fun IncidenciaAsignadaCardComponent(
 private fun EstadoIncidenciaTecnicoBadge(estado: String) {
     val normalizedState = estado.trim().uppercase().replace('_', ' ')
     val backgroundColor = when (normalizedState) {
-        "ABIERTA" -> Color(0xFFD2A447)
-        "EN PROGRESO" -> Color(0xFF596F91)
-        "RESUELTA" -> Color(0xFF68A380)
-        else -> Color(0xFF8998AD)
+        "ABIERTA" -> colorResource(R.color.status_warning)
+        "EN PROGRESO" -> MaterialTheme.colorScheme.primary
+        "RESUELTA" -> MaterialTheme.colorScheme.tertiary
+        else -> MaterialTheme.colorScheme.primary
     }
 
     Surface(
         shape = RoundedCornerShape(6.dp),
         color = backgroundColor,
-        contentColor = Color.White
+        contentColor = when (normalizedState) {
+            "ABIERTA" -> MaterialTheme.colorScheme.onSurface
+            "RESUELTA" -> MaterialTheme.colorScheme.onTertiary
+            else -> MaterialTheme.colorScheme.onPrimary
+        }
     ) {
         Text(
             text = estado.replace('_', ' ').uppercase(),

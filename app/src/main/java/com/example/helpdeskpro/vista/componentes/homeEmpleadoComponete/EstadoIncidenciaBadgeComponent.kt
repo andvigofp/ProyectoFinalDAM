@@ -1,5 +1,9 @@
 package com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete
 
+import com.example.helpdeskpro.R
+
+import androidx.compose.ui.res.colorResource
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -15,16 +19,20 @@ import androidx.compose.ui.unit.dp
 fun EstadoIncidenciaBadgeComponent(estado: String) {
     val normalizedState = estado.uppercase().replace(" ", "_")
     val backgroundColor = when (normalizedState) {
-        "ABIERTA" -> Color(0xFFE5B85C)
-        "EN_PROGRESO" -> Color(0xFF64748B)
-        "RESUELTA" -> Color(0xFF68A380)
-        else -> Color(0xFF8998AD)
+        "ABIERTA" -> colorResource(R.color.status_warning)
+        "EN_PROGRESO" -> MaterialTheme.colorScheme.secondary
+        "RESUELTA" -> MaterialTheme.colorScheme.tertiary
+        else -> MaterialTheme.colorScheme.primary
     }
 
     Surface(
         shape = RoundedCornerShape(6.dp),
         color = backgroundColor,
-        contentColor = Color.White
+        contentColor = when (normalizedState) {
+            "ABIERTA" -> MaterialTheme.colorScheme.onSurface
+            "RESUELTA" -> MaterialTheme.colorScheme.onTertiary
+            else -> MaterialTheme.colorScheme.onPrimary
+        }
     ) {
         Text(
             text = estado.replace('_', ' ').uppercase(),

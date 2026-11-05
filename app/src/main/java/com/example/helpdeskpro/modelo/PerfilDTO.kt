@@ -1,5 +1,7 @@
 package com.example.helpdeskpro.modelo
 
+import kotlinx.serialization.Serializable
+
 /**
  * Información del usuario que se muestra en su perfil.
  *
@@ -12,6 +14,7 @@ package com.example.helpdeskpro.modelo
  * @param miembroDesde fecha de alta del usuario.
  * @param rol rol asignado al usuario.
  */
+@Serializable
 data class PerfilDTO(
     val id: Long,
     val nombre: String,

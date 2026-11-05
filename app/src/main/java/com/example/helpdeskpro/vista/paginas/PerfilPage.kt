@@ -65,7 +65,7 @@ fun PerfilPage(
     onNueva: () -> Unit = {},
     onUsuarios: () -> Unit = {},
     onVolver: () -> Unit = onInicio,
-    onEditarPerfil: () -> Unit = {},
+    onEditarPerfil: (PerfilDTO) -> Unit = {},
     onCerrarSesion: () -> Unit = {}
 ) {
 
@@ -88,7 +88,7 @@ fun PerfilPage(
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
         bottomBar = {
             if (modoAdmin) {
                 AdminBottomBarComponent(
@@ -163,7 +163,7 @@ fun PerfilPage(
                     Text(
                         text = stringResource(R.string.no_profile_data),
                         modifier = Modifier.padding(top = 48.dp),
-                        color = Color(0xFF8A8F98),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -192,8 +192,8 @@ fun PerfilPage(
                         Spacer(modifier = Modifier.height(12.dp))
                         Surface(
                             shape = CircleShape,
-                            color = Color(0xFF637A99),
-                            contentColor = Color.White
+                            color = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         ) {
                             Text(
                                 text = perfil.rol.replace('_', ' ').uppercase(),
@@ -206,7 +206,7 @@ fun PerfilPage(
                     CamposPerfilComponent(perfil = perfil)
                     Spacer(modifier = Modifier.height(32.dp))
                     AccionesPerfilComponent(
-                        onEditarPerfil = onEditarPerfil,
+                        onEditarPerfil = { onEditarPerfil(perfil) },
                         onCerrarSesion = onCerrarSesion
                     )
                 }

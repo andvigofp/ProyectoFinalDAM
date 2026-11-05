@@ -67,7 +67,7 @@ fun SelectorEstadoComponent(
                 lineHeight = 20.sp
             ),
             fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF414A5A)
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         ExposedDropdownMenuBox(
@@ -91,13 +91,13 @@ fun SelectorEstadoComponent(
                 placeholder = {
                     Text(
                         text = stringResource(R.string.all_statuses),
-                        color = Color(0xFF8796AD),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 14.sp,
                         lineHeight = 20.sp
                     )
                 },
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color(0xFF8796AD),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 14.sp,
                     lineHeight = 20.sp
                 ),
@@ -105,21 +105,21 @@ fun SelectorEstadoComponent(
                     Icon(
                         imageVector = Icons.Filled.ArrowDropDown,
                         contentDescription = null,
-                        tint = Color(0xFF8796AD),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(18.dp)
                     )
                 },
                 shape = RoundedCornerShape(8.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(0xFFAAB8CC),
-                    unfocusedBorderColor = Color(0xFFAAB8CC),
-                    focusedTextColor = Color(0xFF8796AD),
-                    unfocusedTextColor = Color(0xFF8796AD),
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    disabledBorderColor = Color(0xFFAAB8CC),
-                    disabledTextColor = Color(0xFF8796AD),
-                    disabledContainerColor = Color.White
+                    focusedBorderColor = MaterialTheme.colorScheme.outline,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface
                 ),
                 enabled = enabled,
                 singleLine = true

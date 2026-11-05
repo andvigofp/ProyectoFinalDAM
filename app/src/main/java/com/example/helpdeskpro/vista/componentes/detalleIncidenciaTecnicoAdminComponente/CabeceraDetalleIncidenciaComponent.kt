@@ -51,7 +51,7 @@ fun CabeceraDetalleIncidenciaComponent(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.volver),
-                    tint = Color(0xFF596F91),
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -63,7 +63,7 @@ fun CabeceraDetalleIncidenciaComponent(
                     lineHeight = 24.sp
                 ),
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF414A5A)
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -75,33 +75,44 @@ fun CabeceraDetalleIncidenciaComponent(
                     lineHeight = 24.sp
                 ),
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF414A5A)
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
                 Text(
-                    text = "De: ${incidencia.creador} (${incidencia.departamento})",
+                    text = stringResource(
+                        R.string.incident_detail_created_by,
+                        incidencia.creador,
+                        incidencia.departamento
+                    ),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontSize = 14.sp,
                         lineHeight = 20.sp
                     ),
-                    color = Color(0xFF3D4A5E)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Categoría: ${incidencia.categoria}    Prioridad: ${incidencia.prioridad}",
+                    text = stringResource(
+                        R.string.incident_detail_category_priority,
+                        incidencia.categoria,
+                        incidencia.prioridad
+                    ),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontSize = 14.sp,
                         lineHeight = 20.sp
                     ),
-                    color = Color(0xFF3D4A5E)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "Creada: ${incidencia.fechaCreacion}",
+                    text = stringResource(
+                        R.string.incident_detail_created,
+                        incidencia.fechaCreacion
+                    ),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontSize = 14.sp,
                         lineHeight = 20.sp
                     ),
-                    color = Color(0xFF3D4A5E)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
