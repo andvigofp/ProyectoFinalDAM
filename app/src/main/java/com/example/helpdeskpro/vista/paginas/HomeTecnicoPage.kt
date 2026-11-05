@@ -1,24 +1,40 @@
 package com.example.helpdeskpro.vista.paginas
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.HomeTecnicoDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.HomeTecnicoUiState
 import com.example.helpdeskpro.viemodel.vm.HomeTecnicoViewModel
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.NavegacionInferiorDetalleComponent
-import com.example.helpdeskpro.vista.componentes.homeTecnicoComponente.HomeTecnicoComponent
+import com.example.helpdeskpro.vista.componentes.homeTecnicoComponente.FiltrosEstadoTecnicoComponent
+import com.example.helpdeskpro.vista.componentes.homeTecnicoComponente.IncidenciaAsignadaCardComponent
 
 /**
  * Página principal del técnico con el listado de incidencias asignadas.
@@ -82,19 +98,102 @@ private fun HomeTecnicoPageContent(
             )
         }
     ) { innerPadding ->
-        HomeTecnicoComponent(
-            incidencias = uiState.incidencias,
-            filtroEstado = uiState.filtroEstado,
-            incidenciasFiltradas = uiState.incidenciasFiltradas,
-            onFiltroEstadoChange = onFiltroEstadoChange,
-            onIncidenciaClick = onIncidenciaClick,
-            titulo = titulo,
-            etiquetasFiltro = etiquetasFiltro,
-            textoCreador = textoCreador,
-            modifier = Modifier.padding(innerPadding).fillMaxSize(),
-            isLoading = uiState.isLoading,
-            errorMessage = uiState.errorMessage
-        )
+        LazyColumn(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+            contentPadding = PaddingValues(
+                start = 16.dp,
+                top = 20.dp,
+                end = 16.dp,
+                bottom = 24.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                Text(
+                    text = titulo,
+                    modifier = Modifier.padding(start = 6.dp),
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontSize = 20.sp,
+                        lineHeight = 24.sp,
+                        letterSpacing = 0.sp
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF414A5A)
+                )
+                Spacer(modifier = Modifier.height(54.dp))
+            }
+
+            if (!uiState.isLoading && uiState.errorMessage == null &&
+                uiState.incidencias.isNotEmpty()
+            ) {
+                item {
+                    FiltrosEstadoTecnicoComponent(
+                        filtroSeleccionado = uiState.filtroEstado,
+                        onFiltroSeleccionado = onFiltroEstadoChange,
+                        etiquetas = etiquetasFiltro
+                    )
+                }
+            }
+
+            when {
+                uiState.isLoading -> item {
+                    EstadoListaHomeTecnico {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                uiState.errorMessage != null -> item {
+                    EstadoListaHomeTecnico {
+                        Text(
+                            text = uiState.errorMessage,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
+
+                uiState.incidenciasFiltradas.isEmpty() -> item {
+                    EstadoListaHomeTecnico {
+                        Text(
+                            text = stringResource(
+                                if (uiState.incidencias.isEmpty()) {
+                                    R.string.no_assigned_incidents
+                                } else {
+                                    R.string.no_incidents_for_filter
+                                }
+                            ),
+                            color = Color(0xFF8796AD),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
+
+                else -> items(
+                    items = uiState.incidenciasFiltradas,
+                    key = { incidencia -> incidencia.id }
+                ) { incidencia ->
+                    IncidenciaAsignadaCardComponent(
+                        incidencia = incidencia,
+                        onClick = { onIncidenciaClick(incidencia) },
+                        textoCreador = textoCreador
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EstadoListaHomeTecnico(content: @Composable () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 48.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        content()
     }
 }
 

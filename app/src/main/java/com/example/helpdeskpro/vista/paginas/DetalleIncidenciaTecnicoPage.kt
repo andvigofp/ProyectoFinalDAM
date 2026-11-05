@@ -1,17 +1,24 @@
 package com.example.helpdeskpro.vista.paginas
 
 import android.app.Application
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -21,8 +28,13 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
-import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.DetalleIncidenciaTecnicoComponent
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.BotonGuardarEstadoComponent
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.BotonRegistrarSolucionComponent
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.CabeceraDetalleIncidenciaComponent
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.ComentariosHistorialComponent
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.NavegacionInferiorDetalleComponent
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.SelectorEstadoComponent
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoComponente.SolucionIncidenciaComponent
 
 /**
  * Pantalla de detalle que conecta el estado del ViewModel con los componentes visuales.
@@ -48,6 +60,7 @@ fun DetalleIncideciaTecnicoPage(
     onPerfil: () -> Unit = {}
 ) {
     val uiState by detalleEmpleadoViewModel.uiState.collectAsState()
+    val detalle = uiState.detalle
 
     LaunchedEffect(detalleEmpleadoViewModel.incidenciaId) {
         detalleEmpleadoViewModel.cargarDetalle(cargarDetalle)
@@ -70,27 +83,83 @@ fun DetalleIncideciaTecnicoPage(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 22.dp, vertical = 16.dp),
         ) {
-            DetalleIncidenciaTecnicoComponent(
-                incidencia = uiState.detalle,
-                estadoSeleccionado = uiState.estadoSeleccionado,
-                estados = listOf(
-                    stringResource(R.string.open),
-                    stringResource(R.string.in_process),
-                    stringResource(R.string.resolved)
-                ),
-                solucion = uiState.solucion,
-                onVolver = onVolver,
-                onEstadoChange = detalleEmpleadoViewModel::onEstadoChange,
-                onGuardarEstado = {
-                    detalleEmpleadoViewModel.guardarEstado(onGuardarEstado)
-                },
-                onSolucionChange = detalleEmpleadoViewModel::onSolucionChange,
-                onRegistrarSolucion = {
-                    detalleEmpleadoViewModel.registrarSolucion(onRegistrarSolucion)
-                },
-                isLoading = uiState.isLoading,
-                errorMessage = uiState.errorMessage
-            )
+            when {
+                uiState.isLoading -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 48.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                uiState.errorMessage != null -> {
+                    Text(
+                        text = uiState.errorMessage.orEmpty(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 48.dp),
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+
+                detalle == null -> {
+                    Text(
+                        text = stringResource(R.string.no_incident_detail),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 48.dp),
+                        color = Color(0xFF8A8F98),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+
+                else -> Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(22.dp)
+                ) {
+                    CabeceraDetalleIncidenciaComponent(
+                        incidencia = detalle,
+                        onVolver = onVolver
+                    )
+
+                    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        SelectorEstadoComponent(
+                            estado = uiState.estadoSeleccionado,
+                            estados = listOf(
+                                stringResource(R.string.open),
+                                stringResource(R.string.in_process),
+                                stringResource(R.string.resolved)
+                            ),
+                            onEstadoChange = detalleEmpleadoViewModel::onEstadoChange
+                        )
+                        BotonGuardarEstadoComponent(
+                            onGuardar = {
+                                detalleEmpleadoViewModel.guardarEstado(onGuardarEstado)
+                            },
+                            enabled = uiState.estadoSeleccionado.isNotBlank()
+                        )
+                    }
+
+                    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        SolucionIncidenciaComponent(
+                            solucion = uiState.solucion,
+                            onSolucionChange = detalleEmpleadoViewModel::onSolucionChange
+                        )
+                        BotonRegistrarSolucionComponent(
+                            onRegistrar = {
+                                detalleEmpleadoViewModel.registrarSolucion(onRegistrarSolucion)
+                            },
+                            enabled = uiState.solucion.isNotBlank()
+                        )
+                    }
+
+                    ComentariosHistorialComponent()
+                }
+            }
         }
     }
 }
