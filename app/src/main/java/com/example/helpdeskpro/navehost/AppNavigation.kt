@@ -12,10 +12,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.helpdeskpro.R
-import com.example.helpdeskpro.modelo.AdminUsuarioDTO
-import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
-import com.example.helpdeskpro.modelo.HomeAdminDTO
-import com.example.helpdeskpro.modelo.HomeTecnicoDTO
+import com.example.helpdeskpro.data.repository.admin.AdministracionRepository
+import com.example.helpdeskpro.data.repository.admin.inmemory.AdministracionRepositoryInMemory
+import com.example.helpdeskpro.data.repository.auth.AuthRepository
+import com.example.helpdeskpro.data.repository.auth.inmemory.AuthRepositoryInMemory
+import com.example.helpdeskpro.data.repository.incidencias.IncidenciasRepository
+import com.example.helpdeskpro.data.repository.incidencias.inmemory.IncidenciasRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.perfil.PerfilRepository
+import com.example.helpdeskpro.data.repository.perfil.inmemory.PerfilRepositoryInMemory
 import com.example.helpdeskpro.viemodel.vm.AdminUsuariosViewModel
 import com.example.helpdeskpro.viemodel.vm.AdminUsuariosViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
@@ -63,6 +68,19 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
     val navController = rememberNavController()
     val application = LocalContext.current.applicationContext as Application
+    val inMemoryStore = remember { InMemoryHelpdeskStore() }
+    val authRepository: AuthRepository = remember(inMemoryStore) {
+        AuthRepositoryInMemory(inMemoryStore)
+    }
+    val incidenciasRepository: IncidenciasRepository = remember(inMemoryStore) {
+        IncidenciasRepositoryInMemory(inMemoryStore)
+    }
+    val perfilRepository: PerfilRepository = remember(inMemoryStore) {
+        PerfilRepositoryInMemory(inMemoryStore)
+    }
+    val administracionRepository: AdministracionRepository = remember(inMemoryStore) {
+        AdministracionRepositoryInMemory(inMemoryStore)
+    }
 
     // ---------- CONTROL DE SESIÓN ----------
     LaunchedEffect(Unit) {
@@ -125,13 +143,17 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.Login> {
 
             val loginViewModel: LoginViewModel = viewModel(
-                factory = LoginViewModelFactory(application)
+                factory = LoginViewModelFactory(application, authRepository)
             )
 
             LoginPage(
                 loginViewModel = loginViewModel,
-                onLoginSuccess = { userId ->
-                    navigate(RouteNavigation.HomeEmpleado(userId))
+                onLoginSuccess = { userId, rol ->
+                    when (rol.uppercase()) {
+                        "TECNICO" -> navigate(RouteNavigation.HomeTecnico(userId))
+                        "ADMINISTRADOR" -> navigate(RouteNavigation.HomeAdmin(userId))
+                        else -> navigate(RouteNavigation.HomeEmpleado(userId))
+                    }
                 },
                 onForgotPassword = {
                     navigate(RouteNavigation.RecuperarContrasena)
@@ -146,7 +168,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.RecuperarContrasena> {
 
             val recuperarViewModel: RecuperarContrasenaViewModel = viewModel(
-                factory = RecuperarContrasenaViewModelFactory(application)
+                factory = RecuperarContrasenaViewModelFactory(application, authRepository)
             )
 
             RecuperarContrasenaPage(
@@ -159,12 +181,13 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.CrearCuenta> {
 
             val crearCuentaViewModel: CrearCuentaViewModel = viewModel(
-                factory = CrearCuentaViewModelFactory(application)
+                factory = CrearCuentaViewModelFactory(application, authRepository)
             )
 
             CrearCuentaPage(
                 crearCuentaViewModel = crearCuentaViewModel,
-                onVolverLogin = ::volverALogin
+                onVolverLogin = ::volverALogin,
+                onCuentaCreada = ::volverALogin
             )
         }
 
@@ -176,7 +199,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             val homeEmpleadoViewModel: HomeEmpleadoViewModel = viewModel(
                 factory = HomeEmpleadoViewModelFactory(
                     application = application,
-                    userId = route.userId
+                    userId = route.userId,
+                    incidenciasRepository = incidenciasRepository
                 )
             )
 
@@ -213,34 +237,13 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             val homeTecnicoViewModel: HomeTecnicoViewModel = viewModel(
                 factory = HomeTecnicoViewModelFactory(
                     application = application,
-                    userId = route.userId
+                    userId = route.userId,
+                    incidenciasRepository = incidenciasRepository
                 )
             )
 
             HomeTecnicoPage(
                 homeTecnicoViewModel = homeTecnicoViewModel,
-                cargarIncidencias = {
-                    listOf(
-                        HomeTecnicoDTO(
-                            id = 1L,
-                            titulo = application.getString(R.string.pc_no_enciende),
-                            categoria = application.getString(R.string.hardware),
-                            prioridad = application.getString(R.string.high),
-                            fecha = "15/10/2026",
-                            estado = application.getString(R.string.open),
-                            creador = "Ana Pérez"
-                        ),
-                        HomeTecnicoDTO(
-                            id = 2L,
-                            titulo = application.getString(R.string.vpn_no_conecta),
-                            categoria = application.getString(R.string.network),
-                            prioridad = application.getString(R.string.medium),
-                            fecha = "16/10/2026",
-                            estado = application.getString(R.string.in_process),
-                            creador = "Carlos Ruiz"
-                        )
-                    )
-                },
                 onIncidenciaClick = { incidencia ->
                     navigate(
                         RouteNavigation.DetalleIncidenciaTecnico(
@@ -265,12 +268,15 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.HomeAdmin> { backStackEntry ->
             val route = backStackEntry.toRoute<RouteNavigation.HomeAdmin>()
             val homeAdminViewModel: HomeAdminViewModel = viewModel(
-                factory = HomeAdminViewModelFactory(application, route.userId)
+                factory = HomeAdminViewModelFactory(
+                    application,
+                    route.userId,
+                    administracionRepository
+                )
             )
 
             HomeAdminPage(
                 homeAdminViewModel = homeAdminViewModel,
-                cargarResumen = { HomeAdminDTO(abiertas = 12, enProgreso = 5, resueltas = 48) },
                 onIncidencias = {
                     navigate(RouteNavigation.AdminIncidencias(route.userId))
                 },
@@ -287,33 +293,15 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.AdminIncidencias> { backStackEntry ->
             val route = backStackEntry.toRoute<RouteNavigation.AdminIncidencias>()
             val homeTecnicoViewModel: HomeTecnicoViewModel = viewModel(
-                factory = HomeTecnicoViewModelFactory(application, route.userId)
+                factory = HomeTecnicoViewModelFactory(
+                    application,
+                    route.userId,
+                    incidenciasRepository
+                )
             )
 
             HomeTecnicoPage(
                 homeTecnicoViewModel = homeTecnicoViewModel,
-                cargarIncidencias = {
-                    listOf(
-                        HomeTecnicoDTO(
-                            id = 1L,
-                            titulo = application.getString(R.string.pc_no_enciende),
-                            categoria = application.getString(R.string.hardware),
-                            prioridad = application.getString(R.string.high),
-                            fecha = "15/10/2026",
-                            estado = application.getString(R.string.open),
-                            creador = "Ana Pérez"
-                        ),
-                        HomeTecnicoDTO(
-                            id = 2L,
-                            titulo = application.getString(R.string.vpn_no_conecta),
-                            categoria = application.getString(R.string.network),
-                            prioridad = application.getString(R.string.medium),
-                            fecha = "16/10/2026",
-                            estado = application.getString(R.string.in_process),
-                            creador = "Carlos Ruiz"
-                        )
-                    )
-                },
                 onIncidenciaClick = { incidencia ->
                     navigate(
                         RouteNavigation.DetalleIncidenciaTecnico(
@@ -346,19 +334,11 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             }
             val adminUsuariosViewModel: AdminUsuariosViewModel = viewModel(
                 viewModelStoreOwner = adminHomeEntry,
-                factory = AdminUsuariosViewModelFactory(application)
+                factory = AdminUsuariosViewModelFactory(application, administracionRepository)
             )
 
             AdminUsuariosPage(
                 adminUsuariosViewModel = adminUsuariosViewModel,
-                cargarUsuarios = {
-                    listOf(
-                        AdminUsuarioDTO(1L, "Ana", "Pérez", "ana@empresa.com", "600 123 456", "EMPLEADO", "Ventas", true),
-                        AdminUsuarioDTO(2L, "Luis", "Gómez", "luis@empresa.com", "600 234 567", "TECNICO", "Sistemas", true),
-                        AdminUsuarioDTO(3L, "Marta", "Díaz", "marta@empresa.com", "600 345 678", "ADMINISTRADOR", "Dirección", true),
-                        AdminUsuarioDTO(4L, "Pedro", "Sanz", "pedro@empresa.com", "600 456 789", "EMPLEADO", "RRHH", false)
-                    )
-                },
                 onVolver = { navController.popBackStack() },
                 onNuevoUsuario = {
                     navigate(RouteNavigation.AdminUsuario(route.userId))
@@ -376,16 +356,17 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             }
             val adminUsuariosViewModel: AdminUsuariosViewModel = viewModel(
                 viewModelStoreOwner = adminHomeEntry,
-                factory = AdminUsuariosViewModelFactory(application)
+                factory = AdminUsuariosViewModelFactory(application, administracionRepository)
             )
 
             AdminCrearUsuarioCrearPage(
                 usuario = route.usuario,
                 idNuevoUsuario = adminUsuariosViewModel.siguienteId(),
                 onVolver = { navController.popBackStack() },
-                onGuardar = { usuario ->
-                    adminUsuariosViewModel.guardarUsuario(usuario)
-                    navController.popBackStack()
+                onGuardar = { usuario, password ->
+                    adminUsuariosViewModel.guardarUsuario(usuario, password) {
+                        navController.popBackStack()
+                    }
                 }
             )
         }
@@ -398,25 +379,13 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 factory = DetalleEmpleadoViewModelFactory(
                     application = application,
                     userId = route.userId,
-                    incidenciaId = route.incidenciaId
+                    incidenciaId = route.incidenciaId,
+                    incidenciasRepository = incidenciasRepository
                 )
             )
 
             DetalleIncideciaTecnicoPage(
                 detalleEmpleadoViewModel = detalleViewModel,
-                cargarDetalle = {
-                    DetalleIncidenciaTecnicoDTO(
-                        id = route.incidenciaId,
-                        titulo = route.titulo,
-                        descripcion = application.getString(R.string.not_provided),
-                        estado = route.estado,
-                        creador = application.getString(R.string.not_provided),
-                        departamento = application.getString(R.string.not_provided),
-                        categoria = route.categoria,
-                        prioridad = route.prioridad,
-                        fechaCreacion = route.fecha
-                    )
-                },
                 onVolver = {
                     navController.popBackStack()
                 },
@@ -449,7 +418,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             val nuevaIncidenciaViewModel: NuevaIncidenciaViewModel = viewModel(
                 factory = NuevaIncidenciaViewModelFactory(
                     application = application,
-                    userId = route.userId
+                    userId = route.userId,
+                    incidenciasRepository = incidenciasRepository
                 )
             )
 
@@ -480,7 +450,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 viewModelStoreOwner = perfilOwner,
                 factory = PerfilViewModelFactory(
                     application = application,
-                    userId = route.userId
+                    userId = route.userId,
+                    perfilRepository = perfilRepository
                 )
             )
 
@@ -557,10 +528,14 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             }
             val perfilViewModel: PerfilViewModel = viewModel(
                 viewModelStoreOwner = perfilOwner,
-                factory = PerfilViewModelFactory(application, route.userId)
+                factory = PerfilViewModelFactory(application, route.userId, perfilRepository)
             )
             val editarPerfilViewModel: EditarPerfilViewModel = viewModel(
-                factory = EditarPerfilViewModelFactory(application, route.userId)
+                factory = EditarPerfilViewModelFactory(
+                    application,
+                    route.userId,
+                    perfilRepository
+                )
             )
 
             EditarPerfilPage(

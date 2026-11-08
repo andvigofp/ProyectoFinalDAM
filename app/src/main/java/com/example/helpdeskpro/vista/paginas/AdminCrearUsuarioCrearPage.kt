@@ -40,7 +40,7 @@ fun AdminCrearUsuarioCrearPage(
     idNuevoUsuario: Long,
     modifier: Modifier = Modifier,
     onVolver: () -> Unit = {},
-    onGuardar: (AdminUsuarioDTO) -> Unit = {}
+    onGuardar: (AdminUsuarioDTO, String?) -> Unit = { _, _ -> }
 ) {
     var nombre by rememberSaveable(usuario?.id) { mutableStateOf(usuario?.nombre.orEmpty()) }
     var apellidos by rememberSaveable(usuario?.id) { mutableStateOf(usuario?.apellidos.orEmpty()) }
@@ -127,7 +127,8 @@ fun AdminCrearUsuarioCrearPage(
                     rol = rol,
                     departamento = departamento,
                     activo = activo
-                )
+                ),
+                password.takeIf { it.isNotBlank() }
             )
         }
     )

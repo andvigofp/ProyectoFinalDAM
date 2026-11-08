@@ -40,7 +40,6 @@ import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarCompo
 @Composable
 fun HomeAdminPage(
     homeAdminViewModel: HomeAdminViewModel,
-    cargarResumen: suspend () -> HomeAdminDTO,
     modifier: Modifier = Modifier,
     onIncidencias: () -> Unit = {},
     onUsuarios: () -> Unit = {},
@@ -49,7 +48,7 @@ fun HomeAdminPage(
     val uiState by homeAdminViewModel.uiState.collectAsState()
 
     LaunchedEffect(homeAdminViewModel.userId) {
-        homeAdminViewModel.cargarResumen(cargarResumen)
+        homeAdminViewModel.cargarResumen()
     }
 
     HomeAdminPageContent(

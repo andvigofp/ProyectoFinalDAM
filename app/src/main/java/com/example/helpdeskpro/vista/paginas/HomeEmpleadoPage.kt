@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -62,6 +63,9 @@ fun HomeEmpleadoPage(
 ) {
 
     val uiState by homeEmpleadoViewModel.uiState.collectAsState()
+    LaunchedEffect(homeEmpleadoViewModel.userId) {
+        homeEmpleadoViewModel.cargarIncidencias()
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),

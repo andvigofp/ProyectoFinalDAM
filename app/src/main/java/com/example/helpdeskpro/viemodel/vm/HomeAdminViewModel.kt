@@ -5,6 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.data.repository.admin.AdministracionRepository
+import com.example.helpdeskpro.data.repository.admin.inmemory.AdministracionRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.HomeAdminDTO
 import com.example.helpdeskpro.viemodel.ustate.HomeAdminUiState
@@ -17,19 +20,25 @@ import kotlinx.coroutines.launch
 
 class HomeAdminViewModel(
     application: Application,
-    val userId: String
+    val userId: String,
+    private val administracionRepository: AdministracionRepository =
+        AdministracionRepositoryInMemory(InMemoryHelpdeskStore())
 ) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(HomeAdminUiState())
     val uiState: StateFlow<HomeAdminUiState> = _uiState.asStateFlow()
 
-    fun cargarResumen(cargar: suspend () -> HomeAdminDTO) {
+    fun cargarResumen() {
         if (_uiState.value.isLoading) return
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             try {
                 _uiState.update {
-                    it.copy(resumen = cargar(), isLoading = false, errorMessage = null)
+                    it.copy(
+                        resumen = administracionRepository.obtenerResumen(),
+                        isLoading = false,
+                        errorMessage = null
+                    )
                 }
             } catch (exception: CancellationException) {
                 throw exception
@@ -48,12 +57,14 @@ class HomeAdminViewModel(
 
 class HomeAdminViewModelFactory(
     private val application: Application,
-    private val userId: String
+    private val userId: String,
+    private val administracionRepository: AdministracionRepository =
+        AdministracionRepositoryInMemory(InMemoryHelpdeskStore())
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomeAdminViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return HomeAdminViewModel(application, userId) as T
+            return HomeAdminViewModel(application, userId, administracionRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

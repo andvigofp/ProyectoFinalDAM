@@ -6,6 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.data.repository.incidencias.IncidenciasRepository
+import com.example.helpdeskpro.data.repository.incidencias.inmemory.IncidenciasRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.IncidenciaDTO
 import com.example.helpdeskpro.viemodel.ustate.HomeEmpleadoUiState
@@ -25,19 +28,19 @@ import kotlinx.coroutines.launch
  */
 class HomeEmpleadoViewModel(
     application: Application,
-    val userId: String
+    val userId: String,
+    private val incidenciasRepository: IncidenciasRepository =
+        IncidenciasRepositoryInMemory(InMemoryHelpdeskStore())
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(HomeEmpleadoUiState())
     val uiState: StateFlow<HomeEmpleadoUiState> = _uiState.asStateFlow()
 
     /**
-     * Carga las incidencias del empleado.
+     * Carga las incidencias del empleado desde el repositorio.
      * Evita lanzar varias cargas simultáneas.
-     *
-     * @param cargar función suspendida que obtiene la lista de incidencias.
      */
-    fun cargarIncidencias(cargar: suspend () -> List<IncidenciaDTO>) {
+    fun cargarIncidencias() {
 
         if (_uiState.value.isLoading) return
 
@@ -51,7 +54,7 @@ class HomeEmpleadoViewModel(
             }
 
             try {
-                val incidencias = cargar()
+                val incidencias = incidenciasRepository.obtenerIncidenciasEmpleado(userId)
 
                 _uiState.update {
                     it.copy(
@@ -94,7 +97,9 @@ class HomeEmpleadoViewModel(
  */
 class HomeEmpleadoViewModelFactory(
     private val application: Application,
-    private val userId: String
+    private val userId: String,
+    private val incidenciasRepository: IncidenciasRepository =
+        IncidenciasRepositoryInMemory(InMemoryHelpdeskStore())
 ) : ViewModelProvider.Factory {
 
     /**
@@ -108,7 +113,8 @@ class HomeEmpleadoViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return HomeEmpleadoViewModel(
                 application = application,
-                userId = userId
+                userId = userId,
+                incidenciasRepository = incidenciasRepository
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

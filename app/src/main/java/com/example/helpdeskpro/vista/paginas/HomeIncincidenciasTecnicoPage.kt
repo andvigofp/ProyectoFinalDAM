@@ -43,7 +43,6 @@ import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarCompo
  * Página principal del técnico con el listado de incidencias asignadas.
  *
  * @param homeTecnicoViewModel ViewModel con las incidencias y filtros de la página.
- * @param cargarIncidencias función suspendida que obtiene las incidencias asignadas.
  * @param modifier modificador aplicado a la página.
  * @param onIncidenciaClick acción ejecutada al seleccionar una incidencia.
  * @param onPerfil acción de navegación al perfil.
@@ -51,7 +50,6 @@ import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarCompo
 @Composable
 fun HomeTecnicoPage(
     homeTecnicoViewModel: HomeTecnicoViewModel,
-    cargarIncidencias: suspend () -> List<HomeTecnicoDTO>,
     modifier: Modifier = Modifier,
     onIncidenciaClick: (HomeTecnicoDTO) -> Unit = {},
     onPerfil: () -> Unit = {},
@@ -63,7 +61,7 @@ fun HomeTecnicoPage(
     val uiState by homeTecnicoViewModel.uiState.collectAsState()
 
     LaunchedEffect(homeTecnicoViewModel.userId) {
-        homeTecnicoViewModel.cargarIncidencias(cargarIncidencias)
+        homeTecnicoViewModel.cargarIncidencias()
     }
 
     HomeTecnicoPageContent(

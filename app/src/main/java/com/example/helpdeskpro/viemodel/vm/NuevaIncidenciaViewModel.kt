@@ -5,6 +5,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.data.repository.incidencias.IncidenciasRepository
+import com.example.helpdeskpro.data.repository.incidencias.inmemory.IncidenciasRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.NuevaIncidenciaDTO
 import com.example.helpdeskpro.viemodel.ustate.NuevaIncidenciaUiState
@@ -12,6 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 /**
  * Mantiene y valida el formulario de creación de incidencias.
@@ -22,7 +28,9 @@ import kotlinx.coroutines.flow.update
  */
 class NuevaIncidenciaViewModel(
     application: Application,
-    val userId: String
+    val userId: String,
+    private val incidenciasRepository: IncidenciasRepository =
+        IncidenciasRepositoryInMemory(InMemoryHelpdeskStore())
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(NuevaIncidenciaUiState())
@@ -93,12 +101,9 @@ class NuevaIncidenciaViewModel(
     }
 
     /**
-     * Valida el formulario y entrega el DTO cuando los datos son correctos.
-     * La llamada al repositorio/API se añadirá en la iteración de integración.
-     *
-     * @param onDatosValidos acción que recibe los datos si el formulario es válido.
+     * Valida el formulario y registra la incidencia mediante el repositorio.
      */
-    fun crearIncidencia(onDatosValidos: (NuevaIncidenciaDTO) -> Unit = {}) {
+    fun crearIncidencia() {
 
         val currentState = _uiState.value
 
@@ -154,14 +159,31 @@ class NuevaIncidenciaViewModel(
         ).all { it == null }
 
         if (formularioValido) {
-            onDatosValidos(
-                NuevaIncidenciaDTO(
+            val datos = NuevaIncidenciaDTO(
                     titulo = titulo,
                     descripcion = descripcion,
                     categoria = categoria,
                     prioridad = prioridad
                 )
-            )
+            viewModelScope.launch {
+                _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+                try {
+                    incidenciasRepository.crearIncidencia(userId, datos)
+                    _uiState.update {
+                        it.copy(isLoading = false, incidenciaCreada = true, errorMessage = null)
+                    }
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (exception: Exception) {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = exception.message
+                                ?: getApplication<Application>().getString(R.string.error_create_incident)
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -181,7 +203,9 @@ class NuevaIncidenciaViewModel(
  */
 class NuevaIncidenciaViewModelFactory(
     private val application: Application,
-    private val userId: String
+    private val userId: String,
+    private val incidenciasRepository: IncidenciasRepository =
+        IncidenciasRepositoryInMemory(InMemoryHelpdeskStore())
 ) : ViewModelProvider.Factory {
 
     /**
@@ -195,7 +219,8 @@ class NuevaIncidenciaViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return NuevaIncidenciaViewModel(
                 application = application,
-                userId = userId
+                userId = userId,
+                incidenciasRepository = incidenciasRepository
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

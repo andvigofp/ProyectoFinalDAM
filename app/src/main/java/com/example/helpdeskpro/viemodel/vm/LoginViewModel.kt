@@ -5,6 +5,10 @@ import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.data.repository.auth.AuthRepository
+import com.example.helpdeskpro.data.repository.auth.inmemory.AuthRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.LoginDTO
 import com.example.helpdeskpro.viemodel.ustate.LoginUiState
@@ -12,6 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 /**
  * Mantiene el estado y valida las credenciales del formulario de inicio de sesión.
@@ -19,7 +25,10 @@ import kotlinx.coroutines.flow.update
  * @property uiState flujo observable del estado del formulario.
  * @param application aplicación Android usada para acceder a recursos.
  */
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
+class LoginViewModel(
+    application: Application,
+    private val authRepository: AuthRepository = AuthRepositoryInMemory(InMemoryHelpdeskStore())
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
@@ -35,7 +44,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 email = email,
                 emailError = null,
                 errorMessage = null,
-                loginSuccess = false
+                loginSuccess = false,
+                userId = null,
+                userRole = null
             )
         }
     }
@@ -51,18 +62,18 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 password = password,
                 passwordError = null,
                 errorMessage = null,
-                loginSuccess = false
+                loginSuccess = false,
+                userId = null,
+                userRole = null
             )
         }
     }
 
     /**
-     * Valida el formulario y entrega las credenciales cuando son correctas.
-     * La llamada al repositorio/API se añadirá en la iteración de integración.
-     *
-     * @param onCredencialesValidas acción que recibe las credenciales válidas.
+     * Valida las credenciales y consulta el repositorio de autenticación.
      */
-    fun iniciarSesion(onCredencialesValidas: (LoginDTO) -> Unit = {}) {
+    fun iniciarSesion() {
+        if (_uiState.value.isLoading) return
 
         val currentState = _uiState.value
         val normalizedEmail = currentState.email.trim()
@@ -94,13 +105,33 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         if (emailError == null && passwordError == null) {
-
-            onCredencialesValidas(
-                LoginDTO(
-                    email = normalizedEmail,
-                    password = currentState.password
-                )
-            )
+            viewModelScope.launch {
+                _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+                try {
+                    val sesion = authRepository.iniciarSesion(
+                        LoginDTO(normalizedEmail, currentState.password)
+                    )
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            loginSuccess = true,
+                            userId = sesion.userId,
+                            userRole = sesion.rol
+                        )
+                    }
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (exception: Exception) {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            loginSuccess = false,
+                            errorMessage = exception.message
+                                ?: getApplication<Application>().getString(R.string.error_login)
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -111,7 +142,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
  * @param application aplicación Android asociada al ViewModel.
  */
 class LoginViewModelFactory(
-    private val application: Application
+    private val application: Application,
+    private val authRepository: AuthRepository = AuthRepositoryInMemory(InMemoryHelpdeskStore())
 ) : ViewModelProvider.Factory {
 
     /**
@@ -123,7 +155,7 @@ class LoginViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return LoginViewModel(application) as T
+            return LoginViewModel(application, authRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

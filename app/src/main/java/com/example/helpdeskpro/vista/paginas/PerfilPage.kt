@@ -72,18 +72,7 @@ fun PerfilPage(
     val uiState by perfilViewModel.uiState.collectAsState()
 
     LaunchedEffect(perfilViewModel.userId) {
-        perfilViewModel.cargarPerfil {
-            PerfilDTO(
-                id = perfilViewModel.userId.toLongOrNull() ?: 1L,
-                nombre = "Ana",
-                apellidos = "Pérez",
-                email = "ana@empresa.com",
-                telefono = "600 123 456",
-                departamento = "Ventas",
-                miembroDesde = "01/09/2026",
-                rol = "EMPLEADO"
-            )
-        }
+        perfilViewModel.cargarPerfil()
     }
 
     Scaffold(

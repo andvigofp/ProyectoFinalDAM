@@ -5,6 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.data.repository.incidencias.IncidenciasRepository
+import com.example.helpdeskpro.data.repository.incidencias.inmemory.IncidenciasRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.HomeTecnicoDTO
 import com.example.helpdeskpro.viemodel.ustate.HomeTecnicoUiState
@@ -24,25 +27,25 @@ import kotlinx.coroutines.launch
  */
 class HomeTecnicoViewModel(
     application: Application,
-    val userId: String
+    val userId: String,
+    private val incidenciasRepository: IncidenciasRepository =
+        IncidenciasRepositoryInMemory(InMemoryHelpdeskStore())
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(HomeTecnicoUiState())
     val uiState: StateFlow<HomeTecnicoUiState> = _uiState.asStateFlow()
 
     /**
-     * Carga las incidencias asignadas al técnico.
-     *
-     * @param cargar función suspendida que obtiene las incidencias.
+     * Carga las incidencias visibles para el técnico.
      */
-    fun cargarIncidencias(cargar: suspend () -> List<HomeTecnicoDTO>) {
+    fun cargarIncidencias() {
         if (_uiState.value.isLoading) return
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
             try {
-                val incidencias = cargar()
+                val incidencias = incidenciasRepository.obtenerIncidenciasTecnico(userId)
                 _uiState.update {
                     it.copy(
                         incidencias = incidencias,
@@ -84,13 +87,15 @@ class HomeTecnicoViewModel(
  */
 class HomeTecnicoViewModelFactory(
     private val application: Application,
-    private val userId: String
+    private val userId: String,
+    private val incidenciasRepository: IncidenciasRepository =
+        IncidenciasRepositoryInMemory(InMemoryHelpdeskStore())
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomeTecnicoViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return HomeTecnicoViewModel(application, userId) as T
+            return HomeTecnicoViewModel(application, userId, incidenciasRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

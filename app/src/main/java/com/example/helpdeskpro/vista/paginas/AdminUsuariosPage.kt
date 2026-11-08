@@ -37,7 +37,6 @@ import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarCompo
 @Composable
 fun AdminUsuariosPage(
     adminUsuariosViewModel: AdminUsuariosViewModel,
-    cargarUsuarios: suspend () -> List<AdminUsuarioDTO>,
     modifier: Modifier = Modifier,
     onVolver: () -> Unit = {},
     onNuevoUsuario: () -> Unit = {},
@@ -46,7 +45,7 @@ fun AdminUsuariosPage(
     val uiState by adminUsuariosViewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        adminUsuariosViewModel.cargarUsuarios(cargarUsuarios)
+        adminUsuariosViewModel.cargarUsuarios()
     }
 
     Scaffold(

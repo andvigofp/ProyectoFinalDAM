@@ -5,6 +5,10 @@ import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.perfil.PerfilRepository
+import com.example.helpdeskpro.data.repository.perfil.inmemory.PerfilRepositoryInMemory
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.EditarPerfilDTO
 import com.example.helpdeskpro.modelo.PerfilDTO
@@ -13,10 +17,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 class EditarPerfilViewModel(
     application: Application,
-    val userId: String
+    val userId: String,
+    private val perfilRepository: PerfilRepository =
+        PerfilRepositoryInMemory(InMemoryHelpdeskStore())
 ) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(EditarPerfilUiState())
     val uiState: StateFlow<EditarPerfilUiState> = _uiState.asStateFlow()
@@ -84,8 +92,7 @@ class EditarPerfilViewModel(
         if (listOf(nombreError, apellidosError, emailError, telefonoError, contrasenaError)
                 .all { it == null }
         ) {
-            onDatosValidos(
-                EditarPerfilDTO(
+            val datos = EditarPerfilDTO(
                     id = perfil.id,
                     nombre = nombre,
                     apellidos = apellidos,
@@ -93,7 +100,26 @@ class EditarPerfilViewModel(
                     telefono = telefono,
                     contrasena = contrasena.takeIf { it.isNotBlank() }
                 )
-            )
+            viewModelScope.launch {
+                _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+                try {
+                    val perfilActualizado = perfilRepository.actualizarPerfil(datos)
+                    _uiState.update {
+                        it.copy(perfil = perfilActualizado, isLoading = false, errorMessage = null)
+                    }
+                    onDatosValidos(datos)
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (exception: Exception) {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = exception.message
+                                ?: getApplication<Application>().getString(R.string.error_save_profile)
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -115,12 +141,14 @@ class EditarPerfilViewModel(
 
 class EditarPerfilViewModelFactory(
     private val application: Application,
-    private val userId: String
+    private val userId: String,
+    private val perfilRepository: PerfilRepository =
+        PerfilRepositoryInMemory(InMemoryHelpdeskStore())
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(EditarPerfilViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return EditarPerfilViewModel(application, userId) as T
+            return EditarPerfilViewModel(application, userId, perfilRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -1,0 +1,11 @@
+package com.example.helpdeskpro.data.repository.admin
+
+import com.example.helpdeskpro.modelo.AdminUsuarioDTO
+import com.example.helpdeskpro.modelo.HomeAdminDTO
+
+interface AdministracionRepository {
+    suspend fun obtenerResumen(): HomeAdminDTO
+    suspend fun obtenerUsuarios(): List<AdminUsuarioDTO>
+    suspend fun guardarUsuario(usuario: AdminUsuarioDTO, password: String? = null)
+    fun siguienteUsuarioId(): Long
+}

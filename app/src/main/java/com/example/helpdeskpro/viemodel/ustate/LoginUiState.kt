@@ -20,5 +20,6 @@ data class LoginUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val loginSuccess: Boolean = false,
-    val userId: String? = null
+    val userId: String? = null,
+    val userRole: String? = null
 )

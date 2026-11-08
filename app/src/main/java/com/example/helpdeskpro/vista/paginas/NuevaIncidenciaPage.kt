@@ -106,8 +106,8 @@ fun NuevaIncidenciaPage(
         onConfirmClick = { nuevaIncidenciaViewModel.crearIncidencia() }
     )
 
-    if (uiState.incidenciaCreada) {
-        onIncidenciaCreada()
+    androidx.compose.runtime.LaunchedEffect(uiState.incidenciaCreada) {
+        if (uiState.incidenciaCreada) onIncidenciaCreada()
     }
 }
 

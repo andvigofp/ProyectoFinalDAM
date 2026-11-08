@@ -5,6 +5,10 @@ import android.util.Patterns
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.data.repository.auth.AuthRepository
+import com.example.helpdeskpro.data.repository.auth.inmemory.AuthRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.CrearCuentaDTO
 import com.example.helpdeskpro.viemodel.ustate.CrearCuentaUiState
@@ -12,6 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 /**
  * Mantiene el formulario y valida los datos de registro de una cuenta.
@@ -19,7 +25,10 @@ import kotlinx.coroutines.flow.update
  * @property uiState flujo observable del estado del formulario.
  * @param application aplicación Android usada para acceder a recursos.
  */
-class CrearCuentaViewModel(application: Application) : AndroidViewModel(application) {
+class CrearCuentaViewModel(
+    application: Application,
+    private val authRepository: AuthRepository = AuthRepositoryInMemory(InMemoryHelpdeskStore())
+) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(CrearCuentaUiState())
     val uiState: StateFlow<CrearCuentaUiState> = _uiState.asStateFlow()
@@ -137,12 +146,9 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     /**
-     * Valida el formulario y entrega el DTO cuando todos los datos son correctos.
-     * La llamada al repositorio/API se añadirá en la iteración de integración.
-     *
-     * @param onDatosValidos acción que recibe los datos si el formulario es válido.
+     * Valida el formulario y crea la cuenta mediante el repositorio.
      */
-    fun crearCuenta(onDatosValidos: (CrearCuentaDTO) -> Unit = {}) {
+    fun crearCuenta() {
 
         val currentState = _uiState.value
 
@@ -234,8 +240,7 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
         ).all { it == null }
 
         if (formularioValido) {
-            onDatosValidos(
-                CrearCuentaDTO(
+            val datos = CrearCuentaDTO(
                     nombre = nombre,
                     apellidos = apellidos,
                     email = email,
@@ -244,7 +249,25 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
                     rol = rol,
                     departamento = departamento
                 )
-            )
+            viewModelScope.launch {
+                _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+                try {
+                    authRepository.crearCuenta(datos)
+                    _uiState.update {
+                        it.copy(isLoading = false, cuentaCreada = true, errorMessage = null)
+                    }
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (exception: Exception) {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = exception.message
+                                ?: getApplication<Application>().getString(R.string.error_create_account)
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -255,7 +278,8 @@ class CrearCuentaViewModel(application: Application) : AndroidViewModel(applicat
  * @param application aplicación Android asociada al ViewModel.
  */
 class CrearCuentaViewModelFactory(
-    private val application: Application
+    private val application: Application,
+    private val authRepository: AuthRepository = AuthRepositoryInMemory(InMemoryHelpdeskStore())
 ) : ViewModelProvider.Factory {
 
     /**
@@ -267,7 +291,7 @@ class CrearCuentaViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CrearCuentaViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return CrearCuentaViewModel(application) as T
+            return CrearCuentaViewModel(application, authRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

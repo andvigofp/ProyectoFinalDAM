@@ -5,6 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.data.repository.incidencias.IncidenciasRepository
+import com.example.helpdeskpro.data.repository.incidencias.inmemory.IncidenciasRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
@@ -27,7 +30,9 @@ import kotlinx.coroutines.launch
 class DetalleEmpleadoViewModel(
     application: Application,
     val userId: String,
-    val incidenciaId: Long
+    val incidenciaId: Long,
+    private val incidenciasRepository: IncidenciasRepository =
+        IncidenciasRepositoryInMemory(InMemoryHelpdeskStore())
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(DetalleEmpleadoUiState())
@@ -62,8 +67,23 @@ class DetalleEmpleadoViewModel(
      */
     fun guardarEstado(onEstadoValido: (String) -> Unit = {}) {
         val estado = _uiState.value.estadoSeleccionado
-        if (estado.isNotBlank()) {
-            onEstadoValido(estado)
+        if (estado.isBlank()) return
+        viewModelScope.launch {
+            try {
+                incidenciasRepository.actualizarEstado(incidenciaId, estado)
+                val detalle = incidenciasRepository.obtenerDetalle(incidenciaId)
+                _uiState.update { it.copy(detalle = detalle, errorMessage = null) }
+                onEstadoValido(estado)
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (exception: Exception) {
+                _uiState.update {
+                    it.copy(
+                        errorMessage = exception.message
+                            ?: getApplication<Application>().getString(R.string.error_update_incident)
+                    )
+                }
+            }
         }
     }
 
@@ -74,8 +94,23 @@ class DetalleEmpleadoViewModel(
      */
     fun registrarSolucion(onSolucionValida: (String) -> Unit = {}) {
         val solucion = _uiState.value.solucion.trim()
-        if (solucion.isNotEmpty()) {
-            onSolucionValida(solucion)
+        if (solucion.isEmpty()) return
+        viewModelScope.launch {
+            try {
+                incidenciasRepository.registrarSolucion(incidenciaId, solucion)
+                val detalle = incidenciasRepository.obtenerDetalle(incidenciaId)
+                _uiState.update { it.copy(detalle = detalle, errorMessage = null) }
+                onSolucionValida(solucion)
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (exception: Exception) {
+                _uiState.update {
+                    it.copy(
+                        errorMessage = exception.message
+                            ?: getApplication<Application>().getString(R.string.error_register_solution)
+                    )
+                }
+            }
         }
     }
 
@@ -95,12 +130,9 @@ class DetalleEmpleadoViewModel(
     }
 
     /**
-     * Carga el detalle de la incidencia.
-     * La llamada al repositorio/API se añadirá en la iteración de integración.
-     *
-     * @param cargar función suspendida que obtiene el detalle.
+     * Carga el detalle de la incidencia desde el repositorio.
      */
-    fun cargarDetalle(cargar: suspend () -> DetalleIncidenciaTecnicoDTO) {
+    fun cargarDetalle() {
 
         if (_uiState.value.isLoading) return
 
@@ -114,7 +146,7 @@ class DetalleEmpleadoViewModel(
             }
 
             try {
-                val detalle = cargar()
+                val detalle = incidenciasRepository.obtenerDetalle(incidenciaId)
 
                 _uiState.update {
                     it.copy(
@@ -158,8 +190,7 @@ class DetalleEmpleadoViewModel(
     }
 
     /**
-     * Valida el comentario y lo añade al hilo local.
-     * La llamada al repositorio/API se añadirá en la iteración de integración.
+     * Valida el comentario y lo guarda mediante el repositorio.
      *
      * @param onComentarioValido acción opcional que recibe el comentario añadido.
      */
@@ -186,17 +217,30 @@ class DetalleEmpleadoViewModel(
             texto = texto
         )
 
-        _uiState.update {
-            it.copy(
-                comentario = "",
-                comentarioError = null,
-                detalle = detalleActual.copy(
-                    comentarios = detalleActual.comentarios + comentario
-                )
-            )
+        viewModelScope.launch {
+            try {
+                incidenciasRepository.agregarComentario(incidenciaId, comentario)
+                val detalle = incidenciasRepository.obtenerDetalle(incidenciaId)
+                _uiState.update {
+                    it.copy(
+                        comentario = "",
+                        comentarioError = null,
+                        detalle = detalle,
+                        errorMessage = null
+                    )
+                }
+                onComentarioValido(comentario)
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (exception: Exception) {
+                _uiState.update {
+                    it.copy(
+                        errorMessage = exception.message
+                            ?: getApplication<Application>().getString(R.string.error_send_comment)
+                    )
+                }
+            }
         }
-
-        onComentarioValido(comentario)
     }
 
     /** Elimina el mensaje de error actual. */
@@ -217,7 +261,9 @@ class DetalleEmpleadoViewModel(
 class DetalleEmpleadoViewModelFactory(
     private val application: Application,
     private val userId: String,
-    private val incidenciaId: Long
+    private val incidenciaId: Long,
+    private val incidenciasRepository: IncidenciasRepository =
+        IncidenciasRepositoryInMemory(InMemoryHelpdeskStore())
 ) : ViewModelProvider.Factory {
 
     /**
@@ -232,7 +278,8 @@ class DetalleEmpleadoViewModelFactory(
             return DetalleEmpleadoViewModel(
                 application = application,
                 userId = userId,
-                incidenciaId = incidenciaId
+                incidenciaId = incidenciaId,
+                incidenciasRepository = incidenciasRepository
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -5,6 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.perfil.PerfilRepository
+import com.example.helpdeskpro.data.repository.perfil.inmemory.PerfilRepositoryInMemory
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.PerfilDTO
 import com.example.helpdeskpro.viemodel.ustate.PerfilUiState
@@ -24,18 +27,18 @@ import kotlinx.coroutines.launch
  */
 class PerfilViewModel(
     application: Application,
-    val userId: String
+    val userId: String,
+    private val perfilRepository: PerfilRepository =
+        PerfilRepositoryInMemory(InMemoryHelpdeskStore())
 ) : AndroidViewModel(application) {
 
     private val _uiState = MutableStateFlow(PerfilUiState())
     val uiState: StateFlow<PerfilUiState> = _uiState.asStateFlow()
 
     /**
-     * Ejecuta la carga proporcionada por el futuro repositorio del perfil.
-     *
-     * @param cargar función suspendida que obtiene los datos del perfil.
+     * Carga los datos del perfil mediante el repositorio.
      */
-    fun cargarPerfil(cargar: suspend () -> PerfilDTO) {
+    fun cargarPerfil() {
 
         if (_uiState.value.isLoading) return
 
@@ -49,7 +52,7 @@ class PerfilViewModel(
             }
 
             try {
-                val perfil = cargar()
+                val perfil = perfilRepository.obtenerPerfil(userId)
 
                 _uiState.update {
                     it.copy(
@@ -111,7 +114,9 @@ class PerfilViewModel(
  */
 class PerfilViewModelFactory(
     private val application: Application,
-    private val userId: String
+    private val userId: String,
+    private val perfilRepository: PerfilRepository =
+        PerfilRepositoryInMemory(InMemoryHelpdeskStore())
 ) : ViewModelProvider.Factory {
 
     /**
@@ -125,7 +130,8 @@ class PerfilViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return PerfilViewModel(
                 application = application,
-                userId = userId
+                userId = userId,
+                perfilRepository = perfilRepository
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

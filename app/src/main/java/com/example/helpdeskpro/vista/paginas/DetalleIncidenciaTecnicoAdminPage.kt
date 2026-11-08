@@ -46,7 +46,6 @@ import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarDetal
  * Pantalla de detalle que conecta el estado del ViewModel con los componentes visuales.
  *
  * @param detalleEmpleadoViewModel ViewModel con el detalle y el estado de la pantalla.
- * @param cargarDetalle función suspendida que obtiene los datos de la incidencia.
  * @param modifier modificador aplicado a la pantalla.
  * @param onVolver acción para regresar a la pantalla anterior.
  * @param onGuardarEstado acción ejecutada con el nuevo estado seleccionado.
@@ -57,7 +56,6 @@ import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarDetal
 @Composable
 fun DetalleIncideciaTecnicoPage(
     detalleEmpleadoViewModel: DetalleEmpleadoViewModel,
-    cargarDetalle: suspend () -> DetalleIncidenciaTecnicoDTO,
     modifier: Modifier = Modifier,
     onVolver: () -> Unit = {},
     onGuardarEstado: (String) -> Unit = {},
@@ -71,7 +69,7 @@ fun DetalleIncideciaTecnicoPage(
     var confirmarRegistrarSolucion by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(detalleEmpleadoViewModel.incidenciaId) {
-        detalleEmpleadoViewModel.cargarDetalle(cargarDetalle)
+        detalleEmpleadoViewModel.cargarDetalle()
     }
 
     Scaffold(
@@ -207,20 +205,7 @@ private fun DetalleIncidenciaTecnicoPreview() {
         }
 
         DetalleIncideciaTecnicoPage(
-            detalleEmpleadoViewModel = viewModel,
-            cargarDetalle = {
-                DetalleIncidenciaTecnicoDTO(
-                    id = 1L,
-                    titulo = "No enciende el ordenador",
-                    descripcion = "El ordenador no arranca al pulsar el botón de encendido.",
-                    estado = "ABIERTA",
-                    creador = "Ana Pérez",
-                    departamento = "Ventas",
-                    categoria = "Hardware",
-                    prioridad = "Alta",
-                    fechaCreacion = "15/10/2026"
-                )
-            }
+            detalleEmpleadoViewModel = viewModel
         )
     }
 }

@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
+import com.example.helpdeskpro.modelo.SesionUsuarioDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.LoginUiState
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
@@ -52,7 +53,7 @@ import com.example.helpdeskpro.vista.componentes.logingComponente.LoginActionsCo
 fun LoginPage(
     loginViewModel: LoginViewModel,
     modifier: Modifier = Modifier,
-    onLoginSuccess: (String) -> Unit = {},
+    onLoginSuccess: (String, String) -> Unit = { _, _ -> },
     onForgotPassword: () -> Unit = {},
     onCreateAccount: () -> Unit = {}
 ) {
@@ -62,7 +63,7 @@ fun LoginPage(
     LaunchedEffect(uiState.loginSuccess, uiState.userId) {
         if (uiState.loginSuccess) {
             uiState.userId?.let { userId ->
-                onLoginSuccess(userId)
+                onLoginSuccess(userId, uiState.userRole.orEmpty())
             }
         }
     }
@@ -130,6 +131,14 @@ private fun LoginPageContent(
             onLogin = solicitarLogin,
             modifier = Modifier.fillMaxWidth(),
         )
+        uiState.errorMessage?.let { error ->
+            Text(
+                text = error,
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
         Spacer(modifier = Modifier.height(32.dp))
         BotonLoginComponent(
             onClick = solicitarLogin,

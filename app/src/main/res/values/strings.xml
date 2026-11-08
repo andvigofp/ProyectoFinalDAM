@@ -28,6 +28,7 @@
     <string name="confirm_register_solution_message">¿Quieres registrar esta solución?</string>
     <string name="confirm_logout_title">Cerrar sesión</string>
     <string name="confirm_logout_message">¿Quieres cerrar la sesión actual?</string>
+    <string name="recovery_request_success">La solicitud se ha procesado correctamente.</string>
     <string name="saving">Guardando…</string>
     <string name="back_to_login">‹ Volver al login</string>
     <string name="home">Inicio</string>
@@ -128,6 +129,15 @@
     <string name="error_surnames_required">Introduce tus apellidos</string>
     <string name="error_email_required">Introduce tu email</string>
     <string name="error_email_invalid">Introduce un email válido</string>
+    <string name="error_login">No se pudo iniciar sesión.</string>
+    <string name="error_create_account">No se pudo crear la cuenta.</string>
+    <string name="error_recovery_request">No se pudo procesar la solicitud de recuperación.</string>
+    <string name="error_create_incident">No se pudo crear la incidencia.</string>
+    <string name="error_update_incident">No se pudo actualizar la incidencia.</string>
+    <string name="error_register_solution">No se pudo registrar la solución.</string>
+    <string name="error_send_comment">No se pudo enviar el comentario.</string>
+    <string name="error_save_profile">No se pudo guardar el perfil.</string>
+    <string name="error_save_admin_user">No se pudo guardar el usuario.</string>
     <string name="error_phone_required">Introduce tu teléfono</string>
     <string name="error_password_required">Introduce tu contraseña</string>
     <string name="error_new_password_required">Introduce una contraseña</string>
