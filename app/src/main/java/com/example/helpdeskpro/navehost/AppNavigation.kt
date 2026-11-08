@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -55,6 +56,7 @@ import com.example.helpdeskpro.vista.paginas.NuevaIncidenciaPage
 import com.example.helpdeskpro.vista.paginas.PerfilPage
 import com.example.helpdeskpro.vista.paginas.RecuperarContrasenaPage
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * Configura la navegación y conecta cada página con su ViewModel.
@@ -66,6 +68,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
     val navController = rememberNavController()
     val application = LocalContext.current.applicationContext as HelpdeskProApp
+    val coroutineScope = rememberCoroutineScope()
     val authRepository = application.authRepository
     val incidenciasRepository = application.incidenciasRepository
     val perfilRepository = application.perfilRepository
@@ -547,13 +550,14 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 },
                 onCerrarSesion = {
                     perfilViewModel.limpiarPerfil()
-                    application.cerrarSesion()
-
-                    navController.navigate(RouteNavigation.Login) {
-                        popUpTo(navController.graph.id) {
-                            inclusive = true
+                    coroutineScope.launch {
+                        application.cerrarSesion()
+                        navController.navigate(RouteNavigation.Login) {
+                            popUpTo(navController.graph.id) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
                         }
-                        launchSingleTop = true
                     }
                 }
             )

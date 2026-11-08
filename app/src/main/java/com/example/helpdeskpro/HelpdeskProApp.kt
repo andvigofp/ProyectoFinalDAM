@@ -31,5 +31,5 @@ class HelpdeskProApp : Application() {
         AdministracionRepositoryRemote(apiClient.api)
     }
 
-    fun cerrarSesion() = apiClient.tokenStore.clear()
+    suspend fun cerrarSesion() = apiClient.tokenStore.clear()
 }

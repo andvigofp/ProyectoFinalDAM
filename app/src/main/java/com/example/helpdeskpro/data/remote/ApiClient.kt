@@ -1,9 +1,15 @@
 package com.example.helpdeskpro.data.remote
 
 import android.content.Context
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.example.helpdeskpro.BuildConfig
 import com.google.gson.Gson
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,22 +17,49 @@ import java.io.IOException
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 
+private val Context.sessionDataStore by preferencesDataStore(
+    name = "helpdesk_session",
+    produceMigrations = { context ->
+        listOf(SharedPreferencesMigration(context, "helpdesk_session"))
+    }
+)
+
 class SessionTokenStore(context: Context) {
-    private val preferences = context.applicationContext
-        .getSharedPreferences("helpdesk_session", Context.MODE_PRIVATE)
+    private val dataStore = context.applicationContext.sessionDataStore
+    private val tokenKey = stringPreferencesKey(TOKEN_KEY)
+    private val cipher = AndroidKeystoreTokenCipher()
 
-    fun get(): String? = preferences.getString(TOKEN_KEY, null)
-
-    fun save(token: String) {
-        preferences.edit().putString(TOKEN_KEY, token).apply()
+    fun get(): String? = runBlocking {
+        val storedToken = dataStore.data.first()[tokenKey] ?: return@runBlocking null
+        if (storedToken.startsWith(ENCRYPTED_TOKEN_PREFIX)) {
+            cipher.decrypt(storedToken)
+        } else {
+            val encryptedToken = cipher.encrypt(storedToken)
+            dataStore.edit { preferences ->
+                if (preferences[tokenKey] == storedToken) {
+                    preferences[tokenKey] = encryptedToken
+                }
+            }
+            storedToken
+        }
     }
 
-    fun clear() {
-        preferences.edit().remove(TOKEN_KEY).apply()
+    suspend fun save(token: String) {
+        val encryptedToken = cipher.encrypt(token)
+        dataStore.edit { preferences ->
+            preferences[tokenKey] = encryptedToken
+        }
+    }
+
+    suspend fun clear() {
+        dataStore.edit { preferences ->
+            preferences.remove(tokenKey)
+        }
     }
 
     private companion object {
         const val TOKEN_KEY = "jwt"
+        const val ENCRYPTED_TOKEN_PREFIX = "enc:v1:"
     }
 }
 
