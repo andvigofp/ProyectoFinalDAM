@@ -1,9 +1,9 @@
-package com.example.helpdeskpro.data.repository.inmemory
+package com.example.helpdeskpro.data.repository.inmemoryRepository
 
-import com.example.helpdeskpro.data.repository.admin.inmemory.AdministracionRepositoryInMemory
-import com.example.helpdeskpro.data.repository.auth.inmemory.AuthRepositoryInMemory
-import com.example.helpdeskpro.data.repository.incidencias.inmemory.IncidenciasRepositoryInMemory
-import com.example.helpdeskpro.data.repository.perfil.inmemory.PerfilRepositoryInMemory
+import com.example.helpdeskpro.data.repository.adminRepository.inmemory.AdministracionRepositoryInMemory
+import com.example.helpdeskpro.data.repository.authRepository.inmemory.AuthRepositoryInMemory
+import com.example.helpdeskpro.data.repository.incidenciasRepository.inmemory.IncidenciasRepositoryInMemory
+import com.example.helpdeskpro.data.repository.perfilRepository.inmemory.PerfilRepositoryInMemory
 import com.example.helpdeskpro.modelo.EditarPerfilDTO
 import com.example.helpdeskpro.modelo.LoginDTO
 import com.example.helpdeskpro.modelo.NuevaIncidenciaDTO

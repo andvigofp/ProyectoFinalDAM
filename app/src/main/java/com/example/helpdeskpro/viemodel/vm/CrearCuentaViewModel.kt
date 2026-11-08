@@ -6,9 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.helpdeskpro.data.repository.auth.AuthRepository
-import com.example.helpdeskpro.data.repository.auth.inmemory.AuthRepositoryInMemory
-import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.authRepository.AuthRepository
+import com.example.helpdeskpro.data.repository.authRepository.inmemory.AuthRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.CrearCuentaDTO
 import com.example.helpdeskpro.viemodel.ustate.CrearCuentaUiState

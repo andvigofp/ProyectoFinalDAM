@@ -1,7 +1,7 @@
-package com.example.helpdeskpro.data.repository.incidencias.inmemory
+package com.example.helpdeskpro.data.repository.incidenciasRepository.inmemory
 
-import com.example.helpdeskpro.data.repository.incidencias.IncidenciasRepository
-import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.incidenciasRepository.IncidenciasRepository
+import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpdeskStore
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.modelo.HomeTecnicoDTO

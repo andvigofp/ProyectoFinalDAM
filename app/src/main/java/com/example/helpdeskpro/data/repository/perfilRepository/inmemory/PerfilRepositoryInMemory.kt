@@ -1,7 +1,7 @@
-package com.example.helpdeskpro.data.repository.perfil.inmemory
+package com.example.helpdeskpro.data.repository.perfilRepository.inmemory
 
-import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
-import com.example.helpdeskpro.data.repository.perfil.PerfilRepository
+import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.perfilRepository.PerfilRepository
 import com.example.helpdeskpro.modelo.EditarPerfilDTO
 import com.example.helpdeskpro.modelo.PerfilDTO
 

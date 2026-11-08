@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.data.repository.auth
+package com.example.helpdeskpro.data.repository.authRepository
 
 import com.example.helpdeskpro.modelo.CrearCuentaDTO
 import com.example.helpdeskpro.modelo.LoginDTO

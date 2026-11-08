@@ -1,6 +1,5 @@
 package com.example.helpdeskpro.navehost
 
-import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -11,16 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.helpdeskpro.HelpdeskProApp
 import com.example.helpdeskpro.R
-import com.example.helpdeskpro.data.repository.admin.AdministracionRepository
-import com.example.helpdeskpro.data.repository.admin.inmemory.AdministracionRepositoryInMemory
-import com.example.helpdeskpro.data.repository.auth.AuthRepository
-import com.example.helpdeskpro.data.repository.auth.inmemory.AuthRepositoryInMemory
-import com.example.helpdeskpro.data.repository.incidencias.IncidenciasRepository
-import com.example.helpdeskpro.data.repository.incidencias.inmemory.IncidenciasRepositoryInMemory
-import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
-import com.example.helpdeskpro.data.repository.perfil.PerfilRepository
-import com.example.helpdeskpro.data.repository.perfil.inmemory.PerfilRepositoryInMemory
 import com.example.helpdeskpro.viemodel.vm.AdminUsuariosViewModel
 import com.example.helpdeskpro.viemodel.vm.AdminUsuariosViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
@@ -67,20 +58,11 @@ import kotlinx.coroutines.flow.collectLatest
 fun AppNavigation(modifier: Modifier = Modifier) {
 
     val navController = rememberNavController()
-    val application = LocalContext.current.applicationContext as Application
-    val inMemoryStore = remember { InMemoryHelpdeskStore() }
-    val authRepository: AuthRepository = remember(inMemoryStore) {
-        AuthRepositoryInMemory(inMemoryStore)
-    }
-    val incidenciasRepository: IncidenciasRepository = remember(inMemoryStore) {
-        IncidenciasRepositoryInMemory(inMemoryStore)
-    }
-    val perfilRepository: PerfilRepository = remember(inMemoryStore) {
-        PerfilRepositoryInMemory(inMemoryStore)
-    }
-    val administracionRepository: AdministracionRepository = remember(inMemoryStore) {
-        AdministracionRepositoryInMemory(inMemoryStore)
-    }
+    val application = LocalContext.current.applicationContext as HelpdeskProApp
+    val authRepository = application.authRepository
+    val incidenciasRepository = application.incidenciasRepository
+    val perfilRepository = application.perfilRepository
+    val administracionRepository = application.administracionRepository
 
     // ---------- CONTROL DE SESIÓN ----------
     LaunchedEffect(Unit) {

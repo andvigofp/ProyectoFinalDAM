@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.data.repository.perfil
+package com.example.helpdeskpro.data.repository.perfilRepository
 
 import com.example.helpdeskpro.modelo.EditarPerfilDTO
 import com.example.helpdeskpro.modelo.PerfilDTO

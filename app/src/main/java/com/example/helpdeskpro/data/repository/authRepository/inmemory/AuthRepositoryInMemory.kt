@@ -1,7 +1,7 @@
-package com.example.helpdeskpro.data.repository.auth.inmemory
+package com.example.helpdeskpro.data.repository.authRepository.inmemory
 
-import com.example.helpdeskpro.data.repository.auth.AuthRepository
-import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.authRepository.AuthRepository
+import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpdeskStore
 import com.example.helpdeskpro.modelo.CrearCuentaDTO
 import com.example.helpdeskpro.modelo.LoginDTO
 import com.example.helpdeskpro.modelo.RecuperarContrasenaDTO

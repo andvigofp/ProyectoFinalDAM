@@ -5,9 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.helpdeskpro.data.repository.admin.AdministracionRepository
-import com.example.helpdeskpro.data.repository.admin.inmemory.AdministracionRepositoryInMemory
-import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.adminRepository.AdministracionRepository
+import com.example.helpdeskpro.data.repository.adminRepository.inmemory.AdministracionRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import com.example.helpdeskpro.viemodel.ustate.AdminUsuariosUiState

@@ -6,9 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
-import com.example.helpdeskpro.data.repository.perfil.PerfilRepository
-import com.example.helpdeskpro.data.repository.perfil.inmemory.PerfilRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.perfilRepository.PerfilRepository
+import com.example.helpdeskpro.data.repository.perfilRepository.inmemory.PerfilRepositoryInMemory
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.EditarPerfilDTO
 import com.example.helpdeskpro.modelo.PerfilDTO

@@ -1,7 +1,7 @@
-package com.example.helpdeskpro.data.repository.admin.inmemory
+package com.example.helpdeskpro.data.repository.adminRepository.inmemory
 
-import com.example.helpdeskpro.data.repository.admin.AdministracionRepository
-import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.adminRepository.AdministracionRepository
+import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpdeskStore
 import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import com.example.helpdeskpro.modelo.HomeAdminDTO
 import com.example.helpdeskpro.modelo.PerfilDTO

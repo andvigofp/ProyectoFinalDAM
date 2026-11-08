@@ -6,11 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.helpdeskpro.data.repository.incidencias.IncidenciasRepository
-import com.example.helpdeskpro.data.repository.incidencias.inmemory.IncidenciasRepositoryInMemory
-import com.example.helpdeskpro.data.repository.inmemory.InMemoryHelpdeskStore
+import com.example.helpdeskpro.data.repository.incidenciasRepository.IncidenciasRepository
+import com.example.helpdeskpro.data.repository.incidenciasRepository.inmemory.IncidenciasRepositoryInMemory
+import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpdeskStore
 import com.example.helpdeskpro.R
-import com.example.helpdeskpro.modelo.IncidenciaDTO
 import com.example.helpdeskpro.viemodel.ustate.HomeEmpleadoUiState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow

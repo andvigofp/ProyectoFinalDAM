@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.data.repository.admin
+package com.example.helpdeskpro.data.repository.adminRepository
 
 import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import com.example.helpdeskpro.modelo.HomeAdminDTO

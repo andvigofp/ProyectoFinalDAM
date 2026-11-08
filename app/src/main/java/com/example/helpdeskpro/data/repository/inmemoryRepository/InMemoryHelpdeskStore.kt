@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.data.repository.inmemory
+package com.example.helpdeskpro.data.repository.inmemoryRepository
 
 import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO

@@ -1,4 +1,4 @@
-package com.example.helpdeskpro.data.repository.incidencias
+package com.example.helpdeskpro.data.repository.incidenciasRepository
 
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
