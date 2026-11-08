@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModel
-import com.example.helpdeskpro.vista.componentes.nuevaIncidenciaComponente.BotonVolverNuevaIncidenciaComponent
 import com.example.helpdeskpro.vista.componentes.nuevaIncidenciaComponente.NuevaIncidenciaComponent
+import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 /**
  * Pantalla para que el empleado registre una nueva incidencia.
@@ -51,20 +51,11 @@ fun NuevaIncidenciaPage(
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 24.dp, vertical = 16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BotonVolverNuevaIncidenciaComponent(
-                onClick = onVolver,
-                enabled = !uiState.isLoading
-            )
-            Text(
-                text = stringResource(R.string.new_incident),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        ToolbarComponent(
+            titulo = stringResource(R.string.new_incident),
+            onVolver = onVolver,
+            backEnabled = !uiState.isLoading
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 

@@ -42,8 +42,8 @@ import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeBotto
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeTab
 import com.example.helpdeskpro.vista.componentes.perfilComponente.AccionesPerfilComponent
 import com.example.helpdeskpro.vista.componentes.perfilComponente.AvatarPerfilComponent
-import com.example.helpdeskpro.vista.componentes.perfilComponente.BotonVolverPerfilComponent
 import com.example.helpdeskpro.vista.componentes.perfilComponente.CamposPerfilComponent
+import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 /**
  * Pantalla de consulta del perfil del usuario autenticado.
@@ -121,20 +121,10 @@ fun PerfilPage(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp, vertical = 20.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                BotonVolverPerfilComponent(onClick = onVolver)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(R.string.my_profile),
-                    modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Start
-                )
-            }
+            ToolbarComponent(
+                titulo = stringResource(R.string.my_profile),
+                onVolver = onVolver
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 

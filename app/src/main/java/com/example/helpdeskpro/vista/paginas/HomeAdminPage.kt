@@ -35,6 +35,7 @@ import com.example.helpdeskpro.vista.componentes.homeAdminComponente.AccionAdmin
 import com.example.helpdeskpro.vista.componentes.homeAdminComponente.AdminBottomBarComponent
 import com.example.helpdeskpro.vista.componentes.homeAdminComponente.AdminTab
 import com.example.helpdeskpro.vista.componentes.homeAdminComponente.ResumenIncidenciasAdminComponent
+import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 @Composable
 fun HomeAdminPage(
@@ -88,12 +89,7 @@ private fun HomeAdminPageContent(
                 .padding(horizontal = 22.dp, vertical = 24.dp),
             verticalArrangement = Arrangement.Top
         ) {
-            Text(
-                text = stringResource(R.string.admin_panel),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            ToolbarComponent(titulo = stringResource(R.string.admin_panel))
             Spacer(modifier = Modifier.height(48.dp))
 
             when {

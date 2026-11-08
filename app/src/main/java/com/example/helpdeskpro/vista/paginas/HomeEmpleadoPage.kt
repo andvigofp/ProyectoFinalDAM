@@ -34,6 +34,7 @@ import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeBotto
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeTab
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.IncidenciaCardComponent
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.BotonNuevaIncidenciaFlotanteComponent
+import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 
 
@@ -97,11 +98,7 @@ fun HomeEmpleadoPage(
         ) {
 
             item {
-                Text(
-                    text = stringResource(R.string.my_incidents),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
-                )
+                ToolbarComponent(titulo = stringResource(R.string.my_incidents))
 
                 Spacer(modifier = Modifier.height(20.dp))
             }

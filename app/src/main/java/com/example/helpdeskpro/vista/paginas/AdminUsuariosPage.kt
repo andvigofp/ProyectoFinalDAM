@@ -32,7 +32,7 @@ import com.example.helpdeskpro.viemodel.ustate.AdminUsuariosUiState
 import com.example.helpdeskpro.viemodel.vm.AdminUsuariosViewModel
 import com.example.helpdeskpro.vista.componentes.adminUsuariosComponente.BotonNuevoUsuarioComponent
 import com.example.helpdeskpro.vista.componentes.adminUsuariosComponente.UsuarioAdminCardComponent
-import com.example.helpdeskpro.vista.componentes.perfilComponente.BotonVolverPerfilComponent
+import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 @Composable
 fun AdminUsuariosPage(
@@ -62,18 +62,10 @@ fun AdminUsuariosPage(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
-                androidx.compose.foundation.layout.Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    BotonVolverPerfilComponent(onClick = onVolver)
-                    Text(
-                        text = stringResource(R.string.users),
-                        modifier = Modifier.padding(start = 8.dp),
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = androidx.compose.material3.MaterialTheme.typography.headlineSmall
-                    )
-                }
+                ToolbarComponent(
+                    titulo = stringResource(R.string.users),
+                    onVolver = onVolver
+                )
                 androidx.compose.foundation.layout.Spacer(Modifier.height(86.dp))
             }
 
@@ -130,18 +122,10 @@ private fun AdminUsuariosPageContentPreview() {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
-                androidx.compose.foundation.layout.Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    BotonVolverPerfilComponent(onClick = {})
-                    Text(
-                        text = stringResource(R.string.users),
-                        modifier = Modifier.padding(start = 8.dp),
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = androidx.compose.material3.MaterialTheme.typography.headlineSmall
-                    )
-                }
+                ToolbarComponent(
+                    titulo = stringResource(R.string.users),
+                    onVolver = {}
+                )
                 androidx.compose.foundation.layout.Spacer(Modifier.height(86.dp))
             }
             items(

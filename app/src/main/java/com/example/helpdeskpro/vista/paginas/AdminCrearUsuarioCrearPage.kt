@@ -31,7 +31,7 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.vista.componentes.adminEditarUsuarioTenico.CamposAdminUsuarioComponent
-import com.example.helpdeskpro.vista.componentes.perfilComponente.BotonVolverPerfilComponent
+import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 @Composable
 fun AdminCrearUsuarioCrearPage(
@@ -57,17 +57,10 @@ fun AdminCrearUsuarioCrearPage(
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 22.dp, vertical = 16.dp)
     ) {
-        androidx.compose.foundation.layout.Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BotonVolverPerfilComponent(onClick = onVolver)
-            Text(
-                text = stringResource(if (usuario == null) R.string.add_user else R.string.edit_user),
-                modifier = Modifier.padding(start = 8.dp),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        ToolbarComponent(
+            titulo = stringResource(if (usuario == null) R.string.add_user else R.string.edit_user),
+            onVolver = onVolver
+        )
         Spacer(modifier = Modifier.height(12.dp))
         CamposAdminUsuarioComponent(
             nombre = nombre,

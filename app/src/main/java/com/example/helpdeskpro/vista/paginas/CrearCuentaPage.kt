@@ -28,8 +28,8 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.CrearCuentaUiState
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.BotonGuardarCuentaComponent
-import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.BotonVolverCrearCuentaComponent
 import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.CamposCrearCuentaComponent
+import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 /**
  * Pantalla de registro sin estado propio: recibe los datos y delega los eventos.
@@ -83,20 +83,11 @@ private fun CrearCuentaPageContent(
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 22.dp, vertical = 16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BotonVolverCrearCuentaComponent(
-                onClick = onVolverLogin,
-                enabled = !uiState.isLoading
-            )
-            Text(
-                text = stringResource(R.string.create_account),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        ToolbarComponent(
+            titulo = stringResource(R.string.create_account),
+            onVolver = onVolverLogin,
+            backEnabled = !uiState.isLoading
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 

@@ -37,6 +37,7 @@ import com.example.helpdeskpro.vista.componentes.homeAdminComponente.AdminTab
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.NavegacionInferiorDetalleComponent
 import com.example.helpdeskpro.vista.componentes.homeTecnicoComponente.FiltrosEstadoTecnicoComponent
 import com.example.helpdeskpro.vista.componentes.homeTecnicoComponente.IncidenciaAsignadaCardComponent
+import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 /**
  * Página principal del técnico con el listado de incidencias asignadas.
@@ -133,16 +134,14 @@ private fun HomeTecnicoPageContent(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                Text(
-                    text = titulo,
+                ToolbarComponent(
+                    titulo = titulo,
                     modifier = Modifier.padding(start = 6.dp),
-                    style = MaterialTheme.typography.titleLarge.copy(
+                    titleStyle = MaterialTheme.typography.titleLarge.copy(
                         fontSize = 20.sp,
                         lineHeight = 24.sp,
                         letterSpacing = 0.sp
-                    ),
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    )
                 )
                 Spacer(modifier = Modifier.height(54.dp))
             }

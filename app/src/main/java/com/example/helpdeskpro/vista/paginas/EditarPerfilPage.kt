@@ -31,7 +31,7 @@ import com.example.helpdeskpro.viemodel.ustate.EditarPerfilUiState
 import com.example.helpdeskpro.viemodel.vm.EditarPerfilViewModel
 import com.example.helpdeskpro.vista.componentes.editarPerfilComponente.BotonGuardarEditarPerfilComponent
 import com.example.helpdeskpro.vista.componentes.editarPerfilComponente.CamposEditarPerfilComponent
-import com.example.helpdeskpro.vista.componentes.perfilComponente.BotonVolverPerfilComponent
+import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 @Composable
 fun EditarPerfilPage(
@@ -55,16 +55,10 @@ fun EditarPerfilPage(
             .padding(horizontal = 22.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.Top
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            BotonVolverPerfilComponent(onClick = onVolver)
-            Text(
-                text = stringResource(R.string.edit_profile),
-                modifier = Modifier.padding(start = 8.dp),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
+        ToolbarComponent(
+            titulo = stringResource(R.string.edit_profile),
+            onVolver = onVolver
+        )
         Spacer(modifier = Modifier.height(12.dp))
 
         if (uiState.perfil == null) {
@@ -129,15 +123,10 @@ private fun EditarPerfilPageContentPreview() {
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 22.dp, vertical = 16.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            BotonVolverPerfilComponent(onClick = {})
-            Text(
-                text = stringResource(R.string.edit_profile),
-                modifier = Modifier.padding(start = 8.dp),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        ToolbarComponent(
+            titulo = stringResource(R.string.edit_profile),
+            onVolver = {}
+        )
         Spacer(modifier = Modifier.height(12.dp))
         CamposEditarPerfilComponent(
             uiState = EditarPerfilUiState(perfil = perfil),
