@@ -17,6 +17,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -30,6 +33,7 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.RecuperarContrasenaUiState
 import com.example.helpdeskpro.viemodel.vm.RecuperarContrasenaViewModel
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
 import com.example.helpdeskpro.vista.componentes.recuperarContrasenaComponente.BotonEnviarRecuperacionComponent
 import com.example.helpdeskpro.vista.componentes.recuperarContrasenaComponente.BotonVolverLoginRecuperacionComponent
 import com.example.helpdeskpro.vista.componentes.recuperarContrasenaComponente.EmailRecuperacionComponent
@@ -49,13 +53,24 @@ fun RecuperarContrasenaPage(
     onVolverLogin: () -> Unit = {}
 ) {
     val uiState by recuperarContrasenaViewModel.uiState.collectAsState()
+    var mostrarConfirmacion by rememberSaveable { mutableStateOf(false) }
 
     RecuperarContrasenaPageContent(
         uiState = uiState,
         onEmailChange = recuperarContrasenaViewModel::onEmailChange,
-        onEnviar = recuperarContrasenaViewModel::recuperarContrasena,
+        onEnviar = { mostrarConfirmacion = true },
         onVolverLogin = onVolverLogin,
         modifier = modifier
+    )
+
+    ConfirmationDialog(
+        showDialog = mostrarConfirmacion,
+        onDismissRequest = { mostrarConfirmacion = false },
+        title = stringResource(R.string.confirm_action_title),
+        message = stringResource(R.string.confirm_recovery_message),
+        confirmButtonText = stringResource(R.string.send_temporary_password),
+        dismissButtonText = stringResource(R.string.dialog_cancel),
+        onConfirmClick = { recuperarContrasenaViewModel.recuperarContrasena() }
     )
 }
 

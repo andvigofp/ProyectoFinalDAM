@@ -19,7 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,6 +32,7 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.BotonGuardarEstadoComponent
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.BotonRegistrarSolucionComponent
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.CabeceraDetalleIncidenciaComponent
@@ -63,6 +67,8 @@ fun DetalleIncideciaTecnicoPage(
 ) {
     val uiState by detalleEmpleadoViewModel.uiState.collectAsState()
     val detalle = uiState.detalle
+    var confirmarGuardarEstado by rememberSaveable { mutableStateOf(false) }
+    var confirmarRegistrarSolucion by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(detalleEmpleadoViewModel.incidenciaId) {
         detalleEmpleadoViewModel.cargarDetalle(cargarDetalle)
@@ -141,9 +147,7 @@ fun DetalleIncideciaTecnicoPage(
                             onEstadoChange = detalleEmpleadoViewModel::onEstadoChange
                         )
                         BotonGuardarEstadoComponent(
-                            onGuardar = {
-                                detalleEmpleadoViewModel.guardarEstado(onGuardarEstado)
-                            },
+                            onGuardar = { confirmarGuardarEstado = true },
                             enabled = uiState.estadoSeleccionado.isNotBlank()
                         )
                     }
@@ -154,9 +158,7 @@ fun DetalleIncideciaTecnicoPage(
                             onSolucionChange = detalleEmpleadoViewModel::onSolucionChange
                         )
                         BotonRegistrarSolucionComponent(
-                            onRegistrar = {
-                                detalleEmpleadoViewModel.registrarSolucion(onRegistrarSolucion)
-                            },
+                            onRegistrar = { confirmarRegistrarSolucion = true },
                             enabled = uiState.solucion.isNotBlank()
                         )
                     }
@@ -164,6 +166,30 @@ fun DetalleIncideciaTecnicoPage(
                     ComentariosHistorialComponent()
                 }
             }
+
+            ConfirmationDialog(
+                showDialog = confirmarGuardarEstado,
+                onDismissRequest = { confirmarGuardarEstado = false },
+                title = stringResource(R.string.confirm_action_title),
+                message = stringResource(R.string.confirm_save_incident_status_message),
+                confirmButtonText = stringResource(R.string.save_status),
+                dismissButtonText = stringResource(R.string.dialog_cancel),
+                onConfirmClick = {
+                    detalleEmpleadoViewModel.guardarEstado(onGuardarEstado)
+                }
+            )
+
+            ConfirmationDialog(
+                showDialog = confirmarRegistrarSolucion,
+                onDismissRequest = { confirmarRegistrarSolucion = false },
+                title = stringResource(R.string.confirm_action_title),
+                message = stringResource(R.string.confirm_register_solution_message),
+                confirmButtonText = stringResource(R.string.register_solution),
+                dismissButtonText = stringResource(R.string.dialog_cancel),
+                onConfirmClick = {
+                    detalleEmpleadoViewModel.registrarSolucion(onRegistrarSolucion)
+                }
+            )
         }
     }
 }

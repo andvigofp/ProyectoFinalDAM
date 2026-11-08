@@ -18,6 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -31,6 +34,7 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.LoginUiState
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
 import com.example.helpdeskpro.vista.componentes.logingComponente.BotonLoginComponent
 import com.example.helpdeskpro.vista.componentes.logingComponente.CamposLoginComponent
 import com.example.helpdeskpro.vista.componentes.logingComponente.LoginActionsComponent
@@ -84,6 +88,9 @@ private fun LoginPageContent(
     onCreateAccount: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var mostrarConfirmacionLogin by rememberSaveable { mutableStateOf(false) }
+    val solicitarLogin = { mostrarConfirmacionLogin = true }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -120,12 +127,12 @@ private fun LoginPageContent(
             uiState = uiState,
             onEmailChange = onEmailChange,
             onPasswordChange = onPasswordChange,
-            onLogin = onLogin,
+            onLogin = solicitarLogin,
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.height(32.dp))
         BotonLoginComponent(
-            onClick = onLogin,
+            onClick = solicitarLogin,
             isLoading = uiState.isLoading
         )
         LoginActionsComponent(
@@ -135,6 +142,16 @@ private fun LoginPageContent(
             isLoading = uiState.isLoading
         )
     }
+
+    ConfirmationDialog(
+        showDialog = mostrarConfirmacionLogin,
+        onDismissRequest = { mostrarConfirmacionLogin = false },
+        title = stringResource(R.string.confirm_login_title),
+        message = stringResource(R.string.confirm_login_message),
+        confirmButtonText = stringResource(R.string.login),
+        dismissButtonText = stringResource(R.string.dialog_cancel),
+        onConfirmClick = onLogin
+    )
 }
 
 

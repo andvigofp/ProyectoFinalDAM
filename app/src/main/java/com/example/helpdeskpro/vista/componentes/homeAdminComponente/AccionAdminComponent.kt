@@ -1,30 +1,20 @@
 package com.example.helpdeskpro.vista.componentes.homeAdminComponente
 
-import androidx.compose.material3.MaterialTheme
-
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.modelo.ButtonData
+import com.example.helpdeskpro.vista.componentes.buttonsComponente.AppButton
 
 @Composable
 fun AccionAdminComponent(
-    texto: String,
+    texto: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Button(
+    AppButton(
+        data = ButtonData(nombre = texto),
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(32.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-    ) {
-        Text(texto, fontWeight = FontWeight.SemiBold)
-    }
+        modifier = modifier.fillMaxWidth()
+    )
 }

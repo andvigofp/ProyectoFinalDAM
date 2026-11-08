@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -29,8 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.AdminUsuarioDTO
+import com.example.helpdeskpro.modelo.ButtonData
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.vista.componentes.adminEditarUsuarioTenico.CamposAdminUsuarioComponent
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
+import com.example.helpdeskpro.vista.componentes.buttonsComponente.AppButton
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 @Composable
@@ -49,6 +50,7 @@ fun AdminCrearUsuarioCrearPage(
     var rol by rememberSaveable(usuario?.id) { mutableStateOf(usuario?.rol.orEmpty()) }
     var departamento by rememberSaveable(usuario?.id) { mutableStateOf(usuario?.departamento.orEmpty()) }
     var activo by rememberSaveable(usuario?.id) { mutableStateOf(usuario?.activo ?: true) }
+    var mostrarConfirmacion by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -92,35 +94,43 @@ fun AdminCrearUsuarioCrearPage(
             Switch(checked = activo, onCheckedChange = { activo = it })
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                onGuardar(
-                    AdminUsuarioDTO(
-                        id = usuario?.id ?: idNuevoUsuario,
-                        nombre = nombre.trim(),
-                        apellidos = apellidos.trim(),
-                        email = email.trim(),
-                        telefono = telefono.trim(),
-                        rol = rol,
-                        departamento = departamento,
-                        activo = activo
-                    )
-                )
-            },
+        AppButton(
+            data = ButtonData(
+                nombre = if (usuario == null) R.string.create else R.string.save,
+                enabled = nombre.isNotBlank() && apellidos.isNotBlank() &&
+                    email.isNotBlank() && rol.isNotBlank() && departamento.isNotBlank() &&
+                    (usuario != null || password.isNotBlank())
+            ),
+            onClick = { mostrarConfirmacion = true },
             modifier = Modifier.fillMaxWidth(),
-            enabled = nombre.isNotBlank() && apellidos.isNotBlank() &&
-                email.isNotBlank() && rol.isNotBlank() && departamento.isNotBlank() &&
-                (usuario != null || password.isNotBlank()),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-            shape = MaterialTheme.shapes.extraLarge
-        ) {
-            Text(
-                text = stringResource(if (usuario == null) R.string.create else R.string.save),
-                modifier = Modifier.padding(vertical = 8.dp),
-                fontWeight = FontWeight.SemiBold
+        )
+    }
+
+    ConfirmationDialog(
+        showDialog = mostrarConfirmacion,
+        onDismissRequest = { mostrarConfirmacion = false },
+        title = stringResource(R.string.confirm_action_title),
+        message = stringResource(
+            if (usuario == null) R.string.confirm_create_user_message
+            else R.string.confirm_save_user_message
+        ),
+        confirmButtonText = stringResource(if (usuario == null) R.string.create else R.string.save),
+        dismissButtonText = stringResource(R.string.dialog_cancel),
+        onConfirmClick = {
+            onGuardar(
+                AdminUsuarioDTO(
+                    id = usuario?.id ?: idNuevoUsuario,
+                    nombre = nombre.trim(),
+                    apellidos = apellidos.trim(),
+                    email = email.trim(),
+                    telefono = telefono.trim(),
+                    rol = rol,
+                    departamento = departamento,
+                    activo = activo
+                )
             )
         }
-    }
+    )
 }
 
 @Preview(showBackground = true)

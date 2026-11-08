@@ -17,6 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,6 +32,7 @@ import com.example.helpdeskpro.modelo.PerfilDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.EditarPerfilUiState
 import com.example.helpdeskpro.viemodel.vm.EditarPerfilViewModel
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
 import com.example.helpdeskpro.vista.componentes.editarPerfilComponente.BotonGuardarEditarPerfilComponent
 import com.example.helpdeskpro.vista.componentes.editarPerfilComponente.CamposEditarPerfilComponent
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
@@ -42,6 +46,7 @@ fun EditarPerfilPage(
     onGuardar: (EditarPerfilDTO) -> Unit = {}
 ) {
     val uiState by editarPerfilViewModel.uiState.collectAsState()
+    var mostrarConfirmacion by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(perfil.id) {
         editarPerfilViewModel.inicializar(perfil)
@@ -87,12 +92,22 @@ fun EditarPerfilPage(
 
             Spacer(modifier = Modifier.height(28.dp))
             BotonGuardarEditarPerfilComponent(
-                onClick = { editarPerfilViewModel.guardarPerfil(onGuardar) },
+                onClick = { mostrarConfirmacion = true },
                 enabled = !uiState.isLoading
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
+
+    ConfirmationDialog(
+        showDialog = mostrarConfirmacion,
+        onDismissRequest = { mostrarConfirmacion = false },
+        title = stringResource(R.string.confirm_action_title),
+        message = stringResource(R.string.confirm_save_profile_message),
+        confirmButtonText = stringResource(R.string.save),
+        dismissButtonText = stringResource(R.string.dialog_cancel),
+        onConfirmClick = { editarPerfilViewModel.guardarPerfil(onGuardar) }
+    )
 }
 
 @Preview(showBackground = true, widthDp = 390, heightDp = 844)

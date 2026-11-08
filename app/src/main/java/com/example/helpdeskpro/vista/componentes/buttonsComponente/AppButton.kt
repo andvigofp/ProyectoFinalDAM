@@ -10,9 +10,10 @@ import com.example.helpdeskpro.modelo.ButtonType
 fun AppButton(
     data: ButtonData,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    text: String? = null
 ) {
-    val buttonText = stringResource(id = data.nombre)
+    val buttonText = text ?: stringResource(id = data.nombre)
 
     when (data.type) {
         ButtonType.PRIMARY ->

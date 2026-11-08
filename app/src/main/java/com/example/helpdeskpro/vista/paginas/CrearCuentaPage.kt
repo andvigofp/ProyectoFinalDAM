@@ -16,6 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +30,7 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.CrearCuentaUiState
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
 import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.BotonGuardarCuentaComponent
 import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.CamposCrearCuentaComponent
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
@@ -46,6 +50,7 @@ fun CrearCuentaPage(
 ) {
 
     val uiState by crearCuentaViewModel.uiState.collectAsState()
+    var mostrarConfirmacion by rememberSaveable { mutableStateOf(false) }
 
     CrearCuentaPageContent(
         uiState = uiState,
@@ -56,9 +61,19 @@ fun CrearCuentaPage(
         onPasswordChange = crearCuentaViewModel::onPasswordChange,
         onRolChange = crearCuentaViewModel::onRolChange,
         onDepartamentoChange = crearCuentaViewModel::onDepartamentoChange,
-        onGuardar = { crearCuentaViewModel.crearCuenta() },
+        onGuardar = { mostrarConfirmacion = true },
         onVolverLogin = onVolverLogin,
         modifier = modifier
+    )
+
+    ConfirmationDialog(
+        showDialog = mostrarConfirmacion,
+        onDismissRequest = { mostrarConfirmacion = false },
+        title = stringResource(R.string.confirm_action_title),
+        message = stringResource(R.string.confirm_create_account_message),
+        confirmButtonText = stringResource(R.string.create_account),
+        dismissButtonText = stringResource(R.string.dialog_cancel),
+        onConfirmClick = { crearCuentaViewModel.crearCuenta() }
     )
 }
 

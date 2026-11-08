@@ -113,12 +113,12 @@ private fun HomeAdminPageContent(
 
             Spacer(modifier = Modifier.height(30.dp))
             AccionAdminComponent(
-                texto = stringResource(R.string.manage_incidents),
+                texto = R.string.manage_incidents,
                 onClick = onIncidencias
             )
             Spacer(modifier = Modifier.height(16.dp))
             AccionAdminComponent(
-                texto = stringResource(R.string.manage_users),
+                texto = R.string.manage_users,
                 onClick = onUsuarios
             )
         }

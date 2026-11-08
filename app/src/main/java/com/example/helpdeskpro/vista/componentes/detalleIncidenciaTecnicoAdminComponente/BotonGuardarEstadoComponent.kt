@@ -1,23 +1,15 @@
 package com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente
 
-import androidx.compose.material3.MaterialTheme
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.helpdeskpro.R
+import com.example.helpdeskpro.modelo.ButtonData
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
+import com.example.helpdeskpro.vista.componentes.buttonsComponente.AppButton
 
 
 /**
@@ -36,8 +28,7 @@ fun BotonGuardarEstadoComponent(
     enabled: Boolean = true
 ) {
     BotonAccionDetalleIncidencia(
-        texto = stringResource(R.string.save_status),
-        textoCargando = stringResource(R.string.saving),
+        textoResource = R.string.save_status,
         onClick = onGuardar,
         modifier = modifier,
         isLoading = isLoading,
@@ -57,32 +48,20 @@ fun BotonGuardarEstadoComponent(
  */
 @Composable
 private fun BotonAccionDetalleIncidencia(
-    texto: String,
-    textoCargando: String,
+    textoResource: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     enabled: Boolean = true
 ) {
-    Button(
+    AppButton(
+        data = ButtonData(
+            nombre = if (isLoading) R.string.saving else textoResource,
+            enabled = enabled && !isLoading
+        ),
         onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth(0.58f)
-            .height(52.dp),
-        enabled = enabled && !isLoading,
-        shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        )
-    ) {
-        Text(
-            text = if (isLoading) textoCargando else texto,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
-            lineHeight = 20.sp
-        )
-    }
+        modifier = modifier.fillMaxWidth(0.58f).height(52.dp)
+    )
 }
 
 @Preview(showBackground = true, widthDp = 390)

@@ -2,16 +2,19 @@ package com.example.helpdeskpro.vista.componentes.alertDialogComponente
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.helpdeskpro.R
+import com.example.helpdeskpro.modelo.ButtonData
+import com.example.helpdeskpro.modelo.ButtonType
+import com.example.helpdeskpro.vista.componentes.buttonsComponente.AppButton
 
 /**
  * Componente de AlertDialog reutilizable para toda la aplicación
@@ -44,27 +47,6 @@ fun AlertDialogComponent(
         val colors = MaterialTheme.colorScheme
         val typography = MaterialTheme.typography
 
-
-        var confirmComponent: @androidx.compose.runtime.Composable (() -> Unit)? = {}
-
-        if(confirmButtonText != null)
-            confirmComponent = @androidx.compose.runtime.Composable {
-                Button(
-                    onClick = {
-                        onConfirmClick()
-                        onDismissRequest()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isDestructive) colors.error else colors.primary
-                    )
-                ) {
-                    Text(
-                        text = confirmButtonText,
-                        style = typography.labelLarge,
-                        color = colors.onPrimary
-                    )
-                }
-            }
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = {
@@ -82,7 +64,21 @@ fun AlertDialogComponent(
                     color = colors.onSurfaceVariant
                 )
             },
-            confirmButton = confirmComponent as @Composable (() -> Unit),
+            confirmButton = {
+                confirmButtonText?.let { label ->
+                    AppButton(
+                        data = ButtonData(
+                            nombre = R.string.dialog_confirm,
+                            type = if (isDestructive) ButtonType.DANGER else ButtonType.PRIMARY
+                        ),
+                        onClick = {
+                            onConfirmClick()
+                            onDismissRequest()
+                        },
+                        text = label
+                    )
+                }
+            },
             dismissButton = if (dismissButtonText != null) {
                 {
                     TextButton(
