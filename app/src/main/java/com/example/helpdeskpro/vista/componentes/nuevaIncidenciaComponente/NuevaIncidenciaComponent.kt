@@ -105,12 +105,14 @@ private fun NuevaIncidenciaComponentPreview() {
             categorias = listOf(
                 stringResource(R.string.hardware),
                 stringResource(R.string.software),
-                stringResource(R.string.network)
+                stringResource(R.string.network),
+                stringResource(R.string.email_category)
             ),
             prioridades = listOf(
                 stringResource(R.string.low),
                 stringResource(R.string.medium),
-                stringResource(R.string.high)
+                stringResource(R.string.high),
+                stringResource(R.string.urgent)
             )
         )
     }

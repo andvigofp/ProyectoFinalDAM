@@ -1,10 +1,13 @@
 package com.helpdeskpro.helpdesk_pro.servicio;
 
 import com.helpdeskpro.helpdesk_pro.dto.LoginRequestDTO;
+import com.helpdeskpro.helpdesk_pro.dto.RegistroRequestDTO;
 import com.helpdeskpro.helpdesk_pro.dto.TokenResponseDTO;
 import com.helpdeskpro.helpdesk_pro.entidades.Roles;
 import com.helpdeskpro.helpdesk_pro.entidades.Usuarios;
 import com.helpdeskpro.helpdesk_pro.excepciones.SolicitudIncorrectaException;
+import com.helpdeskpro.helpdesk_pro.repositorio.DepartamentosRepositorio;
+import com.helpdeskpro.helpdesk_pro.repositorio.RolesRepositorio;
 import com.helpdeskpro.helpdesk_pro.repositorio.UsuariosRepositorio;
 import com.helpdeskpro.helpdesk_pro.seguridad.JwtServicio;
 import com.helpdeskpro.helpdesk_pro.seguridad.SeguridadServicio;
@@ -26,6 +29,10 @@ class AuthServicioTest {
 
     @Mock
     private UsuariosRepositorio usuariosRepositorio;
+    @Mock
+    private RolesRepositorio rolesRepositorio;
+    @Mock
+    private DepartamentosRepositorio departamentosRepositorio;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
@@ -99,5 +106,27 @@ class AuthServicioTest {
 
         assertThrows(SolicitudIncorrectaException.class,
                 () -> authServicio.login(dto));
+    }
+
+    @Test
+    void registroPublicoSiempreCreaUnEmpleado() {
+        RegistroRequestDTO dto = new RegistroRequestDTO(
+                "Ana", "Pérez", "ana.nueva@helpdesk.com",
+                "password123", "600111222", null
+        );
+        Roles empleado = Roles.builder().id(3L).nombre("Empleado").build();
+        when(usuariosRepositorio.existsByEmailIgnoreCase(dto.getEmail()))
+                .thenReturn(false);
+        when(rolesRepositorio.findByNombreIgnoreCase("Empleado"))
+                .thenReturn(Optional.of(empleado));
+        when(passwordEncoder.encode(dto.getPassword())).thenReturn("password-hash");
+        when(usuariosRepositorio.save(any(Usuarios.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        var creado = authServicio.registrar(dto);
+
+        assertEquals("Empleado", creado.getRolNombre());
+        assertEquals(dto.getEmail(), creado.getEmail());
+        verify(rolesRepositorio).findByNombreIgnoreCase("Empleado");
     }
 }

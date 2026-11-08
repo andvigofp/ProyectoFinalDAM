@@ -65,7 +65,6 @@ fun CrearCuentaPage(
         onEmailChange = crearCuentaViewModel::onEmailChange,
         onTelefonoChange = crearCuentaViewModel::onTelefonoChange,
         onPasswordChange = crearCuentaViewModel::onPasswordChange,
-        onRolChange = crearCuentaViewModel::onRolChange,
         onDepartamentoChange = crearCuentaViewModel::onDepartamentoChange,
         onGuardar = { mostrarConfirmacion = true },
         onVolverLogin = onVolverLogin,
@@ -91,7 +90,6 @@ private fun CrearCuentaPageContent(
     onEmailChange: (String) -> Unit,
     onTelefonoChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onRolChange: (String) -> Unit,
     onDepartamentoChange: (String) -> Unit,
     onGuardar: () -> Unit,
     onVolverLogin: () -> Unit,
@@ -119,7 +117,6 @@ private fun CrearCuentaPageContent(
             onEmailChange = onEmailChange,
             onTelefonoChange = onTelefonoChange,
             onPasswordChange = onPasswordChange,
-            onRolChange = onRolChange,
             onDepartamentoChange = onDepartamentoChange,
             onGuardar = onGuardar,
             modifier = Modifier.fillMaxWidth()
@@ -147,7 +144,6 @@ private fun CrearCuentaPagePreview() {
                 onEmailChange = {},
                 onTelefonoChange = {},
                 onPasswordChange = {},
-                onRolChange = {},
                 onDepartamentoChange = {},
                 onGuardar = {},
                 onVolverLogin = {}

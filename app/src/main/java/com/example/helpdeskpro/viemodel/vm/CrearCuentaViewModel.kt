@@ -156,7 +156,7 @@ class CrearCuentaViewModel(
         val apellidos = currentState.apellidos.trim()
         val email = currentState.email.trim()
         val telefono = currentState.telefono.trim()
-        val rol = currentState.rol.trim()
+        val rol = "EMPLEADO"
         val departamento = currentState.departamento.trim()
 
         val nombreError = if (nombre.isEmpty()) {
@@ -197,12 +197,6 @@ class CrearCuentaViewModel(
             else -> null
         }
 
-        val rolError = if (rol.isEmpty()) {
-            getApplication<Application>().getString(R.string.error_role_required)
-        } else {
-            null
-        }
-
         val departamentoError = if (departamento.isEmpty()) {
             getApplication<Application>().getString(R.string.error_department_required)
         } else {
@@ -222,7 +216,6 @@ class CrearCuentaViewModel(
                 emailError = emailError,
                 telefonoError = telefonoError,
                 passwordError = passwordError,
-                rolError = rolError,
                 departamentoError = departamentoError,
                 errorMessage = null,
                 cuentaCreada = false
@@ -235,7 +228,6 @@ class CrearCuentaViewModel(
             emailError,
             telefonoError,
             passwordError,
-            rolError,
             departamentoError
         ).all { it == null }
 

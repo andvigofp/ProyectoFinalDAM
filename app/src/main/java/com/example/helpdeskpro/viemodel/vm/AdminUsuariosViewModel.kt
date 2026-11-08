@@ -60,13 +60,15 @@ class AdminUsuariosViewModel(
     ) {
         viewModelScope.launch {
             try {
-                administracionRepository.guardarUsuario(usuario, password)
+                val usuarioGuardado = administracionRepository.guardarUsuario(usuario, password)
                 _uiState.update { state ->
-                    val existe = state.usuarios.any { it.id == usuario.id }
+                    val existe = state.usuarios.any { it.id == usuarioGuardado.id }
                     val usuarios = if (existe) {
-                        state.usuarios.map { if (it.id == usuario.id) usuario else it }
+                        state.usuarios.map {
+                            if (it.id == usuarioGuardado.id) usuarioGuardado else it
+                        }
                     } else {
-                        state.usuarios + usuario
+                        state.usuarios + usuarioGuardado
                     }
                     state.copy(usuarios = usuarios, errorMessage = null)
                 }

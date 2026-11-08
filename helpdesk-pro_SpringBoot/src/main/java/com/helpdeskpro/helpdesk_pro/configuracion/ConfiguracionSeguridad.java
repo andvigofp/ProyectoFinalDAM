@@ -38,7 +38,11 @@ public class ConfiguracionSeguridad {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         // Inicio de sesión abierto
-                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers(
+                                "/api/auth/login",
+                                "/api/auth/registro",
+                                "/api/catalogos/**")
+                        .permitAll()
 
                         // Gestión de usuarios: solo administrador
                         .requestMatchers("/api/usuarios/**")
@@ -46,6 +50,9 @@ public class ConfiguracionSeguridad {
 
                         // Ver todas las incidencias: técnico y administrador
                         .requestMatchers(HttpMethod.GET, "/api/incidencias")
+                        .hasAnyRole("TECNICO", "ADMINISTRADOR")
+
+                        .requestMatchers(HttpMethod.GET, "/api/incidencias/tecnico/**")
                         .hasAnyRole("TECNICO", "ADMINISTRADOR")
 
                         // Acciones de técnico: asignar, cambiar estado,

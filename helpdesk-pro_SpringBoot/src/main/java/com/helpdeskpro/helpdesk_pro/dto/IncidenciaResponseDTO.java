@@ -20,6 +20,7 @@ public class IncidenciaResponseDTO {
 
     private Long usuarioId;
     private String usuarioNombre;
+    private String departamentoNombre;
 
     private Long tecnicoId;
     private String tecnicoNombre;

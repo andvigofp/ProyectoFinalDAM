@@ -91,10 +91,10 @@ fun CamposAdminUsuarioComponent(
             value = departamento,
             placeholder = stringResource(R.string.department_placeholder),
             options = listOf(
-                stringResource(R.string.department_sales),
-                stringResource(R.string.department_systems),
-                stringResource(R.string.department_management),
-                stringResource(R.string.department_hr)
+                stringResource(R.string.department_informatics),
+                stringResource(R.string.department_human_resources),
+                stringResource(R.string.department_administration),
+                stringResource(R.string.department_production)
             ),
             onOptionSelected = onDepartamentoChange
         )

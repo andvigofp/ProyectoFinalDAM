@@ -1,6 +1,8 @@
 package com.helpdeskpro.helpdesk_pro.controlador;
 
 import com.helpdeskpro.helpdesk_pro.dto.LoginRequestDTO;
+import com.helpdeskpro.helpdesk_pro.dto.PerfilActualizacionRequestDTO;
+import com.helpdeskpro.helpdesk_pro.dto.RegistroRequestDTO;
 import com.helpdeskpro.helpdesk_pro.dto.TokenResponseDTO;
 import com.helpdeskpro.helpdesk_pro.dto.UsuarioResponseDTO;
 import com.helpdeskpro.helpdesk_pro.servicio.AuthServicio;
@@ -26,9 +28,20 @@ public class AuthControlador {
         return authServicio.login(dto);
     }
 
+    @PostMapping("/registro")
+    public UsuarioResponseDTO registrar(@RequestBody RegistroRequestDTO dto) {
+        return authServicio.registrar(dto);
+    }
+
     // GET /api/auth/me -> datos del usuario autenticado
     @GetMapping("/me")
     public UsuarioResponseDTO yo() {
         return authServicio.obtenerUsuarioActual();
+    }
+
+    @org.springframework.web.bind.annotation.PutMapping("/me")
+    public UsuarioResponseDTO actualizarPerfil(
+            @RequestBody PerfilActualizacionRequestDTO dto) {
+        return authServicio.actualizarPerfil(dto);
     }
 }

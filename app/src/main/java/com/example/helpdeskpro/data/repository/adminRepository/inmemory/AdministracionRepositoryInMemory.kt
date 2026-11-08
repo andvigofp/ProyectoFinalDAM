@@ -26,7 +26,10 @@ class AdministracionRepositoryInMemory(
 
     override fun siguienteUsuarioId(): Long = store.siguienteUsuarioId()
 
-    override suspend fun guardarUsuario(usuario: AdminUsuarioDTO, password: String?) {
+    override suspend fun guardarUsuario(
+        usuario: AdminUsuarioDTO,
+        password: String?
+    ): AdminUsuarioDTO {
         if (store.usuarios.values.any {
                 it.perfil.id != usuario.id &&
                     it.perfil.email.equals(usuario.email.trim(), ignoreCase = true)
@@ -52,6 +55,7 @@ class AdministracionRepositoryInMemory(
                 admin = usuario.copy(id = id),
                 password = password.orEmpty()
             )
+            return usuario.copy(id = id)
         } else {
             val profile = existing.perfil.copy(
                 nombre = usuario.nombre.trim(),
@@ -64,6 +68,7 @@ class AdministracionRepositoryInMemory(
             existing.perfil = profile
             existing.admin = usuario.copy(id = usuario.id)
             password?.takeIf { it.isNotBlank() }?.let { existing.password = it }
+            return usuario
         }
     }
 }

@@ -29,7 +29,6 @@ fun CamposCrearCuentaComponent(
     onEmailChange: (String) -> Unit,
     onTelefonoChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onRolChange: (String) -> Unit,
     onDepartamentoChange: (String) -> Unit,
     onGuardar: () -> Unit,
     modifier: Modifier = Modifier
@@ -142,25 +141,14 @@ fun CamposCrearCuentaComponent(
             )
         }
         SelectorCuentaComponent(
-            label = stringResource(R.string.role),
-            value = uiState.rol,
-            placeholder = stringResource(R.string.role_placeholder),
-            options = listOf(
-                stringResource(R.string.role_employee),
-                stringResource(R.string.role_technician),
-                stringResource(R.string.role_administrator)
-            ),
-            onOptionSelected = onRolChange,
-            error = uiState.rolError,
-            enabled = !uiState.isLoading
-        )
-        SelectorCuentaComponent(
             label = stringResource(R.string.department),
             value = uiState.departamento,
             placeholder = stringResource(R.string.department_placeholder),
             options = listOf(
-                stringResource(R.string.department_sales),
-                stringResource(R.string.department_systems)
+                stringResource(R.string.department_informatics),
+                stringResource(R.string.department_human_resources),
+                stringResource(R.string.department_administration),
+                stringResource(R.string.department_production)
             ),
             onOptionSelected = onDepartamentoChange,
             error = uiState.departamentoError,
@@ -188,7 +176,6 @@ private fun CamposCrearCuentaComponentPreview() {
             onEmailChange = {},
             onTelefonoChange = {},
             onPasswordChange = {},
-            onRolChange = {},
             onDepartamentoChange = {},
             onGuardar = {}
         )

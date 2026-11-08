@@ -72,6 +72,19 @@ public class IncidenciaServicio {
     // Incidencias asignadas a un técnico
     @Transactional(readOnly = true)
     public List<IncidenciaResponseDTO> listarPorTecnico(Long tecnicoId) {
+        Usuarios actual = seguridadServicio.obtenerUsuarioActual();
+        if (seguridadServicio.esTecnico(actual)
+                && !actual.getId().equals(tecnicoId)) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "Un técnico solo puede consultar sus propias incidencias"
+            );
+        }
+        if (!seguridadServicio.esTecnico(actual)
+                && !seguridadServicio.esAdministrador(actual)) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                    "No tienes permiso para consultar incidencias por técnico"
+            );
+        }
         return incidenciasRepositorio.findByTecnico_Id(tecnicoId)
                 .stream()
                 .map(this::convertirAResponseDTO)
@@ -351,6 +364,11 @@ public class IncidenciaServicio {
                 .usuarioNombre(
                         incidencia.getUsuarios().getNombre() + " "
                                 + incidencia.getUsuarios().getApellidos()
+                )
+                .departamentoNombre(
+                        incidencia.getUsuarios().getDepartamentos() != null
+                                ? incidencia.getUsuarios().getDepartamentos().getNombre()
+                                : null
                 )
                 .tecnicoId(tecnico != null ? tecnico.getId() : null)
                 .tecnicoNombre(

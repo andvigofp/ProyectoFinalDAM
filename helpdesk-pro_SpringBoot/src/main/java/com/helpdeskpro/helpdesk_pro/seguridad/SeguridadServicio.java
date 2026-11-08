@@ -44,6 +44,14 @@ public class SeguridadServicio {
         return "EMPLEADO".equals(JwtServicio.codigoRol(usuario));
     }
 
+    public boolean esTecnico(Usuarios usuario) {
+        return "TECNICO".equals(JwtServicio.codigoRol(usuario));
+    }
+
+    public boolean esAdministrador(Usuarios usuario) {
+        return "ADMINISTRADOR".equals(JwtServicio.codigoRol(usuario));
+    }
+
     // Un empleado solo puede acceder a sus propias incidencias;
     // técnicos y administradores acceden a todas
     public void verificarAccesoIncidencia(Incidencias incidencia) {

@@ -97,7 +97,8 @@ private fun SelectorIncidenciaComponentPreview() {
             options = listOf(
                 stringResource(R.string.hardware),
                 stringResource(R.string.software),
-                stringResource(R.string.network)
+                stringResource(R.string.network),
+                stringResource(R.string.email_category)
             ),
             onOptionSelected = {},
             label = stringResource(R.string.category)

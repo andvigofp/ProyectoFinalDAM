@@ -357,6 +357,43 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.DetalleIncidenciaTecnico> { backStackEntry ->
 
             val route = backStackEntry.toRoute<RouteNavigation.DetalleIncidenciaTecnico>()
+            val incidentListOwner = remember(backStackEntry) {
+                when {
+                    route.desdeHomeAdmin ->
+                        navController.getBackStackEntry<RouteNavigation.AdminIncidencias>()
+                    route.desdeHomeTecnico ->
+                        navController.getBackStackEntry<RouteNavigation.HomeTecnico>()
+                    else -> navController.getBackStackEntry<RouteNavigation.HomeEmpleado>()
+                }
+            }
+            val technicianHomeViewModel = if (route.desdeHomeAdmin || route.desdeHomeTecnico) {
+                viewModel<HomeTecnicoViewModel>(
+                    viewModelStoreOwner = incidentListOwner,
+                    factory = HomeTecnicoViewModelFactory(
+                        application,
+                        route.userId,
+                        incidenciasRepository
+                    )
+                )
+            } else {
+                null
+            }
+            val employeeHomeViewModel = if (!route.desdeHomeAdmin && !route.desdeHomeTecnico) {
+                viewModel<HomeEmpleadoViewModel>(
+                    viewModelStoreOwner = incidentListOwner,
+                    factory = HomeEmpleadoViewModelFactory(
+                        application,
+                        route.userId,
+                        incidenciasRepository
+                    )
+                )
+            } else {
+                null
+            }
+            val refreshIncidentList = {
+                technicianHomeViewModel?.cargarIncidencias()
+                employeeHomeViewModel?.cargarIncidencias()
+            }
             val detalleViewModel: DetalleEmpleadoViewModel = viewModel(
                 factory = DetalleEmpleadoViewModelFactory(
                     application = application,
@@ -369,9 +406,11 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             DetalleIncideciaTecnicoPage(
                 detalleEmpleadoViewModel = detalleViewModel,
                 onVolver = {
+                    refreshIncidentList()
                     navController.popBackStack()
                 },
                 onIncidencias = {
+                    refreshIncidentList()
                     if (route.desdeHomeAdmin) {
                         navigate(RouteNavigation.AdminIncidencias(route.userId))
                     } else if (route.desdeHomeTecnico) {
@@ -396,6 +435,17 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable<RouteNavigation.NuevaIncidencia> { backStackEntry ->
 
             val route = backStackEntry.toRoute<RouteNavigation.NuevaIncidencia>()
+            val homeEmpleadoEntry = remember(backStackEntry) {
+                navController.getBackStackEntry<RouteNavigation.HomeEmpleado>()
+            }
+            val homeEmpleadoViewModel: HomeEmpleadoViewModel = viewModel(
+                viewModelStoreOwner = homeEmpleadoEntry,
+                factory = HomeEmpleadoViewModelFactory(
+                    application,
+                    route.userId,
+                    incidenciasRepository
+                )
+            )
 
             val nuevaIncidenciaViewModel: NuevaIncidenciaViewModel = viewModel(
                 factory = NuevaIncidenciaViewModelFactory(
@@ -411,7 +461,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                     navController.popBackStack()
                 },
                 onIncidenciaCreada = {
-                    navigate(RouteNavigation.HomeEmpleado(route.userId))
+                    homeEmpleadoViewModel.cargarIncidencias()
+                    navController.popBackStack()
                 }
             )
         }
@@ -487,6 +538,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 },
                 onCerrarSesion = {
                     perfilViewModel.limpiarPerfil()
+                    application.cerrarSesion()
 
                     navController.navigate(RouteNavigation.Login) {
                         popUpTo(navController.graph.id) {

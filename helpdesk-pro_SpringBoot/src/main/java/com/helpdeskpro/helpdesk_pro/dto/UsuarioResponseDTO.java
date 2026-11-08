@@ -27,4 +27,6 @@ public class UsuarioResponseDTO {
     private Long departamentoId;
 
     private String departamentoNombre;
+
+    private java.time.LocalDateTime fechaRegistro;
 }

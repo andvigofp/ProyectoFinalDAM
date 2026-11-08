@@ -120,6 +120,9 @@ public class UsuarioServicio {
         usuario.setTelefono(dto.getTelefono());
         usuario.setRoles(rol);
         usuario.setDepartamentos(departamento);
+        if (dto.getActivo() != null) {
+            usuario.setActivo(dto.getActivo());
+        }
 
         // Solo cambiar la contraseña si se ha enviado una nueva
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
@@ -176,6 +179,7 @@ public class UsuarioServicio {
                                 ? usuario.getDepartamentos().getNombre()
                                 : null
                 )
+                .fechaRegistro(usuario.getFechaRegistro())
                 .build();
     }
 }

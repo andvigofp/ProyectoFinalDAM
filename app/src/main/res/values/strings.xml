@@ -23,7 +23,7 @@
     <string name="confirm_create_user_message">¿Quieres crear este usuario?</string>
     <string name="confirm_save_user_message">¿Quieres guardar los cambios de este usuario?</string>
     <string name="confirm_save_profile_message">¿Quieres guardar los cambios de tu perfil?</string>
-    <string name="confirm_recovery_message">¿Quieres enviar una solicitud para recuperar la contraseña?</string>
+    <string name="confirm_recovery_message">La recuperación necesita un servicio de correo configurado. ¿Quieres comprobar si está disponible?</string>
     <string name="confirm_save_incident_status_message">¿Quieres guardar el estado seleccionado?</string>
     <string name="confirm_register_solution_message">¿Quieres registrar esta solución?</string>
     <string name="confirm_logout_title">Cerrar sesión</string>
@@ -56,7 +56,7 @@
     <string name="create_account">Crear cuenta</string>
     <string name="recover_password">Recuperar contraseña</string>
     <string name="recover_password_description">Introduce tu email y te enviaremos una contraseña temporal para recuperar el acceso a tu cuenta.</string>
-    <string name="send_temporary_password">Enviar contraseña temporal</string>
+    <string name="send_temporary_password">Solicitar recuperación</string>
     <string name="sending">Enviando…</string>
 
     <!-- Crear cuenta -->
@@ -101,6 +101,12 @@
     <string name="department_systems">Sistemas</string>
     <string name="department_management">Dirección</string>
     <string name="department_hr">RRHH</string>
+    <string name="department_informatics">Informática</string>
+    <string name="department_human_resources">Recursos Humanos</string>
+    <string name="department_administration">Administración</string>
+    <string name="department_production">Producción</string>
+    <string name="email_category">Correo</string>
+    <string name="urgent">Urgente</string>
     <string name="user_role_department">%1$s · %2$s</string>
     <string name="incident_title_placeholder">Resumen del problema…</string>
     <string name="incident_description_placeholder">Describe el problema…</string>
