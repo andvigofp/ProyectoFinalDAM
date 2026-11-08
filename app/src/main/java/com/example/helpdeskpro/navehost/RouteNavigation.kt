@@ -1,6 +1,5 @@
 package com.example.helpdeskpro.navehost
 
-import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import kotlinx.serialization.Serializable
 
 /**
@@ -48,7 +47,7 @@ sealed interface RouteNavigation {
     @Serializable
     class AdminUsuario(
         val userId: String,
-        val usuario: AdminUsuarioDTO? = null
+        val usuarioId: Long? = null
     ) : RouteNavigation
 
     /**
@@ -100,7 +99,6 @@ sealed interface RouteNavigation {
     @Serializable
     class EditarPerfil(
         val userId: String,
-        val perfil: com.example.helpdeskpro.modelo.PerfilDTO,
         val esTecnico: Boolean = false,
         val esAdmin: Boolean = false
     ) : RouteNavigation

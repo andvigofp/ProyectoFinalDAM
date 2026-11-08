@@ -1,8 +1,15 @@
 package com.example.helpdeskpro.navehost
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -326,7 +333,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                     navigate(RouteNavigation.AdminUsuario(route.userId))
                 },
                 onEditarUsuario = { usuario ->
-                    navigate(RouteNavigation.AdminUsuario(route.userId, usuario))
+                    navigate(RouteNavigation.AdminUsuario(route.userId, usuario.id))
                 }
             )
         }
@@ -342,7 +349,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             )
 
             AdminCrearUsuarioCrearPage(
-                usuario = route.usuario,
+                usuario = route.usuarioId?.let { usuarioId ->
+                    adminUsuariosViewModel.uiState.value.usuarios
+                        .firstOrNull { it.id == usuarioId }
+                },
                 idNuevoUsuario = adminUsuariosViewModel.siguienteId(),
                 onVolver = { navController.popBackStack() },
                 onGuardar = { usuario, password ->
@@ -526,11 +536,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                         navigate(RouteNavigation.AdminUsuarios(route.userId))
                     }
                 },
-                onEditarPerfil = { perfil ->
+                onEditarPerfil = { _ ->
                     navigate(
                         RouteNavigation.EditarPerfil(
                             userId = route.userId,
-                            perfil = perfil,
                             esTecnico = route.esTecnico,
                             esAdmin = route.esAdmin
                         )
@@ -564,6 +573,12 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 viewModelStoreOwner = perfilOwner,
                 factory = PerfilViewModelFactory(application, route.userId, perfilRepository)
             )
+            val perfilState by perfilViewModel.uiState.collectAsState()
+            LaunchedEffect(route.userId, perfilState.perfil) {
+                if (perfilState.perfil == null && !perfilState.isLoading) {
+                    perfilViewModel.cargarPerfil()
+                }
+            }
             val editarPerfilViewModel: EditarPerfilViewModel = viewModel(
                 factory = EditarPerfilViewModelFactory(
                     application,
@@ -572,22 +587,36 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 )
             )
 
-            EditarPerfilPage(
-                editarPerfilViewModel = editarPerfilViewModel,
-                perfil = route.perfil,
-                onVolver = { navController.popBackStack() },
-                onGuardar = { datos ->
-                    perfilViewModel.actualizarPerfil(
-                        route.perfil.copy(
-                            nombre = datos.nombre,
-                            apellidos = datos.apellidos,
-                            email = datos.email,
-                            telefono = datos.telefono
+            perfilState.perfil?.let { perfil ->
+                EditarPerfilPage(
+                    editarPerfilViewModel = editarPerfilViewModel,
+                    perfil = perfil,
+                    onVolver = { navController.popBackStack() },
+                    onGuardar = { datos ->
+                        perfilViewModel.actualizarPerfil(
+                            perfil.copy(
+                                nombre = datos.nombre,
+                                apellidos = datos.apellidos,
+                                email = datos.email,
+                                telefono = datos.telefono
+                            )
                         )
+                        navController.popBackStack()
+                    }
+                )
+            } ?: Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                if (perfilState.isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(
+                        text = perfilState.errorMessage
+                            ?: application.getString(R.string.error_load_profile)
                     )
-                    navController.popBackStack()
                 }
-            )
+            }
         }
     }
 }
