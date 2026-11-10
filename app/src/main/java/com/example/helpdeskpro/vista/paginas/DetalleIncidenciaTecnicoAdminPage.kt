@@ -33,6 +33,7 @@ import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.SuccessDialog
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.BotonGuardarEstadoComponent
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.BotonRegistrarSolucionComponent
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.CabeceraDetalleIncidenciaComponent
@@ -67,6 +68,8 @@ fun DetalleIncideciaTecnicoPage(
     val detalle = uiState.detalle
     var confirmarGuardarEstado by rememberSaveable { mutableStateOf(false) }
     var confirmarRegistrarSolucion by rememberSaveable { mutableStateOf(false) }
+    var mostrarEstadoGuardado by rememberSaveable { mutableStateOf(false) }
+    var mostrarSolucionRegistrada by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(detalleEmpleadoViewModel.incidenciaId) {
         detalleEmpleadoViewModel.cargarDetalle()
@@ -173,7 +176,10 @@ fun DetalleIncideciaTecnicoPage(
                 confirmButtonText = stringResource(R.string.save_status),
                 dismissButtonText = stringResource(R.string.dialog_cancel),
                 onConfirmClick = {
-                    detalleEmpleadoViewModel.guardarEstado(onGuardarEstado)
+                    detalleEmpleadoViewModel.guardarEstado { estado ->
+                        onGuardarEstado(estado)
+                        mostrarEstadoGuardado = true
+                    }
                 }
             )
 
@@ -185,8 +191,23 @@ fun DetalleIncideciaTecnicoPage(
                 confirmButtonText = stringResource(R.string.register_solution),
                 dismissButtonText = stringResource(R.string.dialog_cancel),
                 onConfirmClick = {
-                    detalleEmpleadoViewModel.registrarSolucion(onRegistrarSolucion)
+                    detalleEmpleadoViewModel.registrarSolucion { solucion ->
+                        onRegistrarSolucion(solucion)
+                        mostrarSolucionRegistrada = true
+                    }
                 }
+            )
+
+            SuccessDialog(
+                showDialog = mostrarEstadoGuardado,
+                onDismissRequest = { mostrarEstadoGuardado = false },
+                message = stringResource(R.string.incident_status_updated_success)
+            )
+
+            SuccessDialog(
+                showDialog = mostrarSolucionRegistrada,
+                onDismissRequest = { mostrarSolucionRegistrada = false },
+                message = stringResource(R.string.incident_solution_registered_success)
             )
         }
     }

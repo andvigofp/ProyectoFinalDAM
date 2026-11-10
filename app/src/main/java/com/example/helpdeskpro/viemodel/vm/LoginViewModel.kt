@@ -46,7 +46,8 @@ class LoginViewModel(
                 errorMessage = null,
                 loginSuccess = false,
                 userId = null,
-                userRole = null
+                userRole = null,
+                userName = null
             )
         }
     }
@@ -64,7 +65,8 @@ class LoginViewModel(
                 errorMessage = null,
                 loginSuccess = false,
                 userId = null,
-                userRole = null
+                userRole = null,
+                userName = null
             )
         }
     }
@@ -116,7 +118,8 @@ class LoginViewModel(
                             isLoading = false,
                             loginSuccess = true,
                             userId = sesion.userId,
-                            userRole = sesion.rol
+                            userRole = sesion.rol,
+                            userName = sesion.nombre
                         )
                     }
                 } catch (exception: CancellationException) {

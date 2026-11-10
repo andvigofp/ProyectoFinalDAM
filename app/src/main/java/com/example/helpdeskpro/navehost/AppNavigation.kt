@@ -358,10 +358,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 },
                 idNuevoUsuario = adminUsuariosViewModel.siguienteId(),
                 onVolver = { navController.popBackStack() },
-                onGuardar = { usuario, password ->
-                    adminUsuariosViewModel.guardarUsuario(usuario, password) {
-                        navController.popBackStack()
-                    }
+                onGuardar = { usuario, password, onGuardado ->
+                    adminUsuariosViewModel.guardarUsuario(usuario, password, onGuardado)
                 }
             )
         }

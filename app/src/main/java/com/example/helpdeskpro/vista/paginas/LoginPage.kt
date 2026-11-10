@@ -36,6 +36,7 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.LoginUiState
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.SuccessDialog
 import com.example.helpdeskpro.vista.componentes.logingComponente.BotonLoginComponent
 import com.example.helpdeskpro.vista.componentes.logingComponente.CamposLoginComponent
 import com.example.helpdeskpro.vista.componentes.logingComponente.LoginActionsComponent
@@ -58,13 +59,11 @@ fun LoginPage(
     onCreateAccount: () -> Unit = {}
 ) {
     val uiState by loginViewModel.uiState.collectAsState()
+    var mostrarBienvenida by rememberSaveable { mutableStateOf(false) }
 
-    // Detectar inicio de sesión correcto
-    LaunchedEffect(uiState.loginSuccess, uiState.userId) {
+    LaunchedEffect(uiState.loginSuccess, uiState.userId, uiState.userName) {
         if (uiState.loginSuccess) {
-            uiState.userId?.let { userId ->
-                onLoginSuccess(userId, uiState.userRole.orEmpty())
-            }
+            mostrarBienvenida = true
         }
     }
 
@@ -76,6 +75,18 @@ fun LoginPage(
         onForgotPassword = onForgotPassword,
         onCreateAccount = onCreateAccount,
         modifier = modifier
+    )
+
+    SuccessDialog(
+        showDialog = mostrarBienvenida,
+        onDismissRequest = {
+            mostrarBienvenida = false
+            uiState.userId?.let { userId ->
+                onLoginSuccess(userId, uiState.userRole.orEmpty())
+            }
+        },
+        title = stringResource(R.string.login_success_title, uiState.userName.orEmpty()),
+        message = stringResource(R.string.login_success_message)
     )
 }
 

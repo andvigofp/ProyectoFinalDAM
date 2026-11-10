@@ -57,7 +57,8 @@ fun CamposEditarPerfilComponent(
             placeholder = stringResource(R.string.account_email_placeholder),
             keyboardType = KeyboardType.Email,
             error = uiState.emailError,
-            onValueChange = onEmailChange
+            onValueChange = onEmailChange,
+            enabled = false
         )
         CampoEditarPerfil(
             label = stringResource(R.string.phone),
@@ -87,7 +88,8 @@ private fun CampoEditarPerfil(
     onValueChange: (String) -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text,
     error: String? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    enabled: Boolean = true
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(
@@ -99,6 +101,7 @@ private fun CampoEditarPerfil(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
+            enabled = enabled,
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text(placeholder) },
             singleLine = true,
@@ -112,6 +115,10 @@ private fun CampoEditarPerfil(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 focusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant
             )

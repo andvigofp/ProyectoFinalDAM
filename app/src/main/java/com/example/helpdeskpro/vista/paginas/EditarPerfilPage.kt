@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.EditarPerfilUiState
 import com.example.helpdeskpro.viemodel.vm.EditarPerfilViewModel
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.SuccessDialog
 import com.example.helpdeskpro.vista.componentes.editarPerfilComponente.BotonGuardarEditarPerfilComponent
 import com.example.helpdeskpro.vista.componentes.editarPerfilComponente.CamposEditarPerfilComponent
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
@@ -47,6 +49,8 @@ fun EditarPerfilPage(
 ) {
     val uiState by editarPerfilViewModel.uiState.collectAsState()
     var mostrarConfirmacion by rememberSaveable { mutableStateOf(false) }
+    var mostrarExito by rememberSaveable { mutableStateOf(false) }
+    var datosGuardados by remember { mutableStateOf<EditarPerfilDTO?>(null) }
 
     LaunchedEffect(perfil.id) {
         editarPerfilViewModel.inicializar(perfil)
@@ -106,7 +110,21 @@ fun EditarPerfilPage(
         message = stringResource(R.string.confirm_save_profile_message),
         confirmButtonText = stringResource(R.string.save),
         dismissButtonText = stringResource(R.string.dialog_cancel),
-        onConfirmClick = { editarPerfilViewModel.guardarPerfil(onGuardar) }
+        onConfirmClick = {
+            editarPerfilViewModel.guardarPerfil { datos ->
+                datosGuardados = datos
+                mostrarExito = true
+            }
+        }
+    )
+
+    SuccessDialog(
+        showDialog = mostrarExito,
+        onDismissRequest = {
+            mostrarExito = false
+            datosGuardados?.let(onGuardar)
+        },
+        message = stringResource(R.string.profile_updated_success)
     )
 }
 

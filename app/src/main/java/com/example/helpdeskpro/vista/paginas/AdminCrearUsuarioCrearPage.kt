@@ -31,6 +31,7 @@ import com.example.helpdeskpro.modelo.ButtonData
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.vista.componentes.adminEditarUsuarioTenico.CamposAdminUsuarioComponent
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.SuccessDialog
 import com.example.helpdeskpro.vista.componentes.buttonsComponente.AppButton
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
@@ -40,7 +41,7 @@ fun AdminCrearUsuarioCrearPage(
     idNuevoUsuario: Long,
     modifier: Modifier = Modifier,
     onVolver: () -> Unit = {},
-    onGuardar: (AdminUsuarioDTO, String?) -> Unit = { _, _ -> }
+    onGuardar: (AdminUsuarioDTO, String?, () -> Unit) -> Unit = { _, _, onGuardado -> onGuardado() }
 ) {
     var nombre by rememberSaveable(usuario?.id) { mutableStateOf(usuario?.nombre.orEmpty()) }
     var apellidos by rememberSaveable(usuario?.id) { mutableStateOf(usuario?.apellidos.orEmpty()) }
@@ -51,6 +52,7 @@ fun AdminCrearUsuarioCrearPage(
     var departamento by rememberSaveable(usuario?.id) { mutableStateOf(usuario?.departamento.orEmpty()) }
     var activo by rememberSaveable(usuario?.id) { mutableStateOf(usuario?.activo ?: true) }
     var mostrarConfirmacion by rememberSaveable { mutableStateOf(false) }
+    var mostrarExito by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -129,8 +131,22 @@ fun AdminCrearUsuarioCrearPage(
                     activo = activo
                 ),
                 password.takeIf { it.isNotBlank() }
-            )
+            ) {
+                mostrarExito = true
+            }
         }
+    )
+
+    SuccessDialog(
+        showDialog = mostrarExito,
+        onDismissRequest = {
+            mostrarExito = false
+            onVolver()
+        },
+        message = stringResource(
+            if (usuario == null) R.string.admin_user_created_success
+            else R.string.admin_user_updated_success
+        )
     )
 }
 

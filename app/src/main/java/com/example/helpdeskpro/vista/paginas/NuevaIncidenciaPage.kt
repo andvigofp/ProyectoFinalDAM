@@ -29,6 +29,7 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.NuevaIncidenciaViewModel
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.SuccessDialog
 import com.example.helpdeskpro.vista.componentes.nuevaIncidenciaComponente.NuevaIncidenciaComponent
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
@@ -49,6 +50,7 @@ fun NuevaIncidenciaPage(
 ) {
     val uiState by nuevaIncidenciaViewModel.uiState.collectAsState()
     var mostrarConfirmacion by rememberSaveable { mutableStateOf(false) }
+    var mostrarExito by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -109,8 +111,17 @@ fun NuevaIncidenciaPage(
     )
 
     androidx.compose.runtime.LaunchedEffect(uiState.incidenciaCreada) {
-        if (uiState.incidenciaCreada) onIncidenciaCreada()
+        if (uiState.incidenciaCreada) mostrarExito = true
     }
+
+    SuccessDialog(
+        showDialog = mostrarExito,
+        onDismissRequest = {
+            mostrarExito = false
+            onIncidenciaCreada()
+        },
+        message = stringResource(R.string.incident_created_success)
+    )
 }
 
 @Preview(showBackground = true, widthDp = 390, heightDp = 844)

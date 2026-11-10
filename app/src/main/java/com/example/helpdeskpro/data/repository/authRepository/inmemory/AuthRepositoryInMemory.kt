@@ -20,7 +20,11 @@ class AuthRepositoryInMemory(
                 it.admin.activo
         } ?: throw IllegalArgumentException("El correo o la contraseña no son correctos.")
 
-        return SesionUsuarioDTO(usuario.perfil.id.toString(), usuario.perfil.rol)
+        return SesionUsuarioDTO(
+            userId = usuario.perfil.id.toString(),
+            rol = usuario.perfil.rol,
+            nombre = usuario.perfil.nombre
+        )
     }
 
     override suspend fun crearCuenta(datos: CrearCuentaDTO): SesionUsuarioDTO {
@@ -44,7 +48,11 @@ class AuthRepositoryInMemory(
             miembroDesde = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date()),
             activo = true
         )
-        return SesionUsuarioDTO(id.toString(), datos.rol.trim().uppercase(Locale.ROOT))
+        return SesionUsuarioDTO(
+            userId = id.toString(),
+            rol = datos.rol.trim().uppercase(Locale.ROOT),
+            nombre = datos.nombre.trim()
+        )
     }
 
     override suspend fun recuperarContrasena(solicitud: RecuperarContrasenaDTO) {

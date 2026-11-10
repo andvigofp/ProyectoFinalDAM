@@ -23,7 +23,8 @@ class AuthRepositoryRemote(
             tokenStore.save(response.token)
             SesionUsuarioDTO(
                 userId = response.usuario.id.toString(),
-                rol = response.usuario.rolNombre.toRoleCode()
+                rol = response.usuario.rolNombre.toRoleCode(),
+                nombre = response.usuario.nombre
             )
         }
 
@@ -42,7 +43,11 @@ class AuthRepositoryRemote(
                 departamentoId = departmentId
             )
         )
-        SesionUsuarioDTO(response.id.toString(), response.rolNombre.toRoleCode())
+        SesionUsuarioDTO(
+            userId = response.id.toString(),
+            rol = response.rolNombre.toRoleCode(),
+            nombre = datos.nombre
+        )
     }
 
     override suspend fun recuperarContrasena(solicitud: RecuperarContrasenaDTO) {

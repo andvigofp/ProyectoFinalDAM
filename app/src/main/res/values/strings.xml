@@ -28,6 +28,16 @@
     <string name="confirm_register_solution_message">¿Quieres registrar esta solución?</string>
     <string name="confirm_logout_title">Cerrar sesión</string>
     <string name="confirm_logout_message">¿Quieres cerrar la sesión actual?</string>
+    <string name="login_success_title">¡Bienvenido, %1$s!</string>
+    <string name="login_success_message">Has iniciado sesión correctamente.</string>
+    <string name="account_created_success">Se creó la cuenta exitosamente.</string>
+    <string name="admin_user_created_success">El usuario se creó exitosamente.</string>
+    <string name="admin_user_updated_success">El usuario se actualizó exitosamente.</string>
+    <string name="incident_created_success">La incidencia se creó exitosamente. Un técnico se pondrá en contacto contigo lo antes posible.</string>
+    <string name="incident_status_updated_success">El estado de la incidencia se actualizó correctamente.</string>
+    <string name="incident_solution_registered_success">La solución se registró correctamente.</string>
+    <string name="profile_updated_success">El perfil se actualizó exitosamente.</string>
+    <string name="logout_success">Se cerró la sesión exitosamente.</string>
     <string name="recovery_request_success">La solicitud se ha procesado correctamente.</string>
     <string name="saving">Guardando…</string>
     <string name="back_to_login">‹ Volver al login</string>

@@ -32,6 +32,7 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.CrearCuentaUiState
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.SuccessDialog
 import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.BotonGuardarCuentaComponent
 import com.example.helpdeskpro.vista.componentes.crearCuentaComponente.CamposCrearCuentaComponent
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
@@ -53,9 +54,10 @@ fun CrearCuentaPage(
 
     val uiState by crearCuentaViewModel.uiState.collectAsState()
     var mostrarConfirmacion by rememberSaveable { mutableStateOf(false) }
+    var mostrarExito by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(uiState.cuentaCreada) {
-        if (uiState.cuentaCreada) onCuentaCreada()
+        if (uiState.cuentaCreada) mostrarExito = true
     }
 
     CrearCuentaPageContent(
@@ -79,6 +81,15 @@ fun CrearCuentaPage(
         confirmButtonText = stringResource(R.string.create_account),
         dismissButtonText = stringResource(R.string.dialog_cancel),
         onConfirmClick = { crearCuentaViewModel.crearCuenta() }
+    )
+
+    SuccessDialog(
+        showDialog = mostrarExito,
+        onDismissRequest = {
+            mostrarExito = false
+            onCuentaCreada()
+        },
+        message = stringResource(R.string.account_created_success)
     )
 }
 

@@ -18,6 +18,7 @@ import com.example.helpdeskpro.modelo.ButtonData
 import com.example.helpdeskpro.modelo.ButtonType
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
+import com.example.helpdeskpro.vista.componentes.alertDialogComponente.SuccessDialog
 import com.example.helpdeskpro.vista.componentes.buttonsComponente.AppButton
 
 @Composable
@@ -27,6 +28,7 @@ fun AccionesPerfilComponent(
     modifier: Modifier = Modifier
 ) {
     var mostrarConfirmacionCerrarSesion by rememberSaveable { mutableStateOf(false) }
+    var mostrarExitoCerrarSesion by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -51,8 +53,17 @@ fun AccionesPerfilComponent(
         message = stringResource(R.string.confirm_logout_message),
         confirmButtonText = stringResource(R.string.logout),
         dismissButtonText = stringResource(R.string.dialog_cancel),
-        onConfirmClick = onCerrarSesion,
+        onConfirmClick = { mostrarExitoCerrarSesion = true },
         isDestructive = true
+    )
+
+    SuccessDialog(
+        showDialog = mostrarExitoCerrarSesion,
+        onDismissRequest = {
+            mostrarExitoCerrarSesion = false
+            onCerrarSesion()
+        },
+        message = stringResource(R.string.logout_success)
     )
 }
 
