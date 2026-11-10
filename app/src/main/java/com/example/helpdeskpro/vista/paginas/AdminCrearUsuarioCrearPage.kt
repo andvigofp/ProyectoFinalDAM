@@ -80,7 +80,8 @@ fun AdminCrearUsuarioCrearPage(
             onTelefonoChange = { telefono = it },
             onPasswordChange = { password = it },
             onRolChange = { rol = it },
-            onDepartamentoChange = { departamento = it }
+            onDepartamentoChange = { departamento = it },
+            emailEditable = usuario == null
         )
         Spacer(modifier = Modifier.height(20.dp))
         androidx.compose.foundation.layout.Row(

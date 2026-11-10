@@ -35,7 +35,8 @@ fun CamposAdminUsuarioComponent(
     onPasswordChange: (String) -> Unit,
     onRolChange: (String) -> Unit,
     onDepartamentoChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    emailEditable: Boolean = true
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -58,7 +59,8 @@ fun CamposAdminUsuarioComponent(
             value = email,
             placeholder = stringResource(R.string.account_email_placeholder),
             keyboardType = KeyboardType.Email,
-            onValueChange = onEmailChange
+            onValueChange = onEmailChange,
+            enabled = emailEditable
         )
         CampoAdminUsuario(
             label = stringResource(R.string.phone),
@@ -109,13 +111,15 @@ private fun CampoAdminUsuario(
     onValueChange: (String) -> Unit,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: androidx.compose.ui.text.input.VisualTransformation =
-        androidx.compose.ui.text.input.VisualTransformation.None
+        androidx.compose.ui.text.input.VisualTransformation.None,
+    enabled: Boolean = true
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(label, style = MaterialTheme.typography.bodyLarge)
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
+            enabled = enabled,
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text(placeholder) },
             singleLine = true,
