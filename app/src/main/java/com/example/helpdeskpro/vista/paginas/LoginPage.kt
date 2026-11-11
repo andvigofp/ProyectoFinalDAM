@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
-import com.example.helpdeskpro.modelo.SesionUsuarioDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.ustate.LoginUiState
 import com.example.helpdeskpro.viemodel.vm.LoginViewModel

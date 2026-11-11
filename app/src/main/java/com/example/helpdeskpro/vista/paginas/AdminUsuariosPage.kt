@@ -20,15 +20,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
-import com.example.helpdeskpro.viemodel.ustate.AdminUsuariosUiState
 import com.example.helpdeskpro.viemodel.vm.AdminUsuariosViewModel
 import com.example.helpdeskpro.vista.componentes.adminUsuariosComponente.BotonNuevoUsuarioComponent
 import com.example.helpdeskpro.vista.componentes.adminUsuariosComponente.UsuarioAdminCardComponent
@@ -78,7 +75,7 @@ fun AdminUsuariosPage(
                     Text(
                         text = uiState.errorMessage.orEmpty(),
                         modifier = Modifier.fillMaxWidth().padding(top = 36.dp),
-                        color = androidx.compose.material3.MaterialTheme.colorScheme.error
+                        color = MaterialTheme.colorScheme.error
                     )
                 }
                 uiState.usuarios.isEmpty() -> item {
@@ -109,7 +106,7 @@ private fun AdminUsuariosPagePreview() {
 
 @Composable
 private fun AdminUsuariosPageContentPreview() {
-    androidx.compose.material3.Scaffold(
+    Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { BotonNuevoUsuarioComponent(onClick = {}) }
     ) { padding ->

@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
-import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
