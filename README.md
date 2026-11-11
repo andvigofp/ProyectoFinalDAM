@@ -16,7 +16,7 @@ ejecuta Spring Boot, accesible desde el mismo Wi-Fi y con el puerto `8080`
 habilitado:
 
 ```powershell
-.\gradlew.bat :app:installDebug -PhelpdeskApiBaseUrl=http://192.168.1.10:8080/
+.\gradlew.bat :app:installDebug -PhelpdeskApiBaseUrl=http://172.20.10.6:8080/
 ```
 
 Sustituye `192.168.1.10` por la IP correspondiente. La barra final es necesaria.
