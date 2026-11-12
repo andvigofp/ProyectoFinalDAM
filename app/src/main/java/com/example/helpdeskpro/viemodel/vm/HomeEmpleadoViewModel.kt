@@ -35,6 +35,12 @@ class HomeEmpleadoViewModel(
     private val _uiState = MutableStateFlow(HomeEmpleadoUiState())
     val uiState: StateFlow<HomeEmpleadoUiState> = _uiState.asStateFlow()
 
+    fun onSearchQueryChange(query: String) {
+        _uiState.update {
+            it.copy(searchQuery = query.filter { character -> character.isLetter() || character == ' ' })
+        }
+    }
+
     /**
      * Carga las incidencias del empleado desde el repositorio.
      * Evita lanzar varias cargas simultáneas.

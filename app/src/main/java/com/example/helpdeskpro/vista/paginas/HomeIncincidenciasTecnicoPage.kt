@@ -35,6 +35,7 @@ import com.example.helpdeskpro.vista.componentes.homeAdminComponente.AdminTab
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.NavegacionInferiorDetalleComponent
 import com.example.helpdeskpro.vista.componentes.homeTecnicoComponente.FiltrosEstadoTecnicoComponent
 import com.example.helpdeskpro.vista.componentes.homeTecnicoComponente.IncidenciaAsignadaCardComponent
+import com.example.helpdeskpro.vista.componentes.searchEmpleadoTecnicoAdminComponente.SearchComponente
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 /**
@@ -65,6 +66,7 @@ fun HomeTecnicoPage(
     HomeTecnicoPageContent(
         uiState = uiState,
         onFiltroEstadoChange = homeTecnicoViewModel::onFiltroEstadoChange,
+        onSearchQueryChange = homeTecnicoViewModel::onSearchQueryChange,
         onIncidenciaClick = onIncidenciaClick,
         onPerfil = onPerfil,
         modoAdmin = modoAdmin,
@@ -87,6 +89,7 @@ fun HomeTecnicoPage(
 private fun HomeTecnicoPageContent(
     uiState: HomeTecnicoUiState,
     onFiltroEstadoChange: (String?) -> Unit,
+    onSearchQueryChange: (String) -> Unit,
     onIncidenciaClick: (HomeTecnicoDTO) -> Unit,
     onPerfil: () -> Unit,
     titulo: String,
@@ -139,7 +142,13 @@ private fun HomeTecnicoPageContent(
                         letterSpacing = 0.sp
                     )
                 )
-                Spacer(modifier = Modifier.height(54.dp))
+                Spacer(modifier = Modifier.height(20.dp))
+                SearchComponente(
+                    query = uiState.searchQuery,
+                    onQueryChange = onSearchQueryChange,
+                    placeholder = stringResource(R.string.search_incidents)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
             if (!uiState.isLoading && uiState.errorMessage == null &&
@@ -177,6 +186,10 @@ private fun HomeTecnicoPageContent(
                             text = stringResource(
                                 if (uiState.incidencias.isEmpty()) {
                                     R.string.no_assigned_incidents
+                                } else if (uiState.searchQuery.isNotBlank() &&
+                                    uiState.incidenciasFiltradas.isEmpty()
+                                ) {
+                                    R.string.no_search_results
                                 } else {
                                     R.string.no_incidents_for_filter
                                 }
@@ -245,6 +258,7 @@ private fun HomeTecnicoPagePreview() {
             HomeTecnicoPageContent(
                 uiState = HomeTecnicoUiState(incidencias = incidencias),
                 onFiltroEstadoChange = {},
+                onSearchQueryChange = {},
                 onIncidenciaClick = {},
                 titulo = "Incidencias asignadas",
                 etiquetasFiltro = listOf("Abiertas", "En progreso", "Resueltas"),

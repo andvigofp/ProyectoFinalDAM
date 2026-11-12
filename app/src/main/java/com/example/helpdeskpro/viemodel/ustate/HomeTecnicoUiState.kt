@@ -13,13 +13,20 @@ import com.example.helpdeskpro.modelo.HomeTecnicoDTO
 data class HomeTecnicoUiState(
     val incidencias: List<HomeTecnicoDTO> = emptyList(),
     val filtroEstado: String? = null,
+    val searchQuery: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 ) {
     val incidenciasFiltradas: List<HomeTecnicoDTO>
-        get() = incidencias.filter { incidencia ->
-            filtroEstado == null ||
-                normalizarEstado(incidencia.estado) == normalizarEstado(filtroEstado)
+        get() {
+            val query = normalizarTextoBusqueda(searchQuery)
+            return incidencias
+                .filter { incidencia ->
+                    (filtroEstado == null ||
+                        normalizarEstado(incidencia.estado) == normalizarEstado(filtroEstado)) &&
+                        normalizarTextoBusqueda(incidencia.titulo).contains(query)
+                }
+                .sortedBy { normalizarTextoBusqueda(it.titulo) }
         }
 
     private fun normalizarEstado(estado: String): String =

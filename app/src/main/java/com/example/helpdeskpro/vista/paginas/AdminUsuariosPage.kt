@@ -29,6 +29,7 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.AdminUsuariosViewModel
 import com.example.helpdeskpro.vista.componentes.adminUsuariosComponente.BotonNuevoUsuarioComponent
 import com.example.helpdeskpro.vista.componentes.adminUsuariosComponente.UsuarioAdminCardComponent
+import com.example.helpdeskpro.vista.componentes.searchEmpleadoTecnicoAdminComponente.SearchComponente
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 @Composable
@@ -62,7 +63,13 @@ fun AdminUsuariosPage(
                     titulo = stringResource(R.string.users),
                     onVolver = onVolver
                 )
-                androidx.compose.foundation.layout.Spacer(Modifier.height(86.dp))
+                androidx.compose.foundation.layout.Spacer(Modifier.height(20.dp))
+                SearchComponente(
+                    query = uiState.searchQuery,
+                    onQueryChange = adminUsuariosViewModel::onSearchQueryChange,
+                    placeholder = stringResource(R.string.search_users)
+                )
+                androidx.compose.foundation.layout.Spacer(Modifier.height(8.dp))
             }
 
             when {
@@ -85,7 +92,14 @@ fun AdminUsuariosPage(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                else -> items(uiState.usuarios, key = { it.id }) { usuario ->
+                uiState.usuariosFiltrados.isEmpty() -> item {
+                    Text(
+                        text = stringResource(R.string.no_search_results),
+                        modifier = Modifier.fillMaxWidth().padding(top = 36.dp),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                else -> items(uiState.usuariosFiltrados, key = { it.id }) { usuario ->
                     UsuarioAdminCardComponent(
                         usuario = usuario,
                         onEditar = { onEditarUsuario(usuario) }
@@ -122,7 +136,12 @@ private fun AdminUsuariosPageContentPreview() {
                     titulo = stringResource(R.string.users),
                     onVolver = {}
                 )
-                androidx.compose.foundation.layout.Spacer(Modifier.height(86.dp))
+                androidx.compose.foundation.layout.Spacer(Modifier.height(20.dp))
+                SearchComponente(
+                    query = "",
+                    onQueryChange = {},
+                    placeholder = stringResource(R.string.search_users)
+                )
             }
             items(
                 listOf(

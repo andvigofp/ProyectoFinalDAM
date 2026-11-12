@@ -45,6 +45,10 @@
     <string name="nav_new">Nueva</string>
     <string name="profile">Perfil</string>
     <string name="users">Usuarios</string>
+    <string name="search">Buscar</string>
+    <string name="search_users">Buscar usuarios…</string>
+    <string name="search_incidents">Buscar incidencias…</string>
+    <string name="no_search_results">No hay resultados para la búsqueda</string>
     <string name="admin_panel">Panel de administración</string>
     <string name="admin_nav_panel">Panel</string>
     <string name="manage_incidents">Gestionar incidencias  &gt;</string>

@@ -11,6 +11,15 @@ import com.example.helpdeskpro.modelo.IncidenciaDTO
  */
 data class HomeEmpleadoUiState(
     val incidencias: List<IncidenciaDTO> = emptyList(),
+    val searchQuery: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null
-)
+) {
+    val incidenciasFiltradas: List<IncidenciaDTO>
+        get() {
+            val query = normalizarTextoBusqueda(searchQuery)
+            return incidencias
+                .filter { normalizarTextoBusqueda(it.titulo).contains(query) }
+                .sortedBy { normalizarTextoBusqueda(it.titulo) }
+        }
+}

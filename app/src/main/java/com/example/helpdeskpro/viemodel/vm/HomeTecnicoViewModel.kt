@@ -34,6 +34,12 @@ class HomeTecnicoViewModel(
     private val _uiState = MutableStateFlow(HomeTecnicoUiState())
     val uiState: StateFlow<HomeTecnicoUiState> = _uiState.asStateFlow()
 
+    fun onSearchQueryChange(query: String) {
+        _uiState.update {
+            it.copy(searchQuery = query.filter { character -> character.isLetter() || character == ' ' })
+        }
+    }
+
     /**
      * Carga las incidencias visibles para el técnico.
      */

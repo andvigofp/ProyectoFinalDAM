@@ -26,6 +26,12 @@ class AdminUsuariosViewModel(
     private val _uiState = MutableStateFlow(AdminUsuariosUiState())
     val uiState: StateFlow<AdminUsuariosUiState> = _uiState.asStateFlow()
 
+    fun onSearchQueryChange(query: String) {
+        _uiState.update {
+            it.copy(searchQuery = query.filter { character -> character.isLetter() || character == ' ' })
+        }
+    }
+
     fun cargarUsuarios() {
         if (_uiState.value.isLoading || _uiState.value.usuarios.isNotEmpty()) return
 

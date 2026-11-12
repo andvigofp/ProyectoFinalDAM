@@ -33,6 +33,7 @@ import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeBotto
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeTab
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.IncidenciaCardComponent
 import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.BotonNuevaIncidenciaFlotanteComponent
+import com.example.helpdeskpro.vista.componentes.searchEmpleadoTecnicoAdminComponente.SearchComponente
 import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarComponent
 
 
@@ -103,6 +104,12 @@ fun HomeEmpleadoPage(
                 ToolbarComponent(titulo = stringResource(R.string.my_incidents))
 
                 Spacer(modifier = Modifier.height(20.dp))
+                SearchComponente(
+                    query = uiState.searchQuery,
+                    onQueryChange = homeEmpleadoViewModel::onSearchQueryChange,
+                    placeholder = stringResource(R.string.search_incidents)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
             when {
@@ -150,9 +157,26 @@ fun HomeEmpleadoPage(
                     }
                 }
 
+                uiState.incidenciasFiltradas.isEmpty() -> {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 48.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.no_search_results),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+                }
+
                 else -> {
                     items(
-                        items = uiState.incidencias,
+                        items = uiState.incidenciasFiltradas,
                         key = { incidencia -> incidencia.id }
                     ) { incidencia ->
 
