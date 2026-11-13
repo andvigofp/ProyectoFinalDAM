@@ -6,6 +6,7 @@
 --   Los valores de password_hash son hashes BCrypt de esa clave.
 --   En Spring Security, validar con BCryptPasswordEncoder.
 
+DROP DATABASE IF EXISTS helpdesk_pro;
 CREATE DATABASE helpdesk_pro
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
@@ -38,6 +39,21 @@ CREATE TABLE usuarios (
         FOREIGN KEY (rol_id) REFERENCES roles(id),
     CONSTRAINT fk_usuarios_departamentos
         FOREIGN KEY (departamento_id) REFERENCES departamentos(id)
+);
+
+CREATE TABLE recuperacion_contrasena (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id BIGINT NOT NULL,
+    codigo_hash VARCHAR(255) NOT NULL,
+    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_expiracion DATETIME NOT NULL,
+    fecha_uso DATETIME NULL,
+    intentos INT NOT NULL DEFAULT 0,
+    CONSTRAINT fk_recuperacion_contrasena_usuario
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+        ON DELETE CASCADE,
+    INDEX idx_recuperacion_contrasena_usuario (usuario_id),
+    INDEX idx_recuperacion_contrasena_expiracion (fecha_expiracion)
 );
 
 CREATE TABLE categorias (

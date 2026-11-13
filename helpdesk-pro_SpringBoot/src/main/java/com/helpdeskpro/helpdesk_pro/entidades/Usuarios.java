@@ -61,4 +61,7 @@ public class Usuarios {
 
     @OneToMany(mappedBy = "usuarios", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Historiales> historialesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<RecuperacionContrasena> recuperacionesContrasena = new ArrayList<>();
 }

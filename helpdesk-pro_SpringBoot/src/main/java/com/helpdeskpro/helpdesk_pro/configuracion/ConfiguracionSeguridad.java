@@ -41,6 +41,8 @@ public class ConfiguracionSeguridad {
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/api/auth/registro",
+                                "/api/auth/recuperar-contrasena",
+                                "/api/auth/restablecer-contrasena",
                                 "/api/catalogos/**")
                         .permitAll()
 
