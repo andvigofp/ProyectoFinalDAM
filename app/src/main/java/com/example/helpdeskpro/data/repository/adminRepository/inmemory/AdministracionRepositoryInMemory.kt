@@ -21,8 +21,14 @@ class AdministracionRepositoryInMemory(
         )
     }
 
-    override suspend fun obtenerUsuarios(): List<AdminUsuarioDTO> =
-        store.usuarios.values.map { it.admin }
+    override suspend fun obtenerUsuarios(busqueda: String): List<AdminUsuarioDTO> =
+        store.usuarios.values
+            .map { it.admin }
+            .filter {
+                normalizar("${it.nombre} ${it.apellidos} ${it.email}")
+                    .contains(normalizar(busqueda))
+            }
+            .sortedBy { normalizar("${it.nombre} ${it.apellidos}") }
 
     override fun siguienteUsuarioId(): Long = store.siguienteUsuarioId()
 
@@ -71,4 +77,9 @@ class AdministracionRepositoryInMemory(
             return usuario
         }
     }
+
+    private fun normalizar(texto: String): String =
+        java.text.Normalizer.normalize(texto.lowercase(Locale.ROOT), java.text.Normalizer.Form.NFD)
+            .replace(Regex("\\p{Mn}+"), "")
+            .trim()
 }

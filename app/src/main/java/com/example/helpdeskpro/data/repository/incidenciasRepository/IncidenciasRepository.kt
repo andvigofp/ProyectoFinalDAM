@@ -7,8 +7,14 @@ import com.example.helpdeskpro.modelo.IncidenciaDTO
 import com.example.helpdeskpro.modelo.NuevaIncidenciaDTO
 
 interface IncidenciasRepository {
-    suspend fun obtenerIncidenciasEmpleado(userId: String): List<IncidenciaDTO>
-    suspend fun obtenerIncidenciasTecnico(userId: String): List<HomeTecnicoDTO>
+    suspend fun obtenerIncidenciasEmpleado(
+        userId: String,
+        busqueda: String = ""
+    ): List<IncidenciaDTO>
+    suspend fun obtenerIncidenciasTecnico(
+        userId: String,
+        busqueda: String = ""
+    ): List<HomeTecnicoDTO>
     suspend fun obtenerDetalle(incidenciaId: Long): DetalleIncidenciaTecnicoDTO
     suspend fun crearIncidencia(userId: String, datos: NuevaIncidenciaDTO): Long
     suspend fun actualizarEstado(incidenciaId: Long, estado: String)

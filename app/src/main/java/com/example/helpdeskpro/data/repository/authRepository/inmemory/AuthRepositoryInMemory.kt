@@ -5,6 +5,7 @@ import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpde
 import com.example.helpdeskpro.modelo.CrearCuentaDTO
 import com.example.helpdeskpro.modelo.LoginDTO
 import com.example.helpdeskpro.modelo.RecuperarContrasenaDTO
+import com.example.helpdeskpro.modelo.RestablecerContrasenaDTO
 import com.example.helpdeskpro.modelo.SesionUsuarioDTO
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -63,5 +64,11 @@ class AuthRepositoryInMemory(
         ) {
             throw IllegalArgumentException("No existe una cuenta activa con ese correo.")
         }
+    }
+
+    override suspend fun restablecerContrasena(solicitud: RestablecerContrasenaDTO) {
+        throw IllegalStateException(
+            "El restablecimiento de contraseña requiere la conexión con el servidor."
+        )
     }
 }

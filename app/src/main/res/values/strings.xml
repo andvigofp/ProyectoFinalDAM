@@ -23,7 +23,7 @@
     <string name="confirm_create_user_message">¿Quieres crear este usuario?</string>
     <string name="confirm_save_user_message">¿Quieres guardar los cambios de este usuario?</string>
     <string name="confirm_save_profile_message">¿Quieres guardar los cambios de tu perfil?</string>
-    <string name="confirm_recovery_message">La recuperación necesita un servicio de correo configurado. ¿Quieres comprobar si está disponible?</string>
+    <string name="confirm_recovery_message">Te enviaremos un código de verificación a ese correo. ¿Quieres continuar?</string>
     <string name="confirm_save_incident_status_message">¿Quieres guardar el estado seleccionado?</string>
     <string name="confirm_register_solution_message">¿Quieres registrar esta solución?</string>
     <string name="confirm_logout_title">Cerrar sesión</string>
@@ -38,7 +38,7 @@
     <string name="incident_solution_registered_success">La solución se registró correctamente.</string>
     <string name="profile_updated_success">El perfil se actualizó exitosamente.</string>
     <string name="logout_success">Se cerró la sesión exitosamente.</string>
-    <string name="recovery_request_success">La solicitud se ha procesado correctamente.</string>
+    <string name="recovery_request_success">Si el correo está registrado, recibirás un código para recuperar la contraseña.</string>
     <string name="saving">Guardando…</string>
     <string name="back_to_login">‹ Volver al login</string>
     <string name="home">Inicio</string>
@@ -69,8 +69,14 @@
     <string name="forgot_password">¿Olvidaste tu contraseña?</string>
     <string name="create_account">Crear cuenta</string>
     <string name="recover_password">Recuperar contraseña</string>
-    <string name="recover_password_description">Introduce tu email y te enviaremos una contraseña temporal para recuperar el acceso a tu cuenta.</string>
-    <string name="send_temporary_password">Solicitar recuperación</string>
+    <string name="recover_password_description">Introduce tu email y te enviaremos un código para recuperar el acceso a tu cuenta.</string>
+    <string name="reset_password_description">Introduce tu email, el código recibido y la nueva contraseña.</string>
+    <string name="new_password">Nueva contraseña</string>
+    <string name="recovery_code">Código</string>
+    <string name="recovery_code_placeholder">Introduce el código recibido</string>
+    <string name="reset_password_action">Restablecer contraseña</string>
+    <string name="password_reset_success">La contraseña se ha actualizado correctamente. Ya puedes iniciar sesión.</string>
+    <string name="send_temporary_password">Solicitar código</string>
     <string name="sending">Enviando…</string>
 
     <!-- Crear cuenta -->
@@ -162,6 +168,8 @@
     <string name="error_password_required">Introduce tu contraseña</string>
     <string name="error_new_password_required">Introduce una contraseña</string>
     <string name="error_password_length">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="error_recovery_code">Introduce el código de 6 cifras que recibiste por email</string>
+    <string name="error_password_reset">No se pudo restablecer la contraseña.</string>
     <string name="error_role_required">Selecciona un rol</string>
     <string name="error_department_required">Selecciona un departamento</string>
     <string name="error_title_required">Introduce un título</string>

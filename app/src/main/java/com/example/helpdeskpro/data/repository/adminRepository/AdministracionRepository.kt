@@ -5,7 +5,7 @@ import com.example.helpdeskpro.modelo.HomeAdminDTO
 
 interface AdministracionRepository {
     suspend fun obtenerResumen(): HomeAdminDTO
-    suspend fun obtenerUsuarios(): List<AdminUsuarioDTO>
+    suspend fun obtenerUsuarios(busqueda: String = ""): List<AdminUsuarioDTO>
     suspend fun guardarUsuario(usuario: AdminUsuarioDTO, password: String? = null): AdminUsuarioDTO
     fun siguienteUsuarioId(): Long
 }

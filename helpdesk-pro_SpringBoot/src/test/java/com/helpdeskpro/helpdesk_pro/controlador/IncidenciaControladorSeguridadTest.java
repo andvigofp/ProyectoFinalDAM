@@ -15,6 +15,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,7 +37,7 @@ class IncidenciaControladorSeguridadTest {
 
     @Test
     void tecnicoPuedeListarTodasLasIncidencias() throws Exception {
-        when(incidenciaServicio.listarIncidencias())
+        when(incidenciaServicio.listarIncidencias(anyString()))
                 .thenReturn(List.of());
 
         mockMvc.perform(get("/api/incidencias")
@@ -46,7 +47,7 @@ class IncidenciaControladorSeguridadTest {
 
     @Test
     void administradorPuedeListarTodasLasIncidencias() throws Exception {
-        when(incidenciaServicio.listarIncidencias())
+        when(incidenciaServicio.listarIncidencias(anyString()))
                 .thenReturn(List.of());
 
         mockMvc.perform(get("/api/incidencias")
@@ -69,12 +70,15 @@ class IncidenciaControladorSeguridadTest {
 
     @Test
     void empleadoPuedeVerSusPropiasIncidencias() throws Exception {
-        when(incidenciaServicio.listarPorUsuario(3L))
+        when(incidenciaServicio.listarPorUsuario(eq(3L), anyString()))
                 .thenReturn(List.of());
 
         mockMvc.perform(get("/api/incidencias/usuario/3")
+                        .param("busqueda", "ordenador")
                         .with(user("carlos").roles("EMPLEADO")))
                 .andExpect(status().isOk());
+
+        verify(incidenciaServicio).listarPorUsuario(3L, "ordenador");
     }
 
     @Test

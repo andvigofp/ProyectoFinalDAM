@@ -7,6 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface HelpdeskApi {
     @POST("api/auth/login")
@@ -15,6 +16,16 @@ interface HelpdeskApi {
     @POST("api/auth/registro")
     suspend fun register(@Body request: RegisterRequest): UserResponse
 
+    @POST("api/auth/recuperar-contrasena")
+    suspend fun requestPasswordRecovery(
+        @Body request: PasswordRecoveryRequest
+    ): MessageResponse
+
+    @POST("api/auth/restablecer-contrasena")
+    suspend fun resetPassword(
+        @Body request: ResetPasswordRequest
+    ): MessageResponse
+
     @GET("api/auth/me")
     suspend fun currentUser(): UserResponse
 
@@ -22,13 +33,21 @@ interface HelpdeskApi {
     suspend fun updateCurrentUser(@Body request: ProfileRequest): UserResponse
 
     @GET("api/incidencias")
-    suspend fun incidents(): List<IncidentResponse>
+    suspend fun incidents(
+        @Query("busqueda") busqueda: String = ""
+    ): List<IncidentResponse>
 
     @GET("api/incidencias/usuario/{userId}")
-    suspend fun incidentsForUser(@Path("userId") userId: Long): List<IncidentResponse>
+    suspend fun incidentsForUser(
+        @Path("userId") userId: Long,
+        @Query("busqueda") busqueda: String = ""
+    ): List<IncidentResponse>
 
     @GET("api/incidencias/tecnico/{userId}")
-    suspend fun technicianIncidents(@Path("userId") userId: Long): List<IncidentResponse>
+    suspend fun technicianIncidents(
+        @Path("userId") userId: Long,
+        @Query("busqueda") busqueda: String = ""
+    ): List<IncidentResponse>
 
     @GET("api/incidencias/{id}")
     suspend fun incident(@Path("id") id: Long): IncidentResponse
@@ -58,7 +77,7 @@ interface HelpdeskApi {
     suspend fun history(@Path("incidentId") incidentId: Long): List<HistoryResponse>
 
     @GET("api/usuarios")
-    suspend fun users(): List<UserResponse>
+    suspend fun users(@Query("busqueda") busqueda: String = ""): List<UserResponse>
 
     @POST("api/usuarios")
     suspend fun createUser(@Body request: UserRequest): UserResponse
@@ -85,6 +104,13 @@ data class RegisterRequest(
     val telefono: String,
     val departamentoId: Long?
 )
+data class PasswordRecoveryRequest(val email: String)
+data class ResetPasswordRequest(
+    val email: String,
+    val codigo: String,
+    val nuevaContrasena: String
+)
+data class MessageResponse(val mensaje: String)
 data class ProfileRequest(
     val nombre: String,
     val apellidos: String,

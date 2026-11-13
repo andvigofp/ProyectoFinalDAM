@@ -237,7 +237,7 @@ class IncidenciaServicioTest {
     void empleadoSoloVeSusPropiasIncidencias() {
         when(seguridadServicio.obtenerUsuarioActual()).thenReturn(empleado);
         when(seguridadServicio.esEmpleado(empleado)).thenReturn(true);
-        when(incidenciasRepositorio.findByUsuarios_Id(3L))
+        when(incidenciasRepositorio.buscarPorUsuario(3L, ""))
                 .thenReturn(List.of(incidencia));
 
         List<IncidenciaResponseDTO> resultado =

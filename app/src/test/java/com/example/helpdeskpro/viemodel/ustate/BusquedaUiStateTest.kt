@@ -9,28 +9,25 @@ import org.junit.Test
 class BusquedaUiStateTest {
 
     @Test
-    fun usuariosFiltradosMatchNameAndSortAlphabetically() {
+    fun usuariosFiltradosUseServerFilteredOrder() {
         val state = AdminUsuariosUiState(
             usuarios = listOf(
-                usuario(1, "Zara", "López"),
                 usuario(2, "Ana", "Pérez"),
                 usuario(3, "Marta", "Díaz")
             ),
-            searchQuery = "a"
+            searchQuery = "Mart"
         )
 
         assertEquals(
-            listOf("Ana Pérez", "Marta Díaz", "Zara López"),
+            listOf("Ana Pérez", "Marta Díaz"),
             state.usuariosFiltrados.map { "${it.nombre} ${it.apellidos}" }
         )
     }
 
     @Test
-    fun employeeIncidentsMatchNamesIgnoringAccentsAndSortAlphabetically() {
+    fun employeeIncidentsUseServerFilteredOrder() {
         val state = HomeEmpleadoUiState(
             incidencias = listOf(
-                incidencia(1, "VPN no conecta en casa"),
-                incidencia(2, "No enciende el ordenador"),
                 incidencia(3, "Fallo de conexión")
             ),
             searchQuery = "conexion"
@@ -47,8 +44,7 @@ class BusquedaUiStateTest {
         val state = HomeTecnicoUiState(
             incidencias = listOf(
                 HomeTecnicoDTO(1, "VPN no conecta", "", "", "", "ABIERTA", ""),
-                HomeTecnicoDTO(2, "VPN no conecta en casa", "", "", "", "RESUELTA", ""),
-                HomeTecnicoDTO(3, "No inicia el equipo", "", "", "", "ABIERTA", "")
+                HomeTecnicoDTO(2, "VPN no conecta en casa", "", "", "", "RESUELTA", "")
             ),
             filtroEstado = "ABIERTA",
             searchQuery = "vpn"

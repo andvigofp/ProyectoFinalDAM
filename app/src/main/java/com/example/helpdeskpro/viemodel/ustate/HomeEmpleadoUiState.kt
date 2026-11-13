@@ -16,10 +16,5 @@ data class HomeEmpleadoUiState(
     val errorMessage: String? = null
 ) {
     val incidenciasFiltradas: List<IncidenciaDTO>
-        get() {
-            val query = normalizarTextoBusqueda(searchQuery)
-            return incidencias
-                .filter { normalizarTextoBusqueda(it.titulo).contains(query) }
-                .sortedBy { normalizarTextoBusqueda(it.titulo) }
-        }
+        get() = incidencias
 }

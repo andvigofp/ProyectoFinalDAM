@@ -21,27 +21,33 @@ import kotlinx.coroutines.coroutineScope
 class IncidenciasRepositoryRemote(
     private val api: HelpdeskApi
 ) : com.example.helpdeskpro.data.repository.incidenciasRepository.IncidenciasRepository {
-    override suspend fun obtenerIncidenciasEmpleado(userId: String): List<IncidenciaDTO> =
+    override suspend fun obtenerIncidenciasEmpleado(
+        userId: String,
+        busqueda: String
+    ): List<IncidenciaDTO> =
         apiCall {
             val employeeId = userId.toLongOrNull()
                 ?: throw IllegalArgumentException("El identificador del empleado no es válido.")
-            api.incidentsForUser(employeeId).map { it.toIncidentList() }
+            api.incidentsForUser(employeeId, busqueda).map { it.toIncidentList() }
         }
 
-    override suspend fun obtenerIncidenciasTecnico(userId: String): List<HomeTecnicoDTO> =
+    override suspend fun obtenerIncidenciasTecnico(
+        userId: String,
+        busqueda: String
+    ): List<HomeTecnicoDTO> =
         apiCall {
             val technicianId = userId.toLongOrNull()
                 ?: throw IllegalArgumentException("El identificador del técnico no es válido.")
             val currentUser = api.currentUser()
             val incidents = if (currentUser.rolNombre.toRoleCode() == "ADMINISTRADOR") {
-                api.incidents()
+                api.incidents(busqueda)
             } else {
                 if (currentUser.id != technicianId) {
                     throw IllegalArgumentException(
                         "El identificador no corresponde al técnico autenticado."
                     )
                 }
-                api.technicianIncidents(technicianId)
+                api.technicianIncidents(technicianId, busqueda)
             }
             incidents.map { it.toTechnicianList() }
         }

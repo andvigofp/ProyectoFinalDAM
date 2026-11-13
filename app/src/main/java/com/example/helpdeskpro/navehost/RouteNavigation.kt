@@ -12,6 +12,9 @@ sealed interface RouteNavigation {
     @Serializable object Login : RouteNavigation
     /** Destino para solicitar la recuperación de contraseña. */
     @Serializable object RecuperarContrasena : RouteNavigation
+    /** Destino para validar el código recibido y establecer una contraseña nueva. */
+    @Serializable
+    data class RestablecerContrasena(val email: String) : RouteNavigation
     /** Destino para registrar una cuenta. */
     @Serializable object CrearCuenta : RouteNavigation
 

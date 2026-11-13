@@ -20,8 +20,9 @@ public class UsuarioControlador {
 
     // GET /api/usuarios
     @GetMapping
-    public List<UsuarioResponseDTO> listar() {
-        return usuarioServicio.listarUsuarios();
+    public List<UsuarioResponseDTO> listar(
+            @RequestParam(defaultValue = "") String busqueda) {
+        return usuarioServicio.listarUsuarios(busqueda);
     }
 
     // GET /api/usuarios/{id}

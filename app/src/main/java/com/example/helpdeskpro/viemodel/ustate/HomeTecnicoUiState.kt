@@ -19,14 +19,11 @@ data class HomeTecnicoUiState(
 ) {
     val incidenciasFiltradas: List<HomeTecnicoDTO>
         get() {
-            val query = normalizarTextoBusqueda(searchQuery)
             return incidencias
                 .filter { incidencia ->
-                    (filtroEstado == null ||
-                        normalizarEstado(incidencia.estado) == normalizarEstado(filtroEstado)) &&
-                        normalizarTextoBusqueda(incidencia.titulo).contains(query)
+                    filtroEstado == null ||
+                        normalizarEstado(incidencia.estado) == normalizarEstado(filtroEstado)
                 }
-                .sortedBy { normalizarTextoBusqueda(it.titulo) }
         }
 
     private fun normalizarEstado(estado: String): String =

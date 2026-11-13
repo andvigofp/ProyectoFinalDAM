@@ -60,6 +60,25 @@ class InMemoryRepositoriesTest {
     }
 
     @Test
+    fun repositoriosEnMemoriaFiltranYOrdenanComoLaApi() {
+        runBlocking {
+            val store = InMemoryHelpdeskStore()
+            val incidencias = IncidenciasRepositoryInMemory(store)
+            val admin = AdministracionRepositoryInMemory(store)
+
+            assertEquals(
+                listOf("No enciende el ordenador"),
+                incidencias.obtenerIncidenciasEmpleado("1", "enciende")
+                    .map { it.titulo }
+            )
+            assertEquals(
+                listOf("Ana", "Luis", "Marta", "Pedro"),
+                admin.obtenerUsuarios().map { it.nombre }
+            )
+        }
+    }
+
+    @Test
     fun actualizarPerfilSincronizaLosDatosDeAutenticacion() {
         runBlocking {
             val store = InMemoryHelpdeskStore()

@@ -3,6 +3,8 @@ package com.helpdeskpro.helpdesk_pro.repositorio;
 
 import com.helpdeskpro.helpdesk_pro.entidades.Incidencias;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -12,8 +14,43 @@ public interface IncidenciasRepositorio
     // Incidencias creadas por un usuario
     List<Incidencias> findByUsuarios_Id(Long usuarioId);
 
+    @Query("""
+            SELECT i
+            FROM Incidencias i
+            WHERE i.usuarios.id = :usuarioId
+              AND (:busqueda = '' OR LOWER(i.titulo)
+                   LIKE LOWER(CONCAT('%', :busqueda, '%')) ESCAPE '!')
+            ORDER BY LOWER(i.titulo), i.id
+            """)
+    List<Incidencias> buscarPorUsuario(
+            @Param("usuarioId") Long usuarioId,
+            @Param("busqueda") String busqueda
+    );
+
     // Incidencias asignadas a un técnico
     List<Incidencias> findByTecnico_Id(Long tecnicoId);
+
+    @Query("""
+            SELECT i
+            FROM Incidencias i
+            WHERE i.tecnico.id = :tecnicoId
+              AND (:busqueda = '' OR LOWER(i.titulo)
+                   LIKE LOWER(CONCAT('%', :busqueda, '%')) ESCAPE '!')
+            ORDER BY LOWER(i.titulo), i.id
+            """)
+    List<Incidencias> buscarPorTecnico(
+            @Param("tecnicoId") Long tecnicoId,
+            @Param("busqueda") String busqueda
+    );
+
+    @Query("""
+            SELECT i
+            FROM Incidencias i
+            WHERE :busqueda = '' OR LOWER(i.titulo)
+                  LIKE LOWER(CONCAT('%', :busqueda, '%')) ESCAPE '!'
+            ORDER BY LOWER(i.titulo), i.id
+            """)
+    List<Incidencias> buscarTodas(@Param("busqueda") String busqueda);
 
     // Incidencias filtradas por estado
     List<Incidencias> findByEstados_Id(Long estadoId);

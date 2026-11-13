@@ -14,19 +14,28 @@ import java.util.Locale
 class IncidenciasRepositoryInMemory(
     private val store: InMemoryHelpdeskStore
 ) : IncidenciasRepository {
-    override suspend fun obtenerIncidenciasEmpleado(userId: String): List<IncidenciaDTO> {
+    override suspend fun obtenerIncidenciasEmpleado(
+        userId: String,
+        busqueda: String
+    ): List<IncidenciaDTO> {
         val id = userId.toLongOrNull() ?: return emptyList()
         return store.incidencias.values
             .filter { it.creadorId == id }
             .map { incidencia ->
                 incidencia.detalle.toIncidenciaDTO()
             }
+            .filter { normalizar(it.titulo).contains(normalizar(busqueda)) }
+            .sortedBy { normalizar(it.titulo) }
     }
 
-    override suspend fun obtenerIncidenciasTecnico(userId: String): List<HomeTecnicoDTO> =
-        store.incidencias.values.map { incidencia ->
-            incidencia.detalle.toHomeTecnicoDTO()
-        }
+    override suspend fun obtenerIncidenciasTecnico(
+        userId: String,
+        busqueda: String
+    ): List<HomeTecnicoDTO> =
+        store.incidencias.values
+            .map { incidencia -> incidencia.detalle.toHomeTecnicoDTO() }
+            .filter { normalizar(it.titulo).contains(normalizar(busqueda)) }
+            .sortedBy { normalizar(it.titulo) }
 
     override suspend fun obtenerDetalle(incidenciaId: Long): DetalleIncidenciaTecnicoDTO =
         store.incidencias[incidenciaId]?.detalle
@@ -94,4 +103,9 @@ class IncidenciasRepositoryInMemory(
         estado = estado,
         creador = creador
     )
+
+    private fun normalizar(texto: String): String =
+        java.text.Normalizer.normalize(texto.lowercase(Locale.ROOT), java.text.Normalizer.Form.NFD)
+            .replace(Regex("\\p{Mn}+"), "")
+            .trim()
 }

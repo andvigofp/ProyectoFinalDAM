@@ -9,13 +9,5 @@ data class AdminUsuariosUiState(
     val errorMessage: String? = null
 ) {
     val usuariosFiltrados: List<AdminUsuarioDTO>
-        get() {
-            val query = normalizarTextoBusqueda(searchQuery)
-            return usuarios
-                .filter { usuario ->
-                    normalizarTextoBusqueda("${usuario.nombre} ${usuario.apellidos}")
-                        .contains(query)
-                }
-                .sortedBy { normalizarTextoBusqueda("${it.nombre} ${it.apellidos}") }
-        }
+        get() = usuarios
 }

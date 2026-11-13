@@ -11,6 +11,8 @@ import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpde
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.viemodel.ustate.HomeTecnicoUiState
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,24 +35,36 @@ class HomeTecnicoViewModel(
 
     private val _uiState = MutableStateFlow(HomeTecnicoUiState())
     val uiState: StateFlow<HomeTecnicoUiState> = _uiState.asStateFlow()
+    private var loadJob: Job? = null
 
     fun onSearchQueryChange(query: String) {
+        if (query == _uiState.value.searchQuery) return
         _uiState.update {
-            it.copy(searchQuery = query.filter { character -> character.isLetter() || character == ' ' })
+            it.copy(
+                searchQuery = query,
+                incidencias = emptyList(),
+                isLoading = true,
+                errorMessage = null
+            )
         }
+        cargarIncidencias(query, debounce = true)
     }
 
     /**
      * Carga las incidencias visibles para el técnico.
      */
     fun cargarIncidencias() {
-        if (_uiState.value.isLoading) return
+        cargarIncidencias(_uiState.value.searchQuery, debounce = false)
+    }
 
-        viewModelScope.launch {
+    private fun cargarIncidencias(busqueda: String, debounce: Boolean) {
+        loadJob?.cancel()
+        loadJob = viewModelScope.launch {
+            if (debounce) delay(300)
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
             try {
-                val incidencias = incidenciasRepository.obtenerIncidenciasTecnico(userId)
+                val incidencias = incidenciasRepository.obtenerIncidenciasTecnico(userId, busqueda)
                 _uiState.update {
                     it.copy(
                         incidencias = incidencias,

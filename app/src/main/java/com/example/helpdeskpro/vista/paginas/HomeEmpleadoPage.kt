@@ -149,7 +149,13 @@ fun HomeEmpleadoPage(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = stringResource(R.string.no_incidents),
+                                text = stringResource(
+                                    if (uiState.searchQuery.isBlank()) {
+                                        R.string.no_incidents
+                                    } else {
+                                        R.string.no_search_results
+                                    }
+                                ),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 style = MaterialTheme.typography.bodyLarge
                             )

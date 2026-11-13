@@ -6,7 +6,7 @@ import com.helpdeskpro.helpdesk_pro.entidades.Usuarios;
 import com.helpdeskpro.helpdesk_pro.excepciones.SolicitudIncorrectaException;
 import com.helpdeskpro.helpdesk_pro.repositorio.RecuperacionContrasenaRepositorio;
 import com.helpdeskpro.helpdesk_pro.repositorio.UsuariosRepositorio;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,6 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 
 @Service
-@AllArgsConstructor
 @Transactional
 public class RecuperacionContrasenaServicio {
 
@@ -27,6 +26,20 @@ public class RecuperacionContrasenaServicio {
     private final UsuariosRepositorio usuariosRepositorio;
     private final PasswordEncoder passwordEncoder;
     private final CorreoServicio correoServicio;
+    private final String destinatarioPruebas;
+
+    public RecuperacionContrasenaServicio(
+            RecuperacionContrasenaRepositorio recuperacionRepositorio,
+            UsuariosRepositorio usuariosRepositorio,
+            PasswordEncoder passwordEncoder,
+            CorreoServicio correoServicio,
+            @Value("${app.mail.recuperacion-destinatario:}") String destinatarioPruebas) {
+        this.recuperacionRepositorio = recuperacionRepositorio;
+        this.usuariosRepositorio = usuariosRepositorio;
+        this.passwordEncoder = passwordEncoder;
+        this.correoServicio = correoServicio;
+        this.destinatarioPruebas = destinatarioPruebas;
+    }
 
     public void solicitarRecuperacion(String email) {
         validarTexto(email, "El email es obligatorio");
@@ -48,7 +61,10 @@ public class RecuperacionContrasenaServicio {
                                     .intentos(0)
                                     .build();
                     recuperacionRepositorio.save(recuperacion);
-                    correoServicio.enviarCodigoRecuperacion(usuario.getEmail(), codigo);
+                    String destinatario = destinatarioPruebas.isBlank()
+                            ? usuario.getEmail()
+                            : destinatarioPruebas.trim();
+                    correoServicio.enviarCodigoRecuperacion(destinatario, codigo);
                 });
     }
 

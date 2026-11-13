@@ -57,9 +57,7 @@ fun SearchComponente(
             Spacer(modifier = Modifier.width(12.dp))
             BasicTextField(
                 value = query,
-                onValueChange = { value ->
-                    onQueryChange(value.filter { it.isLetter() || it == ' ' })
-                },
+                onValueChange = onQueryChange,
                 modifier = Modifier.weight(1f),
                 singleLine = true,
                 textStyle = MaterialTheme.typography.bodyMedium.copy(

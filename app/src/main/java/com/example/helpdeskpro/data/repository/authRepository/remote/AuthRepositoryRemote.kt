@@ -1,9 +1,11 @@
 package com.example.helpdeskpro.data.repository.authRepository.remote
 
-import com.example.helpdeskpro.data.remote.ApiException
 import com.example.helpdeskpro.data.remote.HelpdeskApi
+import com.example.helpdeskpro.data.remote.ApiException
 import com.example.helpdeskpro.data.remote.LoginRequest
+import com.example.helpdeskpro.data.remote.PasswordRecoveryRequest
 import com.example.helpdeskpro.data.remote.RegisterRequest
+import com.example.helpdeskpro.data.remote.ResetPasswordRequest
 import com.example.helpdeskpro.data.remote.SessionTokenStore
 import com.example.helpdeskpro.data.remote.apiCall
 import com.example.helpdeskpro.data.remote.catalogKey
@@ -11,6 +13,7 @@ import com.example.helpdeskpro.data.remote.toRoleCode
 import com.example.helpdeskpro.modelo.CrearCuentaDTO
 import com.example.helpdeskpro.modelo.LoginDTO
 import com.example.helpdeskpro.modelo.RecuperarContrasenaDTO
+import com.example.helpdeskpro.modelo.RestablecerContrasenaDTO
 import com.example.helpdeskpro.modelo.SesionUsuarioDTO
 
 class AuthRepositoryRemote(
@@ -51,8 +54,20 @@ class AuthRepositoryRemote(
     }
 
     override suspend fun recuperarContrasena(solicitud: RecuperarContrasenaDTO) {
-        throw ApiException(
-            "La recuperación por correo aún no está disponible: el servidor no tiene un servicio de envío de email configurado."
-        )
+        apiCall {
+            api.requestPasswordRecovery(PasswordRecoveryRequest(solicitud.email))
+        }
+    }
+
+    override suspend fun restablecerContrasena(solicitud: RestablecerContrasenaDTO) {
+        apiCall {
+            api.resetPassword(
+                ResetPasswordRequest(
+                    email = solicitud.email,
+                    codigo = solicitud.codigo,
+                    nuevaContrasena = solicitud.nuevaContrasena
+                )
+            )
+        }
     }
 }

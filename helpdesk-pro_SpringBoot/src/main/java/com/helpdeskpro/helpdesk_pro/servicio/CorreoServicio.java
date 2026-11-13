@@ -6,9 +6,13 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class CorreoServicio {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CorreoServicio.class);
 
     private final JavaMailSender mailSender;
     private final String remitente;
@@ -37,6 +41,7 @@ public class CorreoServicio {
         try {
             mailSender.send(mensaje);
         } catch (MailException excepcion) {
+            LOGGER.error("Falló el envío SMTP del código de recuperación.", excepcion);
             throw new ErrorEnvioCorreoException(
                     "No se pudo enviar el correo de recuperación.",
                     excepcion

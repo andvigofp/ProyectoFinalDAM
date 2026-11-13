@@ -30,8 +30,8 @@ public class UsuarioServicio {
 
     // Obtener todos los usuarios
     @Transactional(readOnly = true)
-    public List<UsuarioResponseDTO> listarUsuarios() {
-        return usuariosRepositorio.findAll()
+    public List<UsuarioResponseDTO> listarUsuarios(String busqueda) {
+        return usuariosRepositorio.buscarOrdenados(escaparBusqueda(busqueda))
                 .stream()
                 .map(this::convertirAResponseDTO)
                 .toList();
@@ -181,5 +181,15 @@ public class UsuarioServicio {
                 )
                 .fechaRegistro(usuario.getFechaRegistro())
                 .build();
+    }
+
+    private String escaparBusqueda(String busqueda) {
+        if (busqueda == null || busqueda.isBlank()) {
+            return "";
+        }
+        return busqueda.trim()
+                .replace("!", "!!")
+                .replace("%", "!%")
+                .replace("_", "!_");
     }
 }

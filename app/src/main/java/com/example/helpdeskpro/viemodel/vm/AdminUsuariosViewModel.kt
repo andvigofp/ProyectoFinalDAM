@@ -12,6 +12,8 @@ import com.example.helpdeskpro.R
 import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import com.example.helpdeskpro.viemodel.ustate.AdminUsuariosUiState
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,22 +27,34 @@ class AdminUsuariosViewModel(
 ) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(AdminUsuariosUiState())
     val uiState: StateFlow<AdminUsuariosUiState> = _uiState.asStateFlow()
+    private var loadJob: Job? = null
 
     fun onSearchQueryChange(query: String) {
+        if (query == _uiState.value.searchQuery) return
         _uiState.update {
-            it.copy(searchQuery = query.filter { character -> character.isLetter() || character == ' ' })
+            it.copy(
+                searchQuery = query,
+                usuarios = emptyList(),
+                isLoading = true,
+                errorMessage = null
+            )
         }
+        cargarUsuarios(query, debounce = true)
     }
 
     fun cargarUsuarios() {
-        if (_uiState.value.isLoading || _uiState.value.usuarios.isNotEmpty()) return
+        cargarUsuarios(_uiState.value.searchQuery, debounce = false)
+    }
 
-        viewModelScope.launch {
+    private fun cargarUsuarios(busqueda: String, debounce: Boolean) {
+        loadJob?.cancel()
+        loadJob = viewModelScope.launch {
+            if (debounce) delay(300)
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             try {
                 _uiState.update {
                     it.copy(
-                        usuarios = administracionRepository.obtenerUsuarios(),
+                        usuarios = administracionRepository.obtenerUsuarios(busqueda),
                         isLoading = false,
                         errorMessage = null
                     )
@@ -79,6 +93,7 @@ class AdminUsuariosViewModel(
                     state.copy(usuarios = usuarios, errorMessage = null)
                 }
                 onGuardado()
+                cargarUsuarios()
             } catch (exception: kotlinx.coroutines.CancellationException) {
                 throw exception
             } catch (exception: Exception) {

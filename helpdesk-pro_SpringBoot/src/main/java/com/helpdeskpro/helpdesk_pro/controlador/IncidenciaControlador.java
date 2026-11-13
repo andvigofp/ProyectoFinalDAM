@@ -21,8 +21,9 @@ public class IncidenciaControlador {
 
     // GET /api/incidencias
     @GetMapping
-    public List<IncidenciaResponseDTO> listar() {
-        return incidenciaServicio.listarIncidencias();
+    public List<IncidenciaResponseDTO> listar(
+            @RequestParam(defaultValue = "") String busqueda) {
+        return incidenciaServicio.listarIncidencias(busqueda);
     }
 
     // GET /api/incidencias/{id}
@@ -34,17 +35,19 @@ public class IncidenciaControlador {
     // GET /api/incidencias/usuario/{usuarioId}
     @GetMapping("/usuario/{usuarioId}")
     public List<IncidenciaResponseDTO> listarPorUsuario(
-            @PathVariable Long usuarioId) {
+            @PathVariable Long usuarioId,
+            @RequestParam(defaultValue = "") String busqueda) {
 
-        return incidenciaServicio.listarPorUsuario(usuarioId);
+        return incidenciaServicio.listarPorUsuario(usuarioId, busqueda);
     }
 
     // GET /api/incidencias/tecnico/{tecnicoId}
     @GetMapping("/tecnico/{tecnicoId}")
     public List<IncidenciaResponseDTO> listarPorTecnico(
-            @PathVariable Long tecnicoId) {
+            @PathVariable Long tecnicoId,
+            @RequestParam(defaultValue = "") String busqueda) {
 
-        return incidenciaServicio.listarPorTecnico(tecnicoId);
+        return incidenciaServicio.listarPorTecnico(tecnicoId, busqueda);
     }
 
     // GET /api/incidencias/estado/{estadoId}

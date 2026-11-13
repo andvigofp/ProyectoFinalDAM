@@ -30,14 +30,15 @@ public class IncidenciaServicio {
     // Obtener todas las incidencias.
     // Un empleado solo ve las suyas; técnico y administrador ven todas.
     @Transactional(readOnly = true)
-    public List<IncidenciaResponseDTO> listarIncidencias() {
+    public List<IncidenciaResponseDTO> listarIncidencias(String busqueda) {
         Usuarios actual = seguridadServicio.obtenerUsuarioActual();
+        String textoBusqueda = escaparBusqueda(busqueda);
 
         if (seguridadServicio.esEmpleado(actual)) {
-            return listarPorUsuario(actual.getId());
+            return listarPorUsuario(actual.getId(), busqueda);
         }
 
-        return incidenciasRepositorio.findAll()
+        return incidenciasRepositorio.buscarTodas(textoBusqueda)
                 .stream()
                 .map(this::convertirAResponseDTO)
                 .toList();
@@ -54,6 +55,13 @@ public class IncidenciaServicio {
     // Incidencias creadas por un usuario (el empleado solo las suyas)
     @Transactional(readOnly = true)
     public List<IncidenciaResponseDTO> listarPorUsuario(Long usuarioId) {
+        return listarPorUsuario(usuarioId, "");
+    }
+
+    @Transactional(readOnly = true)
+    public List<IncidenciaResponseDTO> listarPorUsuario(
+            Long usuarioId,
+            String busqueda) {
         Usuarios actual = seguridadServicio.obtenerUsuarioActual();
 
         if (seguridadServicio.esEmpleado(actual)
@@ -63,7 +71,9 @@ public class IncidenciaServicio {
             );
         }
 
-        return incidenciasRepositorio.findByUsuarios_Id(usuarioId)
+        return incidenciasRepositorio.buscarPorUsuario(
+                        usuarioId,
+                        escaparBusqueda(busqueda))
                 .stream()
                 .map(this::convertirAResponseDTO)
                 .toList();
@@ -72,6 +82,13 @@ public class IncidenciaServicio {
     // Incidencias asignadas a un técnico
     @Transactional(readOnly = true)
     public List<IncidenciaResponseDTO> listarPorTecnico(Long tecnicoId) {
+        return listarPorTecnico(tecnicoId, "");
+    }
+
+    @Transactional(readOnly = true)
+    public List<IncidenciaResponseDTO> listarPorTecnico(
+            Long tecnicoId,
+            String busqueda) {
         Usuarios actual = seguridadServicio.obtenerUsuarioActual();
         if (seguridadServicio.esTecnico(actual)
                 && !actual.getId().equals(tecnicoId)) {
@@ -85,7 +102,9 @@ public class IncidenciaServicio {
                     "No tienes permiso para consultar incidencias por técnico"
             );
         }
-        return incidenciasRepositorio.findByTecnico_Id(tecnicoId)
+        return incidenciasRepositorio.buscarPorTecnico(
+                        tecnicoId,
+                        escaparBusqueda(busqueda))
                 .stream()
                 .map(this::convertirAResponseDTO)
                 .toList();
@@ -293,6 +312,16 @@ public class IncidenciaServicio {
                 .orElseThrow(() -> new RecursoNoEncontradoException(
                         "No existe el usuario con ID " + id
                 ));
+    }
+
+    private String escaparBusqueda(String busqueda) {
+        if (busqueda == null || busqueda.isBlank()) {
+            return "";
+        }
+        return busqueda.trim()
+                .replace("!", "!!")
+                .replace("%", "!%")
+                .replace("_", "!_");
     }
 
     private Categorias buscarCategoria(Long id) {

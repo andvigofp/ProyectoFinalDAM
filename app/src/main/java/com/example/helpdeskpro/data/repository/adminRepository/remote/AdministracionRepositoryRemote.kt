@@ -17,8 +17,8 @@ class AdministracionRepositoryRemote(
         api.incidents().toAdminSummary()
     }
 
-    override suspend fun obtenerUsuarios(): List<AdminUsuarioDTO> =
-        apiCall { api.users().map { it.toAdminUsuario() } }
+    override suspend fun obtenerUsuarios(busqueda: String): List<AdminUsuarioDTO> =
+        apiCall { api.users(busqueda).map { it.toAdminUsuario() } }
 
     override fun siguienteUsuarioId(): Long = 0L
 

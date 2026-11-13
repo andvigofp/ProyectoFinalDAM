@@ -87,14 +87,13 @@ fun AdminUsuariosPage(
                 }
                 uiState.usuarios.isEmpty() -> item {
                     Text(
-                        text = stringResource(R.string.no_admin_users),
-                        modifier = Modifier.fillMaxWidth().padding(top = 36.dp),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                uiState.usuariosFiltrados.isEmpty() -> item {
-                    Text(
-                        text = stringResource(R.string.no_search_results),
+                        text = stringResource(
+                            if (uiState.searchQuery.isBlank()) {
+                                R.string.no_admin_users
+                            } else {
+                                R.string.no_search_results
+                            }
+                        ),
                         modifier = Modifier.fillMaxWidth().padding(top = 36.dp),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

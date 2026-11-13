@@ -185,11 +185,11 @@ private fun HomeTecnicoPageContent(
                         Text(
                             text = stringResource(
                                 if (uiState.incidencias.isEmpty()) {
-                                    R.string.no_assigned_incidents
-                                } else if (uiState.searchQuery.isNotBlank() &&
-                                    uiState.incidenciasFiltradas.isEmpty()
-                                ) {
-                                    R.string.no_search_results
+                                    if (uiState.searchQuery.isBlank()) {
+                                        R.string.no_assigned_incidents
+                                    } else {
+                                        R.string.no_search_results
+                                    }
                                 } else {
                                     R.string.no_incidents_for_filter
                                 }

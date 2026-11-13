@@ -12,6 +12,8 @@ import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpde
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.viemodel.ustate.HomeEmpleadoUiState
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,11 +36,19 @@ class HomeEmpleadoViewModel(
 
     private val _uiState = MutableStateFlow(HomeEmpleadoUiState())
     val uiState: StateFlow<HomeEmpleadoUiState> = _uiState.asStateFlow()
+    private var loadJob: Job? = null
 
     fun onSearchQueryChange(query: String) {
+        if (query == _uiState.value.searchQuery) return
         _uiState.update {
-            it.copy(searchQuery = query.filter { character -> character.isLetter() || character == ' ' })
+            it.copy(
+                searchQuery = query,
+                incidencias = emptyList(),
+                isLoading = true,
+                errorMessage = null
+            )
         }
+        cargarIncidencias(query, debounce = true)
     }
 
     /**
@@ -46,11 +56,13 @@ class HomeEmpleadoViewModel(
      * Evita lanzar varias cargas simultáneas.
      */
     fun cargarIncidencias() {
+        cargarIncidencias(_uiState.value.searchQuery, debounce = false)
+    }
 
-        if (_uiState.value.isLoading) return
-
-        viewModelScope.launch {
-
+    private fun cargarIncidencias(busqueda: String, debounce: Boolean) {
+        loadJob?.cancel()
+        loadJob = viewModelScope.launch {
+            if (debounce) delay(300)
             _uiState.update {
                 it.copy(
                     isLoading = true,
@@ -59,7 +71,7 @@ class HomeEmpleadoViewModel(
             }
 
             try {
-                val incidencias = incidenciasRepository.obtenerIncidenciasEmpleado(userId)
+                val incidencias = incidenciasRepository.obtenerIncidenciasEmpleado(userId, busqueda)
 
                 _uiState.update {
                     it.copy(
