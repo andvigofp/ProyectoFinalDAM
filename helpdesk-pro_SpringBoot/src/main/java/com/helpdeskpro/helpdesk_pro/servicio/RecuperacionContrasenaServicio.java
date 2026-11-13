@@ -26,6 +26,7 @@ public class RecuperacionContrasenaServicio {
     private final RecuperacionContrasenaRepositorio recuperacionRepositorio;
     private final UsuariosRepositorio usuariosRepositorio;
     private final PasswordEncoder passwordEncoder;
+    private final CorreoServicio correoServicio;
 
     public void solicitarRecuperacion(String email) {
         validarTexto(email, "El email es obligatorio");
@@ -47,6 +48,7 @@ public class RecuperacionContrasenaServicio {
                                     .intentos(0)
                                     .build();
                     recuperacionRepositorio.save(recuperacion);
+                    correoServicio.enviarCodigoRecuperacion(usuario.getEmail(), codigo);
                 });
     }
 

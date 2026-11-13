@@ -49,6 +49,18 @@ public class ManejadorExcepcionesGlobal {
         );
     }
 
+    @ExceptionHandler(ErrorEnvioCorreoException.class)
+    public ResponseEntity<ErrorRespuestaDTO> manejarErrorEnvioCorreo(
+            ErrorEnvioCorreoException ex,
+            HttpServletRequest request) {
+
+        return crearRespuesta(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+    }
+
     private ResponseEntity<ErrorRespuestaDTO> crearRespuesta(
             HttpStatus estado,
             String mensaje,
