@@ -43,7 +43,14 @@ public class ConfiguracionSeguridad {
                                 "/api/auth/registro",
                                 "/api/auth/recuperar-contrasena",
                                 "/api/auth/restablecer-contrasena",
-                                "/api/catalogos/**")
+                                "/api/catalogos/**",
+
+                                // Swagger
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/api-helpdesk-pro",
+                                "/api-helpdesk-pro/**",
+                                "/v3/api-docs/**")
                         .permitAll()
 
                         // Gestión de usuarios: solo administrador
