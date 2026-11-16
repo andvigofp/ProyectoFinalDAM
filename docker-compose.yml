@@ -20,7 +20,9 @@ services:
       MYSQL_ROOT_PASSWORD: "abc123."
       TZ: Europe/Madrid
     ports:
-      - "3306:3306"
+      # Se usa 3307 en el PC porque el 3306 ya lo ocupa tu MySQL local.
+      # Dentro de la red de Docker el backend sigue usando el 3306.
+      - "3307:3306"
     volumes:
       # Datos persistentes: la BD no se pierde al parar los contenedores
       - mysql_data:/var/lib/mysql

@@ -109,6 +109,19 @@ CREATE TABLE historiales (
         FOREIGN KEY (incidencia_id) REFERENCES incidencias(id)
 );
 
+-- Códigos de recuperación de contraseña (se guarda el hash, nunca el código en claro).
+CREATE TABLE recuperacion_contrasena (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id BIGINT NOT NULL,
+    codigo_hash VARCHAR(255) NOT NULL,
+    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_expiracion DATETIME NOT NULL,
+    fecha_uso DATETIME NULL,
+    intentos INT NOT NULL DEFAULT 0,
+    CONSTRAINT fk_recuperacion_usuario
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
 -- Datos iniciales
 INSERT INTO roles (nombre) VALUES
 ('Administrador'),

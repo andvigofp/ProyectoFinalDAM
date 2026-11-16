@@ -5,6 +5,9 @@
 --   Todos utilizan la contraseña: Helpdesk123!
 --   Los valores de password_hash son hashes BCrypt de esa clave.
 --   En Spring Security, validar con BCryptPasswordEncoder.
+--
+-- IMPORTANTE: este script elimina la base de datos helpdesk_pro
+-- si ya existe y la vuelve a crear desde cero.
 
 DROP DATABASE IF EXISTS helpdesk_pro;
 CREATE DATABASE helpdesk_pro
@@ -39,21 +42,6 @@ CREATE TABLE usuarios (
         FOREIGN KEY (rol_id) REFERENCES roles(id),
     CONSTRAINT fk_usuarios_departamentos
         FOREIGN KEY (departamento_id) REFERENCES departamentos(id)
-);
-
-CREATE TABLE recuperacion_contrasena (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id BIGINT NOT NULL,
-    codigo_hash VARCHAR(255) NOT NULL,
-    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    fecha_expiracion DATETIME NOT NULL,
-    fecha_uso DATETIME NULL,
-    intentos INT NOT NULL DEFAULT 0,
-    CONSTRAINT fk_recuperacion_contrasena_usuario
-        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
-        ON DELETE CASCADE,
-    INDEX idx_recuperacion_contrasena_usuario (usuario_id),
-    INDEX idx_recuperacion_contrasena_expiracion (fecha_expiracion)
 );
 
 CREATE TABLE categorias (
@@ -119,6 +107,19 @@ CREATE TABLE historiales (
         FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
     CONSTRAINT fk_historiales_incidencia
         FOREIGN KEY (incidencia_id) REFERENCES incidencias(id)
+);
+
+-- Códigos de recuperación de contraseña (se guarda el hash, nunca el código en claro).
+CREATE TABLE recuperacion_contrasena (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id BIGINT NOT NULL,
+    codigo_hash VARCHAR(255) NOT NULL,
+    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_expiracion DATETIME NOT NULL,
+    fecha_uso DATETIME NULL,
+    intentos INT NOT NULL DEFAULT 0,
+    CONSTRAINT fk_recuperacion_usuario
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
 -- Datos iniciales
@@ -190,3 +191,10 @@ INSERT INTO historiales (accion, usuario_id, incidencia_id) VALUES
 ('Incidencia asignada al técnico', 1, 2),
 ('Prioridad actualizada', 2, 3),
 ('Solución registrada', 2, 4);
+
+-- NOTAS:
+-- 1. Adjuntos y etiquetas no se crean porque están fuera del MVP inicial.
+-- 2. La aplicación Spring Boot debe validar los permisos por rol y por creador
+--    de la incidencia; las claves foráneas por sí solas no aplican esos permisos.
+-- 3. Si el inicio de sesión no acepta una cuenta de prueba, verifica que el hash
+--    BCrypt corresponda realmente a Helpdesk123! y que se use BCryptPasswordEncoder.
