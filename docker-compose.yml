@@ -1,0 +1,71 @@
+# ==========================================================
+# HelpDesk Pro - Docker Compose
+# Levanta la base de datos MySQL y el backend Spring Boot.
+#
+# Uso:
+#   docker compose up --build        -> construye y arranca todo
+#   docker compose up -d             -> arranca en segundo plano
+#   docker compose down              -> para los contenedores
+#   docker compose down -v           -> para y BORRA los datos de la BD
+# ==========================================================
+
+services:
+
+  # ---------- Base de datos MySQL ----------
+  mysql:
+    image: mysql:8.4
+    container_name: helpdesk-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "abc123."
+      TZ: Europe/Madrid
+    ports:
+      - "3306:3306"
+    volumes:
+      # Datos persistentes: la BD no se pierde al parar los contenedores
+      - mysql_data:/var/lib/mysql
+      # Script de inicialización: solo se ejecuta la PRIMERA vez
+      # (cuando el volumen está vacío). Crea la BD helpdesk_pro y sus datos.
+      - ./helpdesk-pro_SpringBoot/helpdesk_pro_mvp.sql:/docker-entrypoint-initdb.d/helpdesk_pro_mvp.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pabc123."]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - helpdesk-net
+
+  # ---------- Backend Spring Boot ----------
+  backend:
+    build: ./helpdesk-pro_SpringBoot
+    image: helpdesk-pro-backend:latest
+    container_name: helpdesk-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy   # Espera a que MySQL esté listo
+    environment:
+      # Dentro de Docker la BD no está en localhost, sino en el servicio "mysql"
+      DB_URL: "jdbc:mysql://mysql:3306/helpdesk_pro?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false"
+      DB_USER: "root"
+      DB_PASSWORD: "abc123."
+      JWT_SECRETO: "helpdesk-pro-clave-de-desarrollo-2026-cambiar-en-produccion"
+      JWT_DURACION_MS: "86400000"
+      # Correo (Gmail): se toman del fichero .env si existe, si no quedan vacíos
+      GMAIL_USERNAME: "${GMAIL_USERNAME:-}"
+      GMAIL_APP_PASSWORD: "${GMAIL_APP_PASSWORD:-}"
+      GMAIL_FROM: "${GMAIL_FROM:-}"
+      GMAIL_RECOVERY_TO: "${GMAIL_RECOVERY_TO:-}"
+      TZ: Europe/Madrid
+    ports:
+      - "8080:8080"   # La app Android del emulador sigue usando http://10.0.2.2:8080/
+    networks:
+      - helpdesk-net
+
+volumes:
+  mysql_data:
+
+networks:
+  helpdesk-net:
+    driver: bridge

@@ -1,0 +1,16 @@
+# Lo que NO se copia dentro de la imagen de Docker
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+mvnw
+mvnw.cmd
+.idea/
+*.iml
+.git/
+.gitignore
+.gitattributes
+HELP.md
+*.md
+helpdesk_pro_mvp.sql
+Dockerfile
+docker-compose*.yml
