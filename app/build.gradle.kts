@@ -21,6 +21,11 @@ android {
         val apiBaseUrl = providers.gradleProperty("helpdeskApiBaseUrl")
             .getOrElse("http://10.0.2.2:8080/")
         buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
+        // URL de respaldo: si la principal no responde (p. ej. Docker local
+        // apagado), la app reintenta automáticamente contra la nube.
+        val apiFallbackUrl = providers.gradleProperty("helpdeskApiFallbackUrl")
+            .getOrElse("https://proyectofinaldam-production-0311c21f.up.railway.app/")
+        buildConfigField("String", "API_FALLBACK_URL", "\"$apiFallbackUrl\"")
         manifestPlaceholders["usesCleartextTraffic"] = "false"
     }
 

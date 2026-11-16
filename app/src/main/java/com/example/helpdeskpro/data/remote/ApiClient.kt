@@ -14,6 +14,7 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 
@@ -69,6 +70,29 @@ class HelpdeskApiClient(context: Context) {
         .baseUrl(BuildConfig.API_BASE_URL)
         .client(
             OkHttpClient.Builder()
+                // Respaldo automático: si la URL principal no responde
+                // (error de red, no de la API), reintenta contra la URL
+                // de fallback (la nube). Así la misma app funciona en local
+                // con Docker y sin él contra Railway.
+                .addInterceptor(Interceptor { chain ->
+                    val request = chain.request()
+                    try {
+                        chain.proceed(request)
+                    } catch (exception: IOException) {
+                        val fallback = BuildConfig.API_FALLBACK_URL
+                            .takeIf { it.isNotBlank() }
+                            ?.let(HttpUrl::parse)
+                        if (fallback == null || request.url().toString().startsWith(fallback.toString())) {
+                            throw exception
+                        }
+                        val retryUrl = request.url().newBuilder()
+                            .scheme(fallback.scheme())
+                            .host(fallback.host())
+                            .port(fallback.port())
+                            .build()
+                        chain.proceed(request.newBuilder().url(retryUrl).build())
+                    }
+                })
                 .addInterceptor(Interceptor { chain ->
                     val request = chain.request().newBuilder().apply {
                         tokenStore.get()?.let { header("Authorization", "Bearer $it") }

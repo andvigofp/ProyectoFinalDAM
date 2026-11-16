@@ -29,7 +29,7 @@ habilitado:
 .\gradlew.bat :app:installDebug -PhelpdeskApiBaseUrl=http://172.20.10.6:8080/
 ```
 
-Sustituye `192.168.1.10` por la IP correspondiente. La barra final es necesaria.
+Sustituye `172.20.10.6` por la IP correspondiente. La barra final es necesaria.
 El tráfico HTTP sin cifrar solo está habilitado para la variante de depuración;
 release requiere HTTPS. El token JWT se guarda localmente y se elimina al cerrar
 sesión. El alta pública siempre crea cuentas con rol Empleado.
@@ -43,6 +43,7 @@ Las búsquedas de incidencias y usuarios se filtran y ordenan alfabéticamente e
 la API con el parámetro opcional `busqueda`; por ejemplo,
 `GET /api/incidencias/usuario/3?busqueda=correo` o
 `GET /api/usuarios?busqueda=ana`.
+
 ## Despliegue con Docker
 
 El backend y la base de datos se pueden levantar juntos en contenedores con un
@@ -94,13 +95,108 @@ docker logs helpdesk-mysql       # Ver los logs de la base de datos
 docker compose ps                # Estado de los contenedores
 ```
 
-### Subir la imagen a Docker Hub
+### Imagen publicada en Docker Hub
 
-Con la sesión iniciada (`docker login` o desde Docker Desktop):
+La imagen del backend está publicada en Docker Hub como
+`andriu987fp/helpdesk-pro-backend:latest`. Para descargarla y usarla:
 
 ```powershell
-docker tag helpdesk-pro-backend:latest TU_USUARIO/helpdesk-pro-backend:latest
-docker push TU_USUARIO/helpdesk-pro-backend:latest
+docker pull andriu987fp/helpdesk-pro-backend:latest
 ```
 
-Sustituye `TU_USUARIO` por tu nombre de usuario de Docker Hub.
+Para volver a publicarla tras hacer cambios (con la sesión iniciada en
+Docker Desktop o con `docker login`):
+
+```powershell
+docker compose build backend
+docker tag helpdesk-pro-backend:latest andriu987fp/helpdesk-pro-backend:latest
+docker push andriu987fp/helpdesk-pro-backend:latest
+```
+
+## Despliegue en la nube con Railway
+
+El proyecto está desplegado en **Railway** (https://railway.app) con dos
+servicios: la base de datos MySQL y el backend Spring Boot construido con el
+mismo `Dockerfile` del proyecto. La app Android se conecta por HTTPS.
+
+### Arquitectura del despliegue
+
+| Servicio | Qué es | Dirección |
+|---|---|---|
+| `MySQL` | Imagen oficial `mysql:8.4` con volumen persistente | Privada: `mysql.railway.internal:3306` (solo accesible dentro de Railway). Pública: proxy TCP que genera Railway (`*.proxy.rlwy.net:puerto`) |
+| `ProyectoFinalDAM` | Backend Spring Boot, construido desde el repo de GitHub con el `Dockerfile` | `https://proyectofinaldam-production-0311c21f.up.railway.app` |
+
+### Pasos realizados para desplegar
+
+1. **Crear el proyecto** en Railway → *New Project*.
+2. **Añadir MySQL**: *Add Service → Database → MySQL*. Railway crea el
+   contenedor con un volumen persistente y genera las credenciales.
+3. **Cargar los datos**: en el servicio MySQL, apartado *Networking*, se activa
+   el **proxy TCP público** y desde el PC se ejecuta el script de siembra:
+
+   ```powershell
+   mysql -h <host-proxy> -P <puerto-proxy> -uroot -p<contraseña> < helpdesk_pro_mvp.sql
+   ```
+
+4. **Añadir el backend**: *Add Service → GitHub Repo → ProyectoFinalDAM*.
+   En *Settings → Source* hay que indicar el **Root Directory**:
+   `helpdesk-pro_SpringBoot` (ahí están el `Dockerfile` y el `pom.xml`).
+5. **Variables de entorno del backend** (*Variables → Raw Editor*):
+
+   ```
+   DB_URL=jdbc:mysql://mysql.railway.internal:3306/helpdesk_pro?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false
+   DB_USER=root
+   DB_PASSWORD=<contraseña que genera Railway para MySQL>
+   JWT_SECRETO=<clave secreta larga para firmar los JWT>
+   JWT_DURACION_MS=86400000
+   ```
+
+   `mysql.railway.internal` es la red privada de Railway: el backend habla con
+   MySQL sin salir a internet y sin gastar ancho de banda público.
+6. **Dominio HTTPS**: *Settings → Networking → Generate Domain* (puerto `8080`).
+   Railway asigna un dominio `*.up.railway.app` con certificado HTTPS.
+
+Railway reconstruye y redespliega el backend automáticamente con cada
+`git push` a la rama conectada.
+
+### Compilar la app Android contra la nube
+
+```powershell
+.\gradlew.bat :app:installDebug "-PhelpdeskApiBaseUrl=https://proyectofinaldam-production-0311c21f.up.railway.app/"
+```
+
+Al ser HTTPS, esta misma URL sirve también para la variante release y para
+dispositivos físicos sin configuración extra.
+
+### Respaldo automático local ↔ nube
+
+La app lleva integrada una **URL de respaldo**: primero intenta conectar con la
+URL principal y, si no responde (error de red), reintenta automáticamente contra
+Railway. Por defecto la principal es `http://10.0.2.2:8080/` (backend local) y
+el respaldo es el dominio de Railway, configurable con la propiedad de Gradle
+`helpdeskApiFallbackUrl`. Así la misma APK funciona con el backend en local
+cuando Docker está encendido y contra la nube cuando está apagado.
+
+### APK de demostración (demo sin internet)
+
+Para una demo sin Wi-Fi (por ejemplo en el instituto), se usa el hotspot del
+móvil como red local y el PC como servidor:
+
+1. Activa el hotspot del móvil y conecta el PC a esa red.
+2. En el PC, ejecuta `ipconfig` y anota la **Dirección IPv4** (192.168.x.x).
+3. Arranca el backend: `docker compose up -d`.
+4. Genera la APK con `.\generar-apk-demo.ps1` (pide la IP del PC y compila
+   `helpdeskpro-demo.apk` en la raíz del proyecto).
+5. Instala la APK en el móvil de la demo.
+
+La app intentará primero contra el PC (`http://IP-DEL-PC:8080`) y, si el móvil
+tiene datos, saltará a Railway como respaldo automático.
+
+### Notas
+
+- El plan de prueba de Railway tiene crédito limitado (unos 23 días / 5 $);
+  pasado ese tiempo hay que pasar a plan de pago o migrar a otro servidor
+  (por ejemplo una VM de Oracle Cloud, siempre gratuita, con el script
+  `deploy-oracle.sh`).
+- Las contraseñas reales (MySQL, JWT) **no** se guardan en este repositorio:
+  viven únicamente en las variables de entorno de Railway.
