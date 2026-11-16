@@ -49,7 +49,7 @@ services:
         condition: service_healthy   # Espera a que MySQL esté listo
     environment:
       # Dentro de Docker la BD no está en localhost, sino en el servicio "mysql"
-      DB_URL: "jdbc:mysql://mysql:3306/helpdesk_pro?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false"
+      DB_URL: "jdbc:mysql://mysql:3306/helpdesk_pro?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8"
       DB_USER: "root"
       DB_PASSWORD: "abc123."
       JWT_SECRETO: "helpdesk-pro-clave-de-desarrollo-2026-cambiar-en-produccion"

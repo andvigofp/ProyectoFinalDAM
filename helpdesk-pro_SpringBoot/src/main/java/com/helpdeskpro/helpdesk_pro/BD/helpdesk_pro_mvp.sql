@@ -14,6 +14,7 @@ CREATE DATABASE helpdesk_pro
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 USE helpdesk_pro;
+SET NAMES utf8mb4;
 
 -- ROLES: solo los tres definidos para el MVP.
 CREATE TABLE roles (
