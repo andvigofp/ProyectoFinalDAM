@@ -37,7 +37,7 @@ sesión. El alta pública siempre crea cuentas con rol Empleado.
 La recuperación de contraseña envía un código al correo de una cuenta existente
 y activa. La API responde con un mensaje genérico incluso si no encuentra la
 cuenta; si no llega el correo, comprueba también Spam y los logs de Spring Boot
-por errores SMTP.
+por errores de envío.
 
 Las búsquedas de incidencias y usuarios se filtran y ordenan alfabéticamente en
 la API con el parámetro opcional `busqueda`; por ejemplo,
@@ -80,9 +80,13 @@ Esto levanta dos contenedores:
 - **Variables de entorno**: `application.properties` toma la conexión de
   `DB_URL`, `DB_USER` y `DB_PASSWORD`, con valores por defecto para desarrollo
   local, así que el arranque con `mvnw spring-boot:run` sigue funcionando igual.
-  Las credenciales de correo (`GMAIL_USERNAME`, `GMAIL_APP_PASSWORD`,
-  `GMAIL_FROM`, `GMAIL_RECOVERY_TO`) se pueden poner en un fichero `.env` junto
-  al `docker-compose.yml` y Compose las inyecta al backend.
+  Las credenciales de correo se pueden poner en un fichero `.env` junto al
+  `docker-compose.yml` y Compose las inyecta al backend. Con Resend configura
+  `RESEND_API_KEY` y `RESEND_FROM`; el remitente debe pertenecer a un dominio
+  verificado en Resend. Con Gmail SMTP configura `GMAIL_USERNAME`,
+  `GMAIL_APP_PASSWORD` y, opcionalmente, `GMAIL_FROM`. Si hay una clave de
+  Resend, el backend prioriza Resend y no necesita credenciales SMTP; si no,
+  usa SMTP.
 
 La app Android no necesita cambios: el emulador sigue usando
 `http://10.0.2.2:8080/`, que el contenedor publica en el puerto 8080 del equipo.
@@ -149,10 +153,16 @@ mismo `Dockerfile` del proyecto. La app Android se conecta por HTTPS.
    DB_PASSWORD=<contraseña que genera Railway para MySQL>
    JWT_SECRETO=<clave secreta larga para firmar los JWT>
    JWT_DURACION_MS=86400000
+   RESEND_API_KEY=<clave API de Resend>
+   RESEND_FROM=Helpdesk Pro <no-reply@tu-dominio-verificado>
    ```
 
    `mysql.railway.internal` es la red privada de Railway: el backend habla con
-   MySQL sin salir a internet y sin gastar ancho de banda público.
+   MySQL sin salir a internet y sin gastar ancho de banda público. Verifica el
+   dominio del remitente en Resend antes de usarlo. `GMAIL_FROM` solo se utiliza
+   con SMTP; no es el remitente de Resend. No configures `GMAIL_RECOVERY_TO` en
+   producción, ya que redirige todos los códigos de recuperación a una sola
+   dirección.
 6. **Dominio HTTPS**: *Settings → Networking → Generate Domain* (puerto `8080`).
    Railway asigna un dominio `*.up.railway.app` con certificado HTTPS.
 

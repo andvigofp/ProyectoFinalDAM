@@ -29,7 +29,7 @@ public class CorreoServicio {
             JavaMailSender mailSender,
             @Value("${app.mail.remitente:}") String remitenteGmail,
             @Value("${resend.api.key:}") String resendApiKey,
-            @Value("${app.mail.resend-remitente:onboarding@resend.dev}") String remitenteResend) {
+            @Value("${app.mail.resend.remitente:onboarding@resend.dev}") String remitenteResend) {
         this.mailSender = mailSender;
         this.remitenteGmail = remitenteGmail;
         this.resendApiKey = resendApiKey;
