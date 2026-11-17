@@ -34,5 +34,8 @@ google-services.json
 *.hprof
 
 # Environment files
+.env
+.env.*
+!.env.example
 *.emp
 *.emp.example

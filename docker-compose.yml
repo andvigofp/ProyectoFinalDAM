@@ -1,4 +1,4 @@
-# ==========================================================
+﻿# ==========================================================
 # HelpDesk Pro - Docker Compose
 # Levanta la base de datos MySQL y el backend Spring Boot.
 #
@@ -26,8 +26,8 @@ services:
     volumes:
       # Datos persistentes: la BD no se pierde al parar los contenedores
       - mysql_data:/var/lib/mysql
-      # Script de inicialización: solo se ejecuta la PRIMERA vez
-      # (cuando el volumen está vacío). Crea la BD helpdesk_pro y sus datos.
+      # Script de inicializaciÃ³n: solo se ejecuta la PRIMERA vez
+      # (cuando el volumen estÃ¡ vacÃ­o). Crea la BD helpdesk_pro y sus datos.
       - ./helpdesk-pro_SpringBoot/helpdesk_pro_mvp.sql:/docker-entrypoint-initdb.d/helpdesk_pro_mvp.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pabc123."]
@@ -46,18 +46,17 @@ services:
     restart: unless-stopped
     depends_on:
       mysql:
-        condition: service_healthy   # Espera a que MySQL esté listo
+        condition: service_healthy   # Espera a que MySQL estÃ© listo
     environment:
-      # Dentro de Docker la BD no está en localhost, sino en el servicio "mysql"
+      # Dentro de Docker la BD no estÃ¡ en localhost, sino en el servicio "mysql"
       DB_URL: "jdbc:mysql://mysql:3306/helpdesk_pro?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8"
       DB_USER: "root"
       DB_PASSWORD: "abc123."
       JWT_SECRETO: "helpdesk-pro-clave-de-desarrollo-2026-cambiar-en-produccion"
       JWT_DURACION_MS: "86400000"
-      # Correo: Resend se prioriza cuando RESEND_API_KEY está configurada.
+      # Correo: Resend se prioriza cuando RESEND_API_KEY estÃ¡ configurada.
       GMAIL_USERNAME: "${GMAIL_USERNAME:-}"
       GMAIL_APP_PASSWORD: "${GMAIL_APP_PASSWORD:-}"
-      GMAIL_FROM: "${GMAIL_FROM:-}"
       GMAIL_RECOVERY_TO: "${GMAIL_RECOVERY_TO:-}"
       RESEND_API_KEY: "${RESEND_API_KEY:-}"
       RESEND_FROM: "${RESEND_FROM:-onboarding@resend.dev}"
