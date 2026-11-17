@@ -54,11 +54,13 @@ services:
       DB_PASSWORD: "abc123."
       JWT_SECRETO: "helpdesk-pro-clave-de-desarrollo-2026-cambiar-en-produccion"
       JWT_DURACION_MS: "86400000"
-      # Correo (Gmail): se toman del fichero .env si existe, si no quedan vacíos
+     # Correo (Gmail / Resend): se toman del fichero .env si existe, si no quedan vacíos
       GMAIL_USERNAME: "${GMAIL_USERNAME:-}"
       GMAIL_APP_PASSWORD: "${GMAIL_APP_PASSWORD:-}"
       GMAIL_FROM: "${GMAIL_FROM:-}"
       GMAIL_RECOVERY_TO: "${GMAIL_RECOVERY_TO:-}"
+      RESEND_API_KEY: "${RESEND_API_KEY:-}"
+      RESEND_FROM: "${RESEND_FROM:-}"
       TZ: Europe/Madrid
     ports:
       - "8080:8080"   # La app Android del emulador sigue usando http://10.0.2.2:8080/
