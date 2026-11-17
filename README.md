@@ -83,10 +83,13 @@ Esto levanta dos contenedores:
   Las credenciales de correo se pueden poner en un fichero `.env` junto al
   `docker-compose.yml` y Compose las inyecta al backend. Con Resend configura
   `RESEND_API_KEY` y `RESEND_FROM`; el remitente debe pertenecer a un dominio
-  verificado en Resend. Con Gmail SMTP configura `GMAIL_USERNAME`,
+  verificado en Resend. Si no defines `RESEND_FROM`, Docker usa
+  `onboarding@resend.dev`, que Resend limita a destinatarios autorizados en tu
+  cuenta. Con Gmail SMTP configura `GMAIL_USERNAME`,
   `GMAIL_APP_PASSWORD` y, opcionalmente, `GMAIL_FROM`. Si hay una clave de
   Resend, el backend prioriza Resend y no necesita credenciales SMTP; si no,
-  usa SMTP.
+  usa SMTP. Tras cambiar variables en `.env`, recrea el backend con
+  `docker compose up -d --force-recreate backend`.
 
 La app Android no necesita cambios: el emulador sigue usando
 `http://10.0.2.2:8080/`, que el contenedor publica en el puerto 8080 del equipo.
