@@ -34,7 +34,7 @@ public class CorreoServicio {
         this.remitenteGmail = remitenteGmail;
         this.resendApiKey = resendApiKey;
         this.remitenteResend = remitenteResend;
-        this.restClient = RestClient.create("https://resend.com");
+        this.restClient = RestClient.create("https://api.resend.com");
     }
 
     public void enviarCodigoRecuperacion(String destinatario, String codigo) {
