@@ -57,13 +57,17 @@ public class CorreoServicio {
             );
 
             try {
-                restClient.post()
+                RespuestaResend respuesta = restClient.post()
                         .uri("/emails")
                         .header("Authorization", "Bearer " + resendApiKey)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(body)
                         .retrieve()
-                        .toBodilessEntity();
+                        .body(RespuestaResend.class);
+                LOGGER.info(
+                        "Resend aceptó el correo de recuperación. ID: {}",
+                        respuesta == null ? "no disponible" : respuesta.id()
+                );
             } catch (RestClientException excepcion) {
                 LOGGER.error("Falló el envío por Resend del código de recuperación.", excepcion);
                 throw new ErrorEnvioCorreoException(
@@ -90,5 +94,8 @@ public class CorreoServicio {
                     excepcion
             );
         }
+    }
+
+    private record RespuestaResend(String id) {
     }
 }
