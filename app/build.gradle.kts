@@ -26,7 +26,7 @@ android {
         val apiFallbackUrl = providers.gradleProperty("helpdeskApiFallbackUrl")
             .getOrElse("https://proyectofinaldam-production-0311c21f.up.railway.app/")
         buildConfigField("String", "API_FALLBACK_URL", "\"$apiFallbackUrl\"")
-        manifestPlaceholders["usesCleartextTraffic"] = "false"
+        manifestPlaceholders["usesCleartextTraffic"] = "true"
     }
 
     buildTypes {
