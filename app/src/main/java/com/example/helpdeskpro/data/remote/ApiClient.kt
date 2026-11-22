@@ -14,6 +14,7 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -74,23 +75,36 @@ class HelpdeskApiClient(context: Context) {
                 // (error de red, no de la API), reintenta contra la URL
                 // de fallback (la nube). Así la misma app funciona en local
                 // con Docker y sin él contra Railway.
+                // - La URL principal solo espera unos segundos a conectar
+                //   (por defecto OkHttp espera 10 s).
+                // - Si la principal falla, durante un rato todas las peticiones
+                //   van directas al respaldo, sin volver a esperar cada vez.
                 .addInterceptor(Interceptor { chain ->
                     val request = chain.request()
+                    val fallback = BuildConfig.API_FALLBACK_URL
+                        .takeIf { it.isNotBlank() }
+                        ?.let(HttpUrl::parse)
+                    if (fallback == null || request.url().host() == fallback.host()) {
+                        return@Interceptor chain.proceed(request)
+                    }
+                    val retryRequest = request.newBuilder()
+                        .url(
+                            request.url().newBuilder()
+                                .scheme(fallback.scheme())
+                                .host(fallback.host())
+                                .port(fallback.port())
+                                .build()
+                        )
+                        .build()
+                    if (System.currentTimeMillis() < usarRespaldoHasta) {
+                        return@Interceptor chain.proceed(retryRequest)
+                    }
                     try {
-                        chain.proceed(request)
+                        chain.withConnectTimeout(ESPERA_PRINCIPAL_SEGUNDOS, TimeUnit.SECONDS)
+                            .proceed(request)
                     } catch (exception: IOException) {
-                        val fallback = BuildConfig.API_FALLBACK_URL
-                            .takeIf { it.isNotBlank() }
-                            ?.let(HttpUrl::parse)
-                        if (fallback == null || request.url().toString().startsWith(fallback.toString())) {
-                            throw exception
-                        }
-                        val retryUrl = request.url().newBuilder()
-                            .scheme(fallback.scheme())
-                            .host(fallback.host())
-                            .port(fallback.port())
-                            .build()
-                        chain.proceed(request.newBuilder().url(retryUrl).build())
+                        usarRespaldoHasta = System.currentTimeMillis() + DURACION_RESPALDO_MS
+                        chain.proceed(retryRequest)
                     }
                 })
                 .addInterceptor(Interceptor { chain ->
@@ -104,6 +118,18 @@ class HelpdeskApiClient(context: Context) {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(HelpdeskApi::class.java)
+
+    private companion object {
+        /** Segundos que se espera a conectar con la URL principal (Docker local). */
+        const val ESPERA_PRINCIPAL_SEGUNDOS = 2
+
+        /** Tiempo que se usa directamente el respaldo tras un fallo de la principal. */
+        const val DURACION_RESPALDO_MS = 60_000L
+
+        /** Hasta cuándo (en ms) las peticiones van directas a la URL de respaldo. */
+        @Volatile
+        var usarRespaldoHasta = 0L
+    }
 }
 
 class ApiException(message: String, cause: Throwable? = null) : Exception(message, cause)
