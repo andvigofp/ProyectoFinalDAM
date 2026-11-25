@@ -54,7 +54,9 @@ class AdminUsuariosViewModel(
             try {
                 _uiState.update {
                     it.copy(
-                        usuarios = administracionRepository.obtenerUsuarios(busqueda),
+                        // Los administradores no se muestran: no se pueden editar desde aquí
+                        usuarios = administracionRepository.obtenerUsuarios(busqueda)
+                            .sinAdministradores(),
                         isLoading = false,
                         errorMessage = null
                     )
@@ -90,7 +92,7 @@ class AdminUsuariosViewModel(
                     } else {
                         state.usuarios + usuarioGuardado
                     }
-                    state.copy(usuarios = usuarios, errorMessage = null)
+                    state.copy(usuarios = usuarios.sinAdministradores(), errorMessage = null)
                 }
                 onGuardado()
                 cargarUsuarios()
@@ -108,6 +110,10 @@ class AdminUsuariosViewModel(
     }
 
     fun siguienteId(): Long = administracionRepository.siguienteUsuarioId()
+
+    /** Quita de la lista a los usuarios con rol de administrador. */
+    private fun List<AdminUsuarioDTO>.sinAdministradores(): List<AdminUsuarioDTO> =
+        filter { it.rol != "ADMINISTRADOR" }
 }
 
 class AdminUsuariosViewModelFactory(
