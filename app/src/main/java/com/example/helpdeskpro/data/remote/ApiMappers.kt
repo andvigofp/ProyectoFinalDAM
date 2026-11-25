@@ -2,6 +2,7 @@ package com.example.helpdeskpro.data.remote
 
 import com.example.helpdeskpro.modelo.AdminUsuarioDTO
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO
+import com.example.helpdeskpro.modelo.DetalleIncidenciaEmpleadoDTO
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.modelo.HistorialIncidenciaDTO
 import com.example.helpdeskpro.modelo.HomeAdminDTO
@@ -76,6 +77,21 @@ internal fun IncidentResponse.toDetail(
         )
     }
 )
+
+internal fun IncidentResponse.toEmployeeDetail(
+    comments: List<CommentResponse>,
+    history: List<HistoryResponse>
+): DetalleIncidenciaEmpleadoDTO {
+    val detail = toDetail(comments, history)
+    return DetalleIncidenciaEmpleadoDTO(
+        id = detail.id,
+        titulo = detail.titulo,
+        descripcion = detail.descripcion,
+        estado = detail.estado,
+        comentarios = detail.comentarios,
+        historial = detail.historial
+    )
+}
 
 internal fun List<IncidentResponse>.toAdminSummary(): HomeAdminDTO {
     val states = map { it.estadoNombre.toStateCode() }

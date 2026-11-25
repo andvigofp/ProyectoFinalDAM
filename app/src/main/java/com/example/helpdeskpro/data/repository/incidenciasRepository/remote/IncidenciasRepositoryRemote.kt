@@ -6,11 +6,13 @@ import com.example.helpdeskpro.data.remote.IncidentRequest
 import com.example.helpdeskpro.data.remote.apiCall
 import com.example.helpdeskpro.data.remote.catalogKey
 import com.example.helpdeskpro.data.remote.toDetail
+import com.example.helpdeskpro.data.remote.toEmployeeDetail
 import com.example.helpdeskpro.data.remote.toIncidentList
 import com.example.helpdeskpro.data.remote.toRoleCode
 import com.example.helpdeskpro.data.remote.toStateCode
 import com.example.helpdeskpro.data.remote.toTechnicianList
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO
+import com.example.helpdeskpro.modelo.DetalleIncidenciaEmpleadoDTO
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.modelo.HomeTecnicoDTO
 import com.example.helpdeskpro.modelo.IncidenciaDTO
@@ -62,6 +64,17 @@ class IncidenciasRepositoryRemote(
             }
         }
 
+    override suspend fun obtenerDetalleEmpleado(
+        incidenciaId: Long
+    ): DetalleIncidenciaEmpleadoDTO = apiCall {
+        coroutineScope {
+            val detail = async { api.incident(incidenciaId) }
+            val comments = async { api.comments(incidenciaId) }
+            val history = async { api.history(incidenciaId) }
+            detail.await().toEmployeeDetail(comments.await(), history.await())
+        }
+    }
+
     override suspend fun crearIncidencia(userId: String, datos: NuevaIncidenciaDTO): Long =
         apiCall {
             val categories = api.catalog("categorias")
@@ -104,13 +117,18 @@ class IncidenciasRepositoryRemote(
 
     override suspend fun agregarComentario(
         incidenciaId: Long,
-        comentario: ComentarioIncidenciaDTO
+        comentario: ComentarioIncidenciaDTO,
+        userId: String?
     ) {
         apiCall {
+            val usuarioId = userId?.toLongOrNull()
+                ?: if (userId == null) null else {
+                    throw IllegalArgumentException("El identificador del usuario no es válido.")
+                }
             api.addComment(
                 CommentRequest(
                     mensaje = comentario.texto,
-                    usuarioId = null,
+                    usuarioId = usuarioId,
                     incidenciaId = incidenciaId
                 )
             )

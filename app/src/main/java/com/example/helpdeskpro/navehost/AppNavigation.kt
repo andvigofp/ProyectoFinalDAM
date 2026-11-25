@@ -26,6 +26,8 @@ import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
 import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModelFactory
+import com.example.helpdeskpro.viemodel.vm.DetalleIncidenciaEmpleadoViewModel
+import com.example.helpdeskpro.viemodel.vm.DetalleIncidenciaEmpleadoViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.EditarPerfilViewModel
 import com.example.helpdeskpro.viemodel.vm.EditarPerfilViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.HomeEmpleadoViewModel
@@ -49,6 +51,7 @@ import com.example.helpdeskpro.vista.paginas.AdminCrearUsuarioCrearPage
 import com.example.helpdeskpro.vista.paginas.AdminUsuariosPage
 import com.example.helpdeskpro.vista.paginas.CrearCuentaPage
 import com.example.helpdeskpro.vista.paginas.DetalleIncideciaTecnicoPage
+import com.example.helpdeskpro.vista.paginas.DetalleIncidenciaEmpleadoPage
 import com.example.helpdeskpro.vista.paginas.EditarPerfilPage
 import com.example.helpdeskpro.vista.paginas.HomeEmpleadoPage
 import com.example.helpdeskpro.vista.paginas.HomeAdminPage
@@ -104,6 +107,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 is RouteNavigation.AdminUsuarios,
                 is RouteNavigation.AdminUsuario,
                 is RouteNavigation.NuevaIncidencia,
+                is RouteNavigation.DetalleIncidenciaEmpleado,
                 is RouteNavigation.DetalleIncidenciaTecnico,
                 is RouteNavigation.Perfil,
                 is RouteNavigation.EditarPerfil -> navController.navigate(route)
@@ -236,16 +240,38 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 },
                 onIncidenciaClick = { incidencia ->
                     navigate(
-                        RouteNavigation.DetalleIncidenciaTecnico(
+                        RouteNavigation.DetalleIncidenciaEmpleado(
                             userId = route.userId,
-                            incidenciaId = incidencia.id,
-                            titulo = incidencia.titulo,
-                            categoria = incidencia.categoria,
-                            prioridad = incidencia.prioridad,
-                            fecha = incidencia.fecha,
-                            estado = incidencia.estado
+                            incidenciaId = incidencia.id
                         )
                     )
+                }
+            )
+        }
+
+        // ---------- DETALLE DE INCIDENCIA DEL EMPLEADO ----------
+        composable<RouteNavigation.DetalleIncidenciaEmpleado> { backStackEntry ->
+            val route = backStackEntry.toRoute<RouteNavigation.DetalleIncidenciaEmpleado>()
+            val detalleViewModel: DetalleIncidenciaEmpleadoViewModel = viewModel(
+                factory = DetalleIncidenciaEmpleadoViewModelFactory(
+                    application = application,
+                    userId = route.userId,
+                    incidenciaId = route.incidenciaId,
+                    incidenciasRepository = incidenciasRepository
+                )
+            )
+
+            DetalleIncidenciaEmpleadoPage(
+                viewModel = detalleViewModel,
+                onVolver = { navController.popBackStack() },
+                onInicio = {
+                    navigate(RouteNavigation.HomeEmpleado(route.userId))
+                },
+                onNueva = {
+                    navigate(RouteNavigation.NuevaIncidencia(route.userId))
+                },
+                onPerfil = {
+                    navigate(RouteNavigation.Perfil(route.userId))
                 }
             )
         }
@@ -400,38 +426,19 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 when {
                     route.desdeHomeAdmin ->
                         navController.getBackStackEntry<RouteNavigation.AdminIncidencias>()
-                    route.desdeHomeTecnico ->
-                        navController.getBackStackEntry<RouteNavigation.HomeTecnico>()
-                    else -> navController.getBackStackEntry<RouteNavigation.HomeEmpleado>()
+                    else -> navController.getBackStackEntry<RouteNavigation.HomeTecnico>()
                 }
             }
-            val technicianHomeViewModel = if (route.desdeHomeAdmin || route.desdeHomeTecnico) {
-                viewModel<HomeTecnicoViewModel>(
-                    viewModelStoreOwner = incidentListOwner,
-                    factory = HomeTecnicoViewModelFactory(
-                        application,
-                        route.userId,
-                        incidenciasRepository
-                    )
+            val technicianHomeViewModel = viewModel<HomeTecnicoViewModel>(
+                viewModelStoreOwner = incidentListOwner,
+                factory = HomeTecnicoViewModelFactory(
+                    application,
+                    route.userId,
+                    incidenciasRepository
                 )
-            } else {
-                null
-            }
-            val employeeHomeViewModel = if (!route.desdeHomeAdmin && !route.desdeHomeTecnico) {
-                viewModel<HomeEmpleadoViewModel>(
-                    viewModelStoreOwner = incidentListOwner,
-                    factory = HomeEmpleadoViewModelFactory(
-                        application,
-                        route.userId,
-                        incidenciasRepository
-                    )
-                )
-            } else {
-                null
-            }
+            )
             val refreshIncidentList = {
-                technicianHomeViewModel?.cargarIncidencias()
-                employeeHomeViewModel?.cargarIncidencias()
+                technicianHomeViewModel.cargarIncidencias()
             }
             val detalleViewModel: DetalleEmpleadoViewModel = viewModel(
                 factory = DetalleEmpleadoViewModelFactory(
@@ -452,17 +459,15 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                     refreshIncidentList()
                     if (route.desdeHomeAdmin) {
                         navigate(RouteNavigation.AdminIncidencias(route.userId))
-                    } else if (route.desdeHomeTecnico) {
-                        navigate(RouteNavigation.HomeTecnico(route.userId))
                     } else {
-                        navigate(RouteNavigation.HomeEmpleado(route.userId))
+                        navigate(RouteNavigation.HomeTecnico(route.userId))
                     }
                 },
                 onPerfil = {
                     navigate(
                         RouteNavigation.Perfil(
                             route.userId,
-                            esTecnico = route.desdeHomeTecnico,
+                            esTecnico = !route.desdeHomeAdmin,
                             esAdmin = route.desdeHomeAdmin
                         )
                     )

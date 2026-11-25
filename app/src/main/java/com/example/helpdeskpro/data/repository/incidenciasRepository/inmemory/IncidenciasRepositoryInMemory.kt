@@ -3,6 +3,7 @@ package com.example.helpdeskpro.data.repository.incidenciasRepository.inmemory
 import com.example.helpdeskpro.data.repository.incidenciasRepository.IncidenciasRepository
 import com.example.helpdeskpro.data.repository.inmemoryRepository.InMemoryHelpdeskStore
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO
+import com.example.helpdeskpro.modelo.DetalleIncidenciaEmpleadoDTO
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.modelo.HomeTecnicoDTO
 import com.example.helpdeskpro.modelo.IncidenciaDTO
@@ -40,6 +41,18 @@ class IncidenciasRepositoryInMemory(
     override suspend fun obtenerDetalle(incidenciaId: Long): DetalleIncidenciaTecnicoDTO =
         store.incidencias[incidenciaId]?.detalle
             ?: throw NoSuchElementException("No se encontró la incidencia solicitada.")
+
+    override suspend fun obtenerDetalleEmpleado(incidenciaId: Long): DetalleIncidenciaEmpleadoDTO {
+        val detalle = obtenerDetalle(incidenciaId)
+        return DetalleIncidenciaEmpleadoDTO(
+            id = detalle.id,
+            titulo = detalle.titulo,
+            descripcion = detalle.descripcion,
+            estado = detalle.estado,
+            comentarios = detalle.comentarios,
+            historial = detalle.historial
+        )
+    }
 
     override suspend fun crearIncidencia(userId: String, datos: NuevaIncidenciaDTO): Long {
         val creadorId = userId.toLongOrNull()
@@ -80,7 +93,8 @@ class IncidenciasRepositoryInMemory(
 
     override suspend fun agregarComentario(
         incidenciaId: Long,
-        comentario: ComentarioIncidenciaDTO
+        comentario: ComentarioIncidenciaDTO,
+        userId: String?
     ) {
         store.agregarComentario(incidenciaId, comentario)
     }

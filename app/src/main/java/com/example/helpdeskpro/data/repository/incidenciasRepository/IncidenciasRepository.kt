@@ -1,6 +1,7 @@
 package com.example.helpdeskpro.data.repository.incidenciasRepository
 
 import com.example.helpdeskpro.modelo.ComentarioIncidenciaDTO
+import com.example.helpdeskpro.modelo.DetalleIncidenciaEmpleadoDTO
 import com.example.helpdeskpro.modelo.DetalleIncidenciaTecnicoDTO
 import com.example.helpdeskpro.modelo.HomeTecnicoDTO
 import com.example.helpdeskpro.modelo.IncidenciaDTO
@@ -16,8 +17,13 @@ interface IncidenciasRepository {
         busqueda: String = ""
     ): List<HomeTecnicoDTO>
     suspend fun obtenerDetalle(incidenciaId: Long): DetalleIncidenciaTecnicoDTO
+    suspend fun obtenerDetalleEmpleado(incidenciaId: Long): DetalleIncidenciaEmpleadoDTO
     suspend fun crearIncidencia(userId: String, datos: NuevaIncidenciaDTO): Long
     suspend fun actualizarEstado(incidenciaId: Long, estado: String)
     suspend fun registrarSolucion(incidenciaId: Long, solucion: String)
-    suspend fun agregarComentario(incidenciaId: Long, comentario: ComentarioIncidenciaDTO)
+    suspend fun agregarComentario(
+        incidenciaId: Long,
+        comentario: ComentarioIncidenciaDTO,
+        userId: String? = null
+    )
 }

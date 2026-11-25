@@ -61,6 +61,13 @@ sealed interface RouteNavigation {
     @Serializable
     class NuevaIncidencia(val userId: String) : RouteNavigation
 
+    /** Destino del detalle de una incidencia para el empleado que la creó. */
+    @Serializable
+    data class DetalleIncidenciaEmpleado(
+        val userId: String,
+        val incidenciaId: Long
+    ) : RouteNavigation
+
     /**
      * Destino del detalle de una incidencia seleccionada.
      *

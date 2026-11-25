@@ -26,6 +26,7 @@
     <string name="confirm_recovery_message">Te enviaremos un código de verificación a ese correo. ¿Quieres continuar?</string>
     <string name="confirm_save_incident_status_message">¿Quieres guardar el estado seleccionado?</string>
     <string name="confirm_register_solution_message">¿Quieres registrar esta solución?</string>
+    <string name="confirm_send_comment_message">¿Quieres enviar este comentario?</string>
     <string name="confirm_logout_title">Cerrar sesión</string>
     <string name="confirm_logout_message">¿Quieres cerrar la sesión actual?</string>
     <string name="login_success_title">¡Bienvenido, %1$s!</string>
@@ -36,6 +37,7 @@
     <string name="incident_created_success">La incidencia se creó exitosamente. Un técnico se pondrá en contacto contigo lo antes posible.</string>
     <string name="incident_status_updated_success">El estado de la incidencia se actualizó correctamente.</string>
     <string name="incident_solution_registered_success">La solución se registró correctamente.</string>
+    <string name="comment_sent_success">El comentario se envió correctamente.</string>
     <string name="profile_updated_success">El perfil se actualizó exitosamente.</string>
     <string name="logout_success">Se cerró la sesión exitosamente.</string>
     <string name="recovery_request_success">Si el correo está registrado, recibirás un código para recuperar la contraseña.</string>
@@ -140,6 +142,15 @@
     <string name="incident_detail_created">Creada: %1$s</string>
     <string name="comment_author_me">Yo</string>
     <string name="no_incident_detail">No hay datos de la incidencia</string>
+    <string name="employee_incident_number">Incidencia #%1$d</string>
+    <string name="employee_comments">Comentarios</string>
+    <string name="employee_no_comments">Todavía no hay comentarios</string>
+    <string name="employee_write_comment">Escribe un comentario…</string>
+    <string name="employee_send_comment">Enviar</string>
+    <string name="employee_comment_by">%1$s: %2$s</string>
+    <string name="employee_history">Historial</string>
+    <string name="employee_no_history">Todavía no hay movimientos</string>
+    <string name="employee_history_entry">%1$s  %2$s</string>
 
     <!-- Perfil -->
     <string name="my_profile">Mi perfil</string>
