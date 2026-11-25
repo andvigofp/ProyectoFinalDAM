@@ -62,7 +62,7 @@ class DetalleIncidenciaEmpleadoViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             try {
-                val detalle = incidenciasRepository.obtenerDetalleEmpleado(incidenciaId)
+                val detalle = incidenciasRepository.obtenerDetalleEmpleado(incidenciaId, userId)
                 _uiState.update {
                     it.copy(detalle = detalle, isLoading = false, errorMessage = null)
                 }
@@ -115,7 +115,7 @@ class DetalleIncidenciaEmpleadoViewModel(
                     comentario = comentario,
                     userId = userId
                 )
-                val detalle = incidenciasRepository.obtenerDetalleEmpleado(incidenciaId)
+                val detalle = incidenciasRepository.obtenerDetalleEmpleado(incidenciaId, userId)
                 _uiState.update {
                     it.copy(
                         detalle = detalle,

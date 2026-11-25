@@ -17,9 +17,13 @@ interface IncidenciasRepository {
         busqueda: String = ""
     ): List<HomeTecnicoDTO>
     suspend fun obtenerDetalle(incidenciaId: Long): DetalleIncidenciaTecnicoDTO
-    suspend fun obtenerDetalleEmpleado(incidenciaId: Long): DetalleIncidenciaEmpleadoDTO
+    suspend fun obtenerDetalleEmpleado(
+        incidenciaId: Long,
+        userId: String? = null
+    ): DetalleIncidenciaEmpleadoDTO
     suspend fun crearIncidencia(userId: String, datos: NuevaIncidenciaDTO): Long
     suspend fun actualizarEstado(incidenciaId: Long, estado: String)
+    suspend fun asignarTecnico(incidenciaId: Long, tecnicoId: Long)
     suspend fun registrarSolucion(incidenciaId: Long, solucion: String)
     suspend fun agregarComentario(
         incidenciaId: Long,

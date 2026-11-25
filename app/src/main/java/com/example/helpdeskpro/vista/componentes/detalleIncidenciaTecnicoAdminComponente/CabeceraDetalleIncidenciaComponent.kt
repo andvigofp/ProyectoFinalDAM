@@ -24,6 +24,10 @@ fun CabeceraDetalleIncidenciaComponent(
     incidencia: DetalleIncidenciaTecnicoDTO,
     modifier: Modifier = Modifier
 ) {
+    val tecnico = incidencia.tecnico.ifBlank {
+        stringResource(R.string.technician_unassigned)
+    }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -57,6 +61,14 @@ fun CabeceraDetalleIncidenciaComponent(
                     incidencia.categoria,
                     incidencia.prioridad
                 ),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp
+                ),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = stringResource(R.string.incident_detail_technician, tecnico),
                 style = MaterialTheme.typography.bodySmall.copy(
                     fontSize = 14.sp,
                     lineHeight = 20.sp

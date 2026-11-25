@@ -55,6 +55,12 @@ interface HelpdeskApi {
     @POST("api/incidencias")
     suspend fun createIncident(@Body request: IncidentRequest): IncidentResponse
 
+    @PUT("api/incidencias/{id}/asignar/{technicianId}")
+    suspend fun assignTechnician(
+        @Path("id") id: Long,
+        @Path("technicianId") technicianId: Long
+    ): IncidentResponse
+
     @PUT("api/incidencias/{id}/estado/{stateId}")
     suspend fun updateIncidentState(
         @Path("id") id: Long,
@@ -149,6 +155,7 @@ data class IncidentResponse(
     val descripcion: String,
     val solucion: String?,
     val fechaCreacion: String?,
+    val fechaActualizacion: String? = null,
     val usuarioId: Long,
     val usuarioNombre: String,
     val departamentoNombre: String?,
@@ -178,7 +185,13 @@ data class CommentRequest(
 data class CommentResponse(
     val mensaje: String,
     val fecha: String?,
+    val usuarioId: Long? = null,
     val usuarioNombre: String
 )
-data class HistoryResponse(val accion: String, val fecha: String?)
+data class HistoryResponse(
+    val accion: String,
+    val fecha: String?,
+    val usuarioId: Long? = null,
+    val usuarioNombre: String? = null
+)
 data class ErrorResponse(val mensaje: String?, val error: String?)

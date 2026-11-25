@@ -65,13 +65,18 @@ class IncidenciasRepositoryRemote(
         }
 
     override suspend fun obtenerDetalleEmpleado(
-        incidenciaId: Long
+        incidenciaId: Long,
+        userId: String?
     ): DetalleIncidenciaEmpleadoDTO = apiCall {
         coroutineScope {
             val detail = async { api.incident(incidenciaId) }
             val comments = async { api.comments(incidenciaId) }
             val history = async { api.history(incidenciaId) }
-            detail.await().toEmployeeDetail(comments.await(), history.await())
+            detail.await().toEmployeeDetail(
+                comments = comments.await(),
+                history = history.await(),
+                userId = userId?.toLongOrNull()
+            )
         }
     }
 
@@ -103,6 +108,12 @@ class IncidenciasRepositoryRemote(
                 it.nombre.toStateCode() == normalizedState
             } ?: throw IllegalArgumentException("El estado seleccionado no existe en el servidor.")
             api.updateIncidentState(incidenciaId, state.id)
+        }
+    }
+
+    override suspend fun asignarTecnico(incidenciaId: Long, tecnicoId: Long) {
+        apiCall {
+            api.assignTechnician(incidenciaId, tecnicoId)
         }
     }
 

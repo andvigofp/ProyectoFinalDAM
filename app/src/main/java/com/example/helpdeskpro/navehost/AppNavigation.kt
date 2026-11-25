@@ -24,8 +24,8 @@ import com.example.helpdeskpro.viemodel.vm.AdminUsuariosViewModel
 import com.example.helpdeskpro.viemodel.vm.AdminUsuariosViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModel
 import com.example.helpdeskpro.viemodel.vm.CrearCuentaViewModelFactory
-import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
-import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModelFactory
+import com.example.helpdeskpro.viemodel.vm.DetalleIncidenciaTecnicoAdminViewModel
+import com.example.helpdeskpro.viemodel.vm.DetalleIncidenciaTecnicoAdminViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.DetalleIncidenciaEmpleadoViewModel
 import com.example.helpdeskpro.viemodel.vm.DetalleIncidenciaEmpleadoViewModelFactory
 import com.example.helpdeskpro.viemodel.vm.EditarPerfilViewModel
@@ -50,7 +50,7 @@ import com.example.helpdeskpro.vista.componentes.homeEmpleadoComponete.HomeTab
 import com.example.helpdeskpro.vista.paginas.AdminCrearUsuarioCrearPage
 import com.example.helpdeskpro.vista.paginas.AdminUsuariosPage
 import com.example.helpdeskpro.vista.paginas.CrearCuentaPage
-import com.example.helpdeskpro.vista.paginas.DetalleIncideciaTecnicoPage
+import com.example.helpdeskpro.vista.paginas.DetalleIncidenciaTecnicoAdminPage
 import com.example.helpdeskpro.vista.paginas.DetalleIncidenciaEmpleadoPage
 import com.example.helpdeskpro.vista.paginas.EditarPerfilPage
 import com.example.helpdeskpro.vista.paginas.HomeEmpleadoPage
@@ -440,17 +440,19 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             val refreshIncidentList = {
                 technicianHomeViewModel.cargarIncidencias()
             }
-            val detalleViewModel: DetalleEmpleadoViewModel = viewModel(
-                factory = DetalleEmpleadoViewModelFactory(
+            val detalleViewModel: DetalleIncidenciaTecnicoAdminViewModel = viewModel(
+                factory = DetalleIncidenciaTecnicoAdminViewModelFactory(
                     application = application,
                     userId = route.userId,
                     incidenciaId = route.incidenciaId,
-                    incidenciasRepository = incidenciasRepository
+                    incidenciasRepository = incidenciasRepository,
+                    esAdmin = route.desdeHomeAdmin,
+                    administracionRepository = administracionRepository
                 )
             )
 
-            DetalleIncideciaTecnicoPage(
-                detalleEmpleadoViewModel = detalleViewModel,
+            DetalleIncidenciaTecnicoAdminPage(
+                detalleIncidenciaTecnicoAdminViewModel = detalleViewModel,
                 onVolver = {
                     refreshIncidentList()
                     navController.popBackStack()

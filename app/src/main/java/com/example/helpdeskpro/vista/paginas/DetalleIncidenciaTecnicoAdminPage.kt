@@ -30,9 +30,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
-import com.example.helpdeskpro.viemodel.vm.DetalleEmpleadoViewModel
+import com.example.helpdeskpro.viemodel.vm.DetalleIncidenciaTecnicoAdminViewModel
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.ConfirmationDialog
 import com.example.helpdeskpro.vista.componentes.alertDialogComponente.SuccessDialog
+import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.BotonAsignarTecnicoComponent
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.BotonGuardarEstadoComponent
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.BotonRegistrarSolucionComponent
 import com.example.helpdeskpro.vista.componentes.detalleIncidenciaTecnicoAdminComponente.CabeceraDetalleIncidenciaComponent
@@ -45,7 +46,7 @@ import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarDetal
 /**
  * Pantalla de detalle que conecta el estado del ViewModel con los componentes visuales.
  *
- * @param detalleEmpleadoViewModel ViewModel con el detalle y el estado de la pantalla.
+ * @param detalleIncidenciaTecnicoAdminViewModel ViewModel con el detalle y el estado de la pantalla.
  * @param modifier modificador aplicado a la pantalla.
  * @param onVolver acción para regresar a la pantalla anterior.
  * @param onGuardarEstado acción ejecutada con el nuevo estado seleccionado.
@@ -54,8 +55,8 @@ import com.example.helpdeskpro.vista.componentes.toolbarComponenete.ToolbarDetal
  * @param onPerfil acción de navegación al perfil.
  */
 @Composable
-fun DetalleIncideciaTecnicoPage(
-    detalleEmpleadoViewModel: DetalleEmpleadoViewModel,
+fun DetalleIncidenciaTecnicoAdminPage(
+    detalleIncidenciaTecnicoAdminViewModel: DetalleIncidenciaTecnicoAdminViewModel,
     modifier: Modifier = Modifier,
     onVolver: () -> Unit = {},
     onGuardarEstado: (String) -> Unit = {},
@@ -63,15 +64,18 @@ fun DetalleIncideciaTecnicoPage(
     onIncidencias: () -> Unit = {},
     onPerfil: () -> Unit = {}
 ) {
-    val uiState by detalleEmpleadoViewModel.uiState.collectAsState()
+    val uiState by detalleIncidenciaTecnicoAdminViewModel.uiState.collectAsState()
     val detalle = uiState.detalle
     var confirmarGuardarEstado by rememberSaveable { mutableStateOf(false) }
     var confirmarRegistrarSolucion by rememberSaveable { mutableStateOf(false) }
     var mostrarEstadoGuardado by rememberSaveable { mutableStateOf(false) }
     var mostrarSolucionRegistrada by rememberSaveable { mutableStateOf(false) }
+    var confirmarAsignarTecnico by rememberSaveable { mutableStateOf(false) }
+    var mostrarTecnicoAsignado by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(detalleEmpleadoViewModel.incidenciaId) {
-        detalleEmpleadoViewModel.cargarDetalle()
+    LaunchedEffect(detalleIncidenciaTecnicoAdminViewModel.incidenciaId) {
+        detalleIncidenciaTecnicoAdminViewModel.cargarDetalle()
+        detalleIncidenciaTecnicoAdminViewModel.cargarTecnicos()
     }
 
     Scaffold(
@@ -136,6 +140,25 @@ fun DetalleIncideciaTecnicoPage(
                         incidencia = detalle
                     )
 
+                    // Solo el administrador puede asignar el técnico
+                    if (detalleIncidenciaTecnicoAdminViewModel.esAdmin) {
+                        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                            SelectorEstadoComponent(
+                                estado = uiState.tecnicoSeleccionado,
+                                estados = uiState.tecnicos.map {
+                                    "${it.nombre} ${it.apellidos}".trim()
+                                },
+                                onEstadoChange = detalleIncidenciaTecnicoAdminViewModel::onTecnicoChange,
+                                titulo = stringResource(R.string.assign_technician),
+                                placeholder = stringResource(R.string.select_technician)
+                            )
+                            BotonAsignarTecnicoComponent(
+                                onAsignar = { confirmarAsignarTecnico = true },
+                                enabled = uiState.tecnicoSeleccionado.isNotBlank()
+                            )
+                        }
+                    }
+
                     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
                         SelectorEstadoComponent(
                             estado = uiState.estadoSeleccionado,
@@ -144,7 +167,7 @@ fun DetalleIncideciaTecnicoPage(
                                 stringResource(R.string.in_process),
                                 stringResource(R.string.resolved)
                             ),
-                            onEstadoChange = detalleEmpleadoViewModel::onEstadoChange
+                            onEstadoChange = detalleIncidenciaTecnicoAdminViewModel::onEstadoChange
                         )
                         BotonGuardarEstadoComponent(
                             onGuardar = { confirmarGuardarEstado = true },
@@ -155,7 +178,7 @@ fun DetalleIncideciaTecnicoPage(
                     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
                         SolucionIncidenciaComponent(
                             solucion = uiState.solucion,
-                            onSolucionChange = detalleEmpleadoViewModel::onSolucionChange
+                            onSolucionChange = detalleIncidenciaTecnicoAdminViewModel::onSolucionChange
                         )
                         BotonRegistrarSolucionComponent(
                             onRegistrar = { confirmarRegistrarSolucion = true },
@@ -175,7 +198,7 @@ fun DetalleIncideciaTecnicoPage(
                 confirmButtonText = stringResource(R.string.save_status),
                 dismissButtonText = stringResource(R.string.dialog_cancel),
                 onConfirmClick = {
-                    detalleEmpleadoViewModel.guardarEstado { estado ->
+                    detalleIncidenciaTecnicoAdminViewModel.guardarEstado { estado ->
                         onGuardarEstado(estado)
                         mostrarEstadoGuardado = true
                     }
@@ -190,7 +213,7 @@ fun DetalleIncideciaTecnicoPage(
                 confirmButtonText = stringResource(R.string.register_solution),
                 dismissButtonText = stringResource(R.string.dialog_cancel),
                 onConfirmClick = {
-                    detalleEmpleadoViewModel.registrarSolucion { solucion ->
+                    detalleIncidenciaTecnicoAdminViewModel.registrarSolucion { solucion ->
                         onRegistrarSolucion(solucion)
                         mostrarSolucionRegistrada = true
                     }
@@ -208,6 +231,26 @@ fun DetalleIncideciaTecnicoPage(
                 onDismissRequest = { mostrarSolucionRegistrada = false },
                 message = stringResource(R.string.incident_solution_registered_success)
             )
+
+            ConfirmationDialog(
+                showDialog = confirmarAsignarTecnico,
+                onDismissRequest = { confirmarAsignarTecnico = false },
+                title = stringResource(R.string.confirm_action_title),
+                message = stringResource(R.string.confirm_assign_technician_message),
+                confirmButtonText = stringResource(R.string.assign_technician),
+                dismissButtonText = stringResource(R.string.dialog_cancel),
+                onConfirmClick = {
+                    detalleIncidenciaTecnicoAdminViewModel.asignarTecnico {
+                        mostrarTecnicoAsignado = true
+                    }
+                }
+            )
+
+            SuccessDialog(
+                showDialog = mostrarTecnicoAsignado,
+                onDismissRequest = { mostrarTecnicoAsignado = false },
+                message = stringResource(R.string.technician_assigned_success)
+            )
         }
     }
 }
@@ -217,15 +260,15 @@ fun DetalleIncideciaTecnicoPage(
 private fun DetalleIncidenciaTecnicoPreview() {
     HelpdeskProTheme(dynamicColor = false) {
         val viewModel = remember {
-            DetalleEmpleadoViewModel(
+            DetalleIncidenciaTecnicoAdminViewModel(
                 Application(),
                 userId = "preview",
                 incidenciaId = 1L
             )
         }
 
-        DetalleIncideciaTecnicoPage(
-            detalleEmpleadoViewModel = viewModel
+        DetalleIncidenciaTecnicoAdminPage(
+            detalleIncidenciaTecnicoAdminViewModel = viewModel
         )
     }
 }

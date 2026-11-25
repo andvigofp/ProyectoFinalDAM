@@ -42,7 +42,10 @@ class IncidenciasRepositoryInMemory(
         store.incidencias[incidenciaId]?.detalle
             ?: throw NoSuchElementException("No se encontró la incidencia solicitada.")
 
-    override suspend fun obtenerDetalleEmpleado(incidenciaId: Long): DetalleIncidenciaEmpleadoDTO {
+    override suspend fun obtenerDetalleEmpleado(
+        incidenciaId: Long,
+        userId: String?
+    ): DetalleIncidenciaEmpleadoDTO {
         val detalle = obtenerDetalle(incidenciaId)
         return DetalleIncidenciaEmpleadoDTO(
             id = detalle.id,
@@ -82,6 +85,16 @@ class IncidenciasRepositoryInMemory(
         val nuevoEstado = estado.trim().uppercase(Locale.ROOT)
         incidencia.detalle = incidencia.detalle.copy(estado = nuevoEstado)
         store.agregarHistorial(incidenciaId, "Estado actualizado a $nuevoEstado.")
+    }
+
+    override suspend fun asignarTecnico(incidenciaId: Long, tecnicoId: Long) {
+        val incidencia = store.incidencias[incidenciaId]
+            ?: throw NoSuchElementException("No se encontró la incidencia solicitada.")
+        val tecnico = store.usuarios[tecnicoId]?.perfil
+            ?: throw NoSuchElementException("No se encontró el técnico seleccionado.")
+        val nombre = "${tecnico.nombre} ${tecnico.apellidos}".trim()
+        incidencia.detalle = incidencia.detalle.copy(tecnico = nombre)
+        store.agregarHistorial(incidenciaId, "Incidencia asignada a $nombre")
     }
 
     override suspend fun registrarSolucion(incidenciaId: Long, solucion: String) {

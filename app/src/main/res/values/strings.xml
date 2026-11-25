@@ -27,6 +27,7 @@
     <string name="confirm_save_incident_status_message">¿Quieres guardar el estado seleccionado?</string>
     <string name="confirm_register_solution_message">¿Quieres registrar esta solución?</string>
     <string name="confirm_send_comment_message">¿Quieres enviar este comentario?</string>
+    <string name="confirm_assign_technician_message">¿Quieres asignar este técnico a la incidencia?</string>
     <string name="confirm_logout_title">Cerrar sesión</string>
     <string name="confirm_logout_message">¿Quieres cerrar la sesión actual?</string>
     <string name="login_success_title">¡Bienvenido, %1$s!</string>
@@ -38,6 +39,7 @@
     <string name="incident_status_updated_success">El estado de la incidencia se actualizó correctamente.</string>
     <string name="incident_solution_registered_success">La solución se registró correctamente.</string>
     <string name="comment_sent_success">El comentario se envió correctamente.</string>
+    <string name="technician_assigned_success">El técnico se asignó correctamente.</string>
     <string name="profile_updated_success">El perfil se actualizó exitosamente.</string>
     <string name="logout_success">Se cerró la sesión exitosamente.</string>
     <string name="recovery_request_success">Si el correo está registrado, recibirás un código para recuperar la contraseña.</string>
@@ -172,6 +174,7 @@
     <string name="error_create_incident">No se pudo crear la incidencia.</string>
     <string name="error_update_incident">No se pudo actualizar la incidencia.</string>
     <string name="error_register_solution">No se pudo registrar la solución.</string>
+    <string name="error_assign_technician">No se pudo asignar el técnico.</string>
     <string name="error_send_comment">No se pudo enviar el comentario.</string>
     <string name="error_save_profile">No se pudo guardar el perfil.</string>
     <string name="error_save_admin_user">No se pudo guardar el usuario.</string>
@@ -209,6 +212,10 @@
     <string name="applied_solution">Solución aplicada</string>
     <string name="solution_placeholder">Describe la resolución…</string>
     <string name="register_solution">Registrar solución</string>
+    <string name="assign_technician">Asignar técnico</string>
+    <string name="select_technician">Selecciona un técnico</string>
+    <string name="incident_detail_technician">Técnico: %1$s</string>
+    <string name="technician_unassigned">Sin asignar</string>
     <string name="incident_comments_history">Comentarios e historial (mismos que empleado)</string>
 
 </resources>

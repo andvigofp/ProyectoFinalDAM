@@ -1,7 +1,7 @@
 package com.example.helpdeskpro.modelo
 
 /**
- * Detalle completo de una incidencia para la vista del empleado.
+ * Detalle completo de una incidencia para la vista del técnico y del administrador.
  *
  * @param id identificador único de la incidencia.
  * @param titulo título de la incidencia.
@@ -14,6 +14,7 @@ package com.example.helpdeskpro.modelo
  * @param fechaCreacion fecha en que se creó la incidencia.
  * @param comentarios comentarios asociados a la incidencia.
  * @param historial cambios registrados para la incidencia.
+ * @param tecnico nombre del técnico asignado (vacío si no tiene).
  */
 data class DetalleIncidenciaTecnicoDTO(
     val id: Long,
@@ -26,5 +27,6 @@ data class DetalleIncidenciaTecnicoDTO(
     val prioridad: String,
     val fechaCreacion: String,
     val comentarios: List<ComentarioIncidenciaDTO> = emptyList(),
-    val historial: List<HistorialIncidenciaDTO> = emptyList()
+    val historial: List<HistorialIncidenciaDTO> = emptyList(),
+    val tecnico: String = ""
 )

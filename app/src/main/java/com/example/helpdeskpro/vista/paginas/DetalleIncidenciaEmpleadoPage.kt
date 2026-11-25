@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.example.helpdeskpro.R
 import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
 import com.example.helpdeskpro.viemodel.vm.DetalleIncidenciaEmpleadoViewModel
@@ -65,8 +66,11 @@ fun DetalleIncidenciaEmpleadoPage(
     var mostrarConfirmacion by rememberSaveable { mutableStateOf(false) }
     var mostrarExito by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(viewModel.incidenciaId) {
+    // Recarga el detalle cada vez que la pantalla vuelve a primer plano,
+    // para ver los cambios que haga el técnico o el administrador.
+    LifecycleResumeEffect(viewModel.incidenciaId) {
         viewModel.cargarDetalle()
+        onPauseOrDispose { }
     }
 
     LaunchedEffect(uiState.comentarioEnviado) {

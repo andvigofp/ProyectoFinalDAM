@@ -41,6 +41,8 @@ import com.example.helpdeskpro.ui.theme.HelpdeskProTheme
  * @param onEstadoChange callback cuando cambia la selección.
  * @param modifier modificador aplicado al selector.
  * @param enabled indica si el selector está habilitado.
+ * @param titulo texto de la etiqueta (por defecto "Cambiar estado").
+ * @param placeholder texto mostrado cuando no hay selección.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +51,9 @@ fun SelectorEstadoComponent(
     estados: List<String>,
     onEstadoChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    titulo: String = stringResource(R.string.change_status),
+    placeholder: String = stringResource(R.string.all_statuses)
 ) {
     var expanded by rememberSaveable {
         mutableStateOf(false)
@@ -60,7 +64,7 @@ fun SelectorEstadoComponent(
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Text(
-            text = stringResource(R.string.change_status),
+            text = titulo,
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontSize = 14.sp,
                 lineHeight = 20.sp
@@ -89,7 +93,7 @@ fun SelectorEstadoComponent(
                 readOnly = true,
                 placeholder = {
                     Text(
-                        text = stringResource(R.string.all_statuses),
+                        text = placeholder,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 14.sp,
                         lineHeight = 20.sp
